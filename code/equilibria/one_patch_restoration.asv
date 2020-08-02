@@ -19,7 +19,7 @@ g = 0.3;
 g_vec = repmat(0.3, [20 3]);
 g_vec = g_vec(:);
 z = 0;
-z_vec = repmat(0, [20 3]);
+z_vec = repmat(0, [20 3]); %#ok<REPMAT>
 z_vec = z_vec(:);
 
 %make a vector for the number of the equilibrium values                              
@@ -32,7 +32,7 @@ eqi_num = eqi_num(:);
 data = 2.*ones(60,6); %rows, columns -- filling them with 2s
 %2 columns for eigenvalues and equi values each, and 3 columns for 
 %so 7 columns
-data(1:end,1) = r_vec
+data(1:end,1) = r_vec;
 data(1:end,2) = a_vec; 
 data(1:end,3) = d_vec; 
 data(1:end,4) = y_vec;
@@ -100,10 +100,13 @@ eqns_3 = [r*c*(1-m-c) + ...
     z*r*(1-c-m) - ...
     d*c - ...
     a*m*c, ...
-    data((i*20)+1,2)*m*c - ...
-    (data((i*20)+1,5)*m)/((1-c-m)+m)...
-    + data((i*20)+1,4)*m*(1-c-m)];
+    a*m*c - ...
+    (g*m)/((1-c-m)+m) + ...
+    y*m*(1-c-m)];
 B = solve(eqns_3, syms);
+
+%unsure if this is the best way to write these files? 
+%will look into it. 
 
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
