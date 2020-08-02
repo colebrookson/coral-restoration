@@ -36,8 +36,7 @@ S = vpasolve(eqns, [x,y,w,v], init_guess) %some sol'ns with numerical instabilit
 len = 20 - length(S.x);
 data((i*20)+1:((i+1)*20)-len,5) = S.x;
 data((i*20)+1:((i+1)*20)-len,6) = S.y;
-data((i*20)+1:((i+1)*20)-len,7) = S.w;
-data((i*20)+1:((i+1)*20)-len,8) = S.v;
+
 
 
 eqns2 = [r*(1-x-y)*x - d*x - a*x*y + data((i*20)+1,3)*w*(1-x-y), a*x*y - (data((i*20)+1,1)*y)/(1-x) + gamma*y*(1-x-y) + data((i*20)+1,2)*v*(1-x-y), r*(1-w-v)*w - d*w - a*w*v + data((i*20)+1,3)*x*(1-w-v), a*w*v - (data((i*20)+1,1)*v)/(1-w) + gamma*v*(1-w-v) + data((i*20)+1,2)*y*(1-w-v)];
