@@ -4,7 +4,7 @@ clf    % Removes anything in the figure window before simulation.
 
 %%%%%% define the variables here
 r = 0.55;
-r_vec = repmat(0.55, [20,3]);
+r_vec = repmat(0.55, [20 3]);
 r_vec = r_vec(:);
 a = [0.1 0.3 0.5];
 a_vec = repmat([0.1 0.3 0.5], [20 1]);
@@ -91,9 +91,9 @@ end
 
 end
 
-%let's try to get the analytical solutions - 'unable to solve symbolically'
-
-% NOTE - not sure what the p_c q_c variables are for? 
+%let's try to get the analytical solutions
+%NOTE - wondering if this should happen in another script if we think it 
+%may take some time? 
 syms c m r a d y g z 
 assume (0 < c < 1 & 0 < m < 1)
 eqns_3 = [r*c*(1-m-c) + ...
@@ -104,6 +104,9 @@ eqns_3 = [r*c*(1-m-c) + ...
     (g*m)/((1-c-m)+m) + ...
     y*m*(1-c-m)];
 B = solve(eqns_3, syms);
+
+%unsure if this is the best way to write these files? 
+%will look into it. 
 
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
