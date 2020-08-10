@@ -4,7 +4,7 @@ clf    % Removes anything in the figure window before simulation.
 
 %%%%%% define the variables here
 r = 0.55;
-r_vec = repmat(0.55, [20,3]);
+r_vec = repmat(0.55, [20 3]);
 r_vec = r_vec(:);
 a = [0.1 0.3 0.5];
 a_vec = repmat([0.1 0.3 0.5], [20 1]);
