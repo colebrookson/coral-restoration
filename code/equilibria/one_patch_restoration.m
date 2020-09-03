@@ -38,12 +38,12 @@ data(1:end,3) = d_vec;
 data(1:end,4) = y_vec;
 data(1:end,5) = g_vec;
 data(1:end,6) = z_vec;
-data(2:end,7) = eqi_num;
+data(1:end,7) = eqi_num;
 
 
 %%%%%% loop through the combinations
-for i = 0:3
-syms c m %state variables - x is C, y is M
+for i = 0:2
+syms c m %state variables 
 
 %equations: dC/dt = rCT + zrT - dC - aMC, dM/dt = aMC - (gM)/(T+M) + yMT
 %define the equations - all the data(...) are calling from the named data
