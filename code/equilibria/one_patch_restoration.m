@@ -111,6 +111,6 @@ B = solve(eqns_3, syms);
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
 %.csv files...hence why I gave them different names bc only 1 sheet
-xlswrite("twopatch_fullsolve.xlsx",data,'All data','A1');
+xlswrite("simple_restoration_model_output.xlsx",data,'All data','A1');
 
 
