@@ -29,8 +29,8 @@ eqi_num = eqi_num(:);
 
                               
 %%%%%% define the matrix for the data
-data = 2.*ones(60,6); %rows, columns -- filling them with 2s
-%2 columns for eigenvalues and equi values each, and 3 columns for 
+data = 2.*ones(60,11); %rows, columns -- filling them with 2s
+%2 columns for eigenvalues and 2 for c & m 
 %so 7 columns
 data(1:end,1) = r_vec;
 data(1:end,2) = a_vec; 
@@ -111,6 +111,6 @@ B = solve(eqns_3, syms);
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
 %.csv files...hence why I gave them different names bc only 1 sheet
-xlswrite("twopatch_fullsolve.xlsx",data,'All data','A1')
+xlswrite("twopatch_fullsolve.xlsx",data,'All data','A1');
 
 
