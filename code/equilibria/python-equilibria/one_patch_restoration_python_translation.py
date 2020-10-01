@@ -8,6 +8,7 @@
 # DATE OF CREATION: 2020-09-03
 ##########
 ##########
+import numpy as np
 
 #### define variables here
 # making each one as a list with the number of spaces (20) to store the results
@@ -36,4 +37,20 @@ z_vec = [0]*(20*3)
 equil_num = list(range(1,21))
 equil_num = equil_num*(3)
 
-#### define the matrix for the data 
+#### define the matrix for the data
+#this will have 60 rows (20 results * 3 iterations of parameter combinations)
+#and 11 columns - 2 for C & M, 2 for eigenvalues, and 7 parameters
+rows = 60
+cols = 11
+shape = (rows, cols)
+results_matrix = np.ones(shape) #initialize as ones
+results_matrix[:,:] = results_matrix[:,:] + 1 #scale up to twos
+
+#### populate matrix with data
+results_matrix[:,0] = r_vec
+results_matrix[:,1] = a_vec
+results_matrix[:,2] = d_vec
+results_matrix[:,3] = y_vec
+results_matrix[:,4] = g_vec
+results_matrix[:,5] = z_vec
+results_matrix[:,6] = equil_num
