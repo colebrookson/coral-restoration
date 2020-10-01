@@ -54,3 +54,5 @@ results_matrix[:,3] = y_vec
 results_matrix[:,4] = g_vec
 results_matrix[:,5] = z_vec
 results_matrix[:,6] = equil_num
+
+#### loop through all parameter combinations and solve the equation
