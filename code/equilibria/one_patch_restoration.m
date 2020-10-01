@@ -4,7 +4,7 @@ clf    % Removes anything in the figure window before simulation.
 
 %%%%%% define the variables here
 r = 0.55;
-r_vec = repmat(0.55, [20,3]);
+r_vec = repmat(0.55, [20 3]);
 r_vec = r_vec(:);
 a = [0.1 0.3 0.5];
 a_vec = repmat([0.1 0.3 0.5], [20 1]);
@@ -29,8 +29,8 @@ eqi_num = eqi_num(:);
 
                               
 %%%%%% define the matrix for the data
-data = 2.*ones(60,6); %rows, columns -- filling them with 2s
-%2 columns for eigenvalues and equi values each, and 3 columns for 
+data = 2.*ones(60,11); %rows, columns -- filling them with 2s
+%2 columns for eigenvalues and 2 for c & m 
 %so 7 columns
 data(1:end,1) = r_vec;
 data(1:end,2) = a_vec; 
@@ -38,12 +38,12 @@ data(1:end,3) = d_vec;
 data(1:end,4) = y_vec;
 data(1:end,5) = g_vec;
 data(1:end,6) = z_vec;
-data(2:end,7) = eqi_num;
+data(1:end,7) = eqi_num;
 
 
 %%%%%% loop through the combinations
-for i = 0:3
-syms c m %state variables - x is C, y is M
+for i = 0:2
+syms c m %state variables 
 
 %equations: dC/dt = rCT + zrT - dC - aMC, dM/dt = aMC - (gM)/(T+M) + yMT
 %define the equations - all the data(...) are calling from the named data
@@ -91,9 +91,9 @@ end
 
 end
 
-%let's try to get the analytical solutions - 'unable to solve symbolically'
-
-% NOTE - not sure what the p_c q_c variables are for? 
+%let's try to get the analytical solutions
+%NOTE - wondering if this should happen in another script if we think it 
+%may take some time? 
 syms c m r a d y g z 
 assume (0 < c < 1 & 0 < m < 1)
 eqns_3 = [r*c*(1-m-c) + ...
@@ -105,9 +105,12 @@ eqns_3 = [r*c*(1-m-c) + ...
     y*m*(1-c-m)];
 B = solve(eqns_3, syms);
 
+%unsure if this is the best way to write these files? 
+%will look into it. 
+
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
 %.csv files...hence why I gave them different names bc only 1 sheet
-xlswrite("twopatch_fullsolve.xlsx",data,'All data','A1')
+xlswrite("simple_restoration_model_output.xlsx",data,'All data','A1');
 
 
