@@ -9,6 +9,7 @@
 ##########
 ##########
 import numpy as np
+from mpmath import *
 
 #### define variables here
 # making each one as a list with the number of spaces (20) to store the results
@@ -56,3 +57,17 @@ results_matrix[:,5] = z_vec
 results_matrix[:,6] = equil_num
 
 #### loop through all parameter combinations and solve the equation
+
+#define functions
+
+def eqns(c, m):
+    """ Return list of functions to pass to findroot()
+    """
+    return results_matrix((i*20)+1,0)*c*(1-m-c) +
+        results_matrix((i*20)+1,5)*results_matrix((i*20)+1,0)*(1-c-m) -
+        results_matrix((i*20)+1,2)*c - data((i*20)+1,1)*m*c,
+
+        results_matrix((i*20)+1,2)*m*c -
+        (results_matrix((i*20)+1,4)*m)/((1-c-m)+m)
+        + results_matrix((i*20)+1,4)*m*(1-c-m) == 0]
+findroot(eqns, (0,0))
