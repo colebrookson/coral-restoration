@@ -34,37 +34,73 @@ allparam_data_abr$Colour[allparam_data_abr$stability == "bifurcation_point"] <- 
 #maybe at some point have the stable nodes ordered to be on top of the unstable nodes and saddle nodes like did for the two patch model but that may not be necessary
 
 #what values of the different parameters am i looking at?
-allparam_data_abr %>%
+#allparam_data_abr %>%
   #distinct(a) #[0.0,0.5] by 0.01
   #distinct(g) #[0.0,0.5] by 0.01
-   distinct(z) #[0.0,0.05,0.25,0.50]
+  #distinct(z) #[0.0,0.05,0.25,0.50]
+dispersal_val = c(0,0.05,0.25,0.5)
+a_val = seq(0,0.5,0.01)
+g_val = seq(0,0.5,0.01)
 
-#loop through all recruitment values, and all 3 levels of g2
-g_lvl = c(0.1,0.3,0.5)
-for(i in 1:100){
-	for(j in 1:3){
-recruitvalue = round((i-1)/100,4)
-g_level = g_lvl[j]	
+#Grazing bifurcation diagrams
+for(i in 1:length(a_val)){ #loop through the 'a' values
+	  for(k in 1:length(dispersal_val)){ #loop through the dispersal values
 
-#stable only
-#pdf(paste0("StableOnly_Heterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".pdf"))
-png(paste0("StableOnly_Heterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".png"))
-plot(x = twopatch_ext_complete$g[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level & twopatch_ext_complete$ID > 0], y = twopatch_ext_complete$C1[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level & twopatch_ext_complete$ID > 0], col = twopatch_ext_complete$Colour[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level & twopatch_ext_complete$ID > 0], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Only Stable Nodes, Dispersal = ", recruitvalue, "and g_level =", g_level))
+#all   
+#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Normal",paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
+png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Normal",paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
+plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
 legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
 dev.off()
 
-#all
-#pdf(paste0("Heterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".pdf"))
-png(paste0("Heterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".png")) 
-plot(x = twopatch_ext_complete$g[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level], y = twopatch_ext_complete$C1[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level], col = twopatch_ext_complete$Colour[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", recruitvalue, "and g_level =", g_level))
-legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
-dev.off()
-
-#transparent
-#pdf(paste0("TransparentHeterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".pdf"))
-png(paste0("TransparentHeterograz_GrazingBifurcationGraph_dispersal",recruitvalue,"grazinglevel",g_level,".png"))
-plot(x = twopatch_ext_complete$g[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level], y = twopatch_ext_complete$C1[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level], col = alpha(twopatch_ext_complete$Colour[twopatch_ext_complete$p_c == recruitvalue & twopatch_ext_complete$p_m == recruitvalue & twopatch_ext_complete$q_c == recruitvalue & twopatch_ext_complete$q_m == recruitvalue & twopatch_ext_complete$g2 == g_level],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", recruitvalue, "and g_level =", g_level))
+#transparent  
+#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Transparent",paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
+png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Transparent",paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
+plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
 legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = alpha(c("black","gold","purple","green"),0.4), pch = c(20,20))
 dev.off()
+
 	}
+}
+
+#Macroalg-coral bifurcation diagrams
+for(i in 1:length(g_val)){ #loop through the grazing values
+  for(k in 1:length(dispersal_val)){ #loop through the dispersal values
+    
+    #all   
+    #pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Normal",paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
+    png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Normal",paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
+    legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
+    dev.off()
+    
+    #transparent   
+    #pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Transparent",paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
+    png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Transparent",paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
+    legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = alpha(c("black","gold","purple","green"),0.4), pch = c(20,20))
+    dev.off()
+    
+  }
+}
+
+#Dispersal bifurcation diagrams
+for(i in 1:length(g_val)){ #loop through the grazing values
+  for(k in 1:length(a_val)){ #loop through the a values
+    
+    #all   
+    #pdf(here("graphs","bifurcationdiagrams","dispersal_bifurcation_diagrams","pdf","Normal",paste0("DispersalBifurcationGraph_MCcomp",a_val[k],"grazing",g_val[i],".pdf")))
+    png(here("graphs","bifurcationdiagrams","dispersal_bifurcation_diagrams","png","Normal",paste0("DispersalBifurcationGraph_MCcomp",a_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$z[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]], col = allparam_data_abr$Colour[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("MCcomp = ", a_val[k], "and grazing =", g_val[i]))
+    legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
+    dev.off()
+    
+    #transparent   
+    #pdf(here("graphs","bifurcationdiagrams","dispersal_bifurcation_diagrams","pdf","Transparent",paste0("Transparent_DispersalBifurcationGraph_MCcomp",a_val[k],"grazing",g_val[i],".pdf")))
+    png(here("graphs","bifurcationdiagrams","dispersal_bifurcation_diagrams","png","Transparent",paste0("Transparent_DispersalBifurcationGraph_MCcomp",a_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$z[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]], col = alpha(allparam_data_abr$Colour[allparam_data_abr$a == a_val[k] & allparam_data_abr$g == g_val[i]],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("MCcomp = ", a_val[k], "and grazing =", g_val[i]))
+    legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = alpha(c("black","gold","purple","green"),0.4), pch = c(20,20))
+    dev.off()
+    
+  }
 }
