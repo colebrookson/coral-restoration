@@ -8,21 +8,28 @@ from mpmath import *
 #number of combos:
 combos = 51*51*4
 
-r = 0.55 # rate coral overgrow turf
-r_vec = [0.55]*(20*3)
+# rate coral overgrow turf
+r_vec = [0.55]*(20*combos)
 
-d = 0.24 # rate of natural coral mortality
-d_vec = [0.24]*(20*3)
+# rate of natural coral mortality
+d_vec = [0.24]*(20*combos)
 
-y = 0.77 # rate a unit macroalgae overgrows a unit of turf algae
-y_vec = [0.77]*(20*3)
+# rate a unit macroalgae overgrows a unit of turf algae
+y_vec = [0.77]*(20*combos)
 
-a = [0.1, 0.3, 0.5] # rate macroalgae overgrow coral
-a_vec = [0.1]*20 + [0.3]*20 + [0.5]*20
+# rate macroalgae overgrow coral
+a = np.arange(0,0.51,0.01)
+a_vec = []
+for i in range(0, len(z)):
+    a_vec_temp_1 = []
+    for j in a:
+        a_vec_temp_2 = [j]*20
+        a_vec_temp_2 = a_vec_temp_2*51
+        a_vec_temp_1.extend(a_vec_temp_2)
+    a_vec.extend(a_vec_temp_1)
 
-
-
-g = np.arange(0,0.51,0.01) # rate of grazing on macroalgae and turf algae
+# rate of grazing on macroalgae and turf algae
+g = np.arange(0,0.51,0.01)
 g_vec = []
 for i in range(0, int(combos/len(g))):
     g_vec_temp_1 = []
@@ -31,7 +38,8 @@ for i in range(0, int(combos/len(g))):
         g_vec_temp_1.extend(g_vec_temp_2)
     g_vec.extend(g_vec_temp_1)
 
-z = [0, 0.05, 0.25, 0.5] # rate coral larvae recruit and overgrow turf algae
+# rate coral larvae recruit and overgrow turf algae
+z = [0, 0.05, 0.25, 0.5]
 z_vec = []
 for i in z:
     z_vec_temp = [i]*(20*int(combos/4))
@@ -39,12 +47,16 @@ for i in z:
 
 #### make a vector for the number of equilibrium values
 equil_num = list(range(1,21))
-equil_num = equil_num*(3)
+equil_num = equil_num*(combos)
+
+# make sure all the columns are the same length -- must return true
+len(r_vec) == len(d_vec) == len(y_vec) == len(a_vec) == len(g_vec) == len(z_vec)
+len(equil_num) == len(r_vec)
 
 #### define the matrix for the data
 #this will have 60 rows (20 results * 3 iterations of parameter combinations)
 #and 11 columns - 2 for C & M, 2 for eigenvalues, and 7 parameters
-rows = 60
+rows = 20*combos
 cols = 11
 shape = (rows, cols)
 results_matrix = np.ones(shape) #initialize as ones
@@ -52,9 +64,12 @@ results_matrix[:,:] = results_matrix[:,:] + 1 #scale up to twos
 
 #### populate matrix with data
 results_matrix[:,0] = r_vec
-results_matrix[:,1] = a_vec
-results_matrix[:,2] = d_vec
-results_matrix[:,3] = y_vec
+results_matrix[:,1] = d_vec
+results_matrix[:,2] = y_vec
+results_matrix[:,3] = a_vec
 results_matrix[:,4] = g_vec
 results_matrix[:,5] = z_vec
 results_matrix[:,6] = equil_num
+
+# NOTE: still have to make this path robust, but will work on that later
+np.savetxt("C:/Users/brookson/Documents/Github/Coral-Resotration-Modeling/code/equilibria/full_combo_data.csv", results_matrix, delimiter=",")
