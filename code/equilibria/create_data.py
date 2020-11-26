@@ -6,7 +6,7 @@ from mpmath import *
 # then multiplying them by the number of combinations we have
 
 #number of combos:
-combos = 51*51*4
+combos = 51*101*4
 
 # rate coral overgrow turf
 r_vec = [0.55]*(20*combos)
@@ -17,8 +17,15 @@ d_vec = [0.24]*(20*combos)
 # rate a unit macroalgae overgrows a unit of turf algae
 y_vec = [0.77]*(20*combos)
 
+# rate coral larvae recruit and overgrow turf algae
+z = [0, 0.05, 0.25, 0.5]
+z_vec = []
+for i in z:
+    z_vec_temp = [i]*(20*int(combos/4))
+    z_vec.extend(z_vec_temp)
+
 # rate macroalgae overgrow coral
-a = np.arange(0,0.51,0.01)
+a = np.arange(0,1.01,0.01)
 a_vec = []
 for i in range(0, len(z)):
     a_vec_temp_1 = []
@@ -37,13 +44,6 @@ for i in range(0, int(combos/len(g))):
         g_vec_temp_2 = [j]*(20)
         g_vec_temp_1.extend(g_vec_temp_2)
     g_vec.extend(g_vec_temp_1)
-
-# rate coral larvae recruit and overgrow turf algae
-z = [0, 0.05, 0.25, 0.5]
-z_vec = []
-for i in z:
-    z_vec_temp = [i]*(20*int(combos/4))
-    z_vec.extend(z_vec_temp)
 
 #### make a vector for the number of equilibrium values
 equil_num = list(range(1,21))

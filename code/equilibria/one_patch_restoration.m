@@ -120,6 +120,6 @@ end
 %filename = "equilibria_eigenvalues.xlsx"
 %the code below failed to 'start the Excel server' so it made a bunch of
 %.csv files...hence why I gave them different names bc only 1 sheet
-xlswrite("full_restoration_model_output.xlsx",data,'All data','A1');
+xlswrite("full_restoration_model_output_all_combos.xlsx",data,'All data','A1');
 
 

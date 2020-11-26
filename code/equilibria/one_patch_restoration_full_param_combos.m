@@ -5,7 +5,7 @@ clf    % Removes anything in the figure window before simulation.
 data = readmatrix('C:\Users\brookson\Documents\Github\Coral-Resotration-Modeling\code\equilibria\full_combo_data.csv');
 
 %%%%%% loop through the combinations
-for i = 0:10403
+for i = 0:20604
 syms c m %state variables 
 
 %equations: dC/dt = rCT + zrT - dC - aMC, dM/dt = aMC - (gM)/(T+M) + yMT
