@@ -47,16 +47,16 @@ for(i in 1:length(a_val)){ #loop through the 'a' values
 	  for(k in 1:length(dispersal_val)){ #loop through the dispersal values
 
 #all   
-#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Normal",paste0("Dispersal",dispersal_val),paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
-png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Normal",paste0("Dispersal",dispersal_val),paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
-plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
+#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Normal",paste0("Dispersal",dispersal_val[k]),paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
+png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Normal",paste0("Dispersal",dispersal_val[k]),paste0("GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
+plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
 legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
 dev.off()
 
 #transparent  
-#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Transparent",paste0("Dispersal",dispersal_val),paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
-png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Transparent",paste0("Dispersal",dispersal_val),paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
-plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == a_val[i]],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
+#pdf(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","pdf","Transparent",paste0("Dispersal",dispersal_val[k]),paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".pdf")))
+png(here("graphs","bifurcationdiagrams","grazing_bifurcation_diagrams","png","Transparent",paste0("Dispersal",dispersal_val[k]),paste0("Transparent_GrazingBifurcationGraph_dispersal",dispersal_val[k],"MCcomp",a_val[i],".png")))
+plot(x = allparam_data_abr$g[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$a == round(a_val[i],2)],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "g", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and a =", a_val[i]))
 legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = alpha(c("black","gold","purple","green"),0.4), pch = c(20,20))
 dev.off()
 
@@ -68,16 +68,16 @@ for(i in 1:length(g_val)){ #loop through the grazing values
   for(k in 1:length(dispersal_val)){ #loop through the dispersal values
     
     #all   
-    #pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Normal",paste0("Dispersal",dispersal_val), paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
-    png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Normal",paste0("Dispersal",dispersal_val), paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
-    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
+    pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Normal",paste0("Dispersal",dispersal_val[k]), paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
+    #png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Normal",paste0("Dispersal",dispersal_val[k]), paste0("MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)], col = allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)], xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
     legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = c("black","gold","purple","green"), pch = c(20,20))
     dev.off()
     
     #transparent   
-    #pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Transparent",paste0("Dispersal",dispersal_val), paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
-    png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Transparent",paste0("Dispersal",dispersal_val), paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
-    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == g_val[i]],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
+    pdf(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","pdf","Transparent",paste0("Dispersal",dispersal_val[k]), paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".pdf")))
+    #png(here("graphs","bifurcationdiagrams","MCcomp_bifurcation_diagrams","png","Transparent",paste0("Dispersal",dispersal_val[k]), paste0("Transparent_MCcompBifurcationGraph_dispersal",dispersal_val[k],"grazing",g_val[i],".png")))
+    plot(x = allparam_data_abr$a[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)], y = allparam_data_abr$C[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)], col = alpha(allparam_data_abr$Colour[allparam_data_abr$z == dispersal_val[k] & allparam_data_abr$g == round(g_val[i],2)],0.4), xlim = c(0,1), ylim = c(0,1), pch = 16, xlab = "MCcomp", ylab = "C cover", main = paste("Dispersal = ", dispersal_val[k], "and grazing =", g_val[i]))
     legend("topleft", c("Stable Node", "Unstable Node", "Saddle", "Bifurcation Point?"), col = alpha(c("black","gold","purple","green"),0.4), pch = c(20,20))
     dev.off()
     
