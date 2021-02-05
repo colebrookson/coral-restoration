@@ -31,6 +31,8 @@ allparam_data_abr$Colour[allparam_data_abr$stability == "unstable_node"] <- 'gol
 allparam_data_abr$Colour[allparam_data_abr$stability == "saddle_node"] <- 'purple'
 allparam_data_abr$Colour[allparam_data_abr$stability == "bifurcation_point"] <- 'green'
 
+save(allparam_data_abr, file = here("code", "allparam_data_pre_ordering"))
+
 #maybe at some point have the stable nodes ordered to be on top of the unstable nodes and saddle nodes like did for the two patch model but that may not be necessary
 
 #what values of the different parameters am i looking at?
