@@ -234,3 +234,6 @@ for(i in 2:20604){ #2:paramcomb
   numequi_old <- numequi
   equival_storage$norep  <- 0 #because just don't want reps w/n 1 paramcomb
 }
+
+save(data, file = here("code", "allparam_data_ordered_pilottest.RData"))
+range(data$ID, na.rm=TRUE) #434!
