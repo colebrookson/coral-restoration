@@ -235,5 +235,24 @@ for(i in 2:20604){ #2:paramcomb
   equival_storage$norep  <- 0 #because just don't want reps w/n 1 paramcomb
 }
 
-save(data, file = here("code", "allparam_data_ordered_pilottest.RData"))
+save(data, file = here("code", "allparam_data_ordered.RData"))
+load(here("code", "allparam_data_ordered.RData"))
 range(data$ID, na.rm=TRUE) #434!
+
+#troubleshooting
+library(fields)
+data$t_colour <- NA
+#cols <- rainbow(26)
+cols <- sample(tim.colors(434)) 
+for(i in 1:434){
+  data$t_colour[data$stability == "stable_node" & data$ID == i] <- cols[i] 
+}
+
+par(mfrow = c(2,1)) #if these two plots look different...some stable points didn't get an ID designation
+plot(x = data$g[data$stability == "stable_node"], y = data$C[data$stability == "stable_node"], xlab = "g", ylab = "C", col = data$t_colour[data$stability == "stable_node"], pch = 20, xlim = c(0,1), ylim = c(0,1))
+plot(x = data$g[data$stability == "stable_node"], y = data$C[data$stability == "stable_node"], xlab = "g", ylab = "C", pch = 20, xlim = c(0,1), ylim = c(0,1))
+#okay actually it seems like it worked? like it seems like it is doing what i want it to do
+
+#still seems pretty good
+plot(x = data$M[data$stability == "stable_node"], y = data$C[data$stability == "stable_node"], xlab = "M", ylab = "C", col = data$t_colour[data$stability == "stable_node"], pch = 20)
+
