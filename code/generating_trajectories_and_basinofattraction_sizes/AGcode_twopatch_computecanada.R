@@ -36,7 +36,9 @@ interval <- 0.05
 x_coords <- seq(0.01,0.99, by = interval)
 y_coords <- seq(0.01,0.99,by = interval)
 #make dataframe 
-grid <- data.frame(Point_Num=seq(1,length(x_coords)*length(y_coords),by=1), Minit = rep(x_coords,each = length(y_coords)), Cinit = NA, Tinit = NA)
+grid <- data.frame(Point_Num=seq(1,length(x_coords)*length(y_coords),by=1),
+                   Minit = rep(x_coords,each = length(y_coords)), 
+                   Cinit = NA, Tinit = NA)
 #populate C column - want a lower triangle situation in an MxC graph
 for(i in 1:length(x_coords)){ 
   val <- x_coords[i]
@@ -84,7 +86,38 @@ MumbyOpen_Elmhirst_2PatchExt <- function(t,state,parameters){
 
 #this is where you store the size of the basins for each of the stable nodes for each of the parameter combinations
 #850 is being used as 'max number of equilibria for a particular parameter combination'...but this is way too high, we've been seeing max 4 equilibria so you could just use '5' instead of '850' here
-basins <- data.frame(RecruitValue=c(rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99),rep(seq(0,0.99,by=0.01),each=850*99)),Grazing=c(rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850),rep(seq(0.01,0.99,by=0.01),each=850)),grazlvl=c(rep(0.1,4*99*100*850),rep(0.3,4*99*100*850),rep(0.5,4*99*100*850)), level=c(rep(0.05,99*100*850),rep(0.1,99*100*850),rep(0.25,99*100*850),rep(0.5,99*100*850)),EquilibriumID=seq(1,850,by=1), Size = 0, numNA = -1)
+basins <- data.frame(RecruitValue=c(rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99),
+                                    rep(seq(0,0.99,by=0.01),each=850*99)),
+                     Grazing=c(rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850),
+                               rep(seq(0.01,0.99,by=0.01),each=850)),
+                     grazlvl=c(rep(0.1,4*99*100*850), #don't need to use this
+                               rep(0.3,4*99*100*850),
+                               rep(0.5,4*99*100*850)), 
+                     level=c(rep(0.05,99*100*850), #this is our z parameter
+                             rep(0.1,99*100*850),
+                             rep(0.25,99*100*850),
+                             rep(0.5,99*100*850)),
+                     EquilibriumID=seq(1,850,by=1), Size = 0, numNA = -1)
 #change to numerics as opposed to factors
 basins$Grazing <- as.numeric(as.character(basins$Grazing))
 basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
@@ -106,8 +139,17 @@ initC2 <- gridtwo$Cinit
 initT2 <- gridtwo$Tinit
 
 #initializing the dataframes beforehand
-mumbytrajectories <- data.frame(Run=rep(1:ntrajectory, each = npoints), M1 = NA, C1 = NA, T1 = NA, M2 = NA, C2 = NA, T2 = NA, TimeStep = rep(1:npoints))
-basinofattractionID <- data.frame(InitCond=rep(1:ntrajectory), Equilibrium = NA, initM1 = initM[1:ntrajectory], initC1 = initC[1:ntrajectory], initT1 = initT[1:ntrajectory], initM2 = initM2[1:ntrajectory], initC2 = initC2[1:ntrajectory], initT2 = initT2[1:ntrajectory])
+mumbytrajectories <- data.frame(Run=rep(1:ntrajectory, each = npoints), 
+                                M1 = NA, C1 = NA, T1 = NA, M2 = NA, C2 = NA, 
+                                T2 = NA, TimeStep = rep(1:npoints))
+basinofattractionID <- data.frame(InitCond=rep(1:ntrajectory), 
+                                  Equilibrium = NA, 
+                                  initM1 = initM[1:ntrajectory], 
+                                  initC1 = initC[1:ntrajectory], 
+                                  initT1 = initT[1:ntrajectory], 
+                                  initM2 = initM2[1:ntrajectory], 
+                                  initC2 = initC2[1:ntrajectory], 
+                                  initT2 = initT2[1:ntrajectory])
 
 print(paste("The first row of mumbytrajectories = ", mumbytrajectories[1,]))
 print(paste("The first row of basinofattractionID = ", basinofattractionID[1,]))
@@ -119,55 +161,142 @@ finaltime <- floor(length(times)*0.1) #needs to spend last tenth of the total ti
 #should all end up by some stable point, if ran the simulation for long enough
 
 #[PYTHON CODE HANDLES FROM HERE TO]
-CalcTrajectories <- function(i,parameters,recruitvalue, g_val, glvl, lvl, ntrajectory,times,mumbytrajectories,initM,initC,initT,initM2,initC2,initT2,MumbyOpen_Elmhirst_2PatchExt){
+CalcTrajectories <- function(i,parameters,recruitvalue, g_val, glvl, lvl, 
+                             ntrajectory,times,mumbytrajectories,initM,initC,
+                             initT,initM2,initC2,initT2,
+                             MumbyOpen_Elmhirst_2PatchExt){
   for(i in 1:ntrajectory){
     #Elmhirst parameter model 
-    parameters <- c(a <- 0.1, d <- 0.24, g <- g_val, r <- 0.55, gamma <- 0.77, p_c <- recruitvalue, q_c <- recruitvalue, p_m <- round(recruitvalue*lvl,4), q_m <- round(recruitvalue*lvl,4), glvl <- glvl)
+    parameters <- c(a <- 0.1, d <- 0.24, g <- g_val, r <- 0.55, 
+                    gamma <- 0.77, p_c <- recruitvalue, q_c <- recruitvalue, 
+                    p_m <- round(recruitvalue*lvl,4), 
+                    q_m <- round(recruitvalue*lvl,4), glvl <- glvl)
     #giving M1 and M2, C1 and C2, T1 and T2 starting conditions
-    state <- c(M1 = initM[i], C1 = initC[i], Tu1 = initT[i], M2 = initM2[i], C2 = initC2[i], Tu2 = initT2[i])
+    state <- c(M1 = initM[i], C1 = initC[i], Tu1 = initT[i], M2 = initM2[i], 
+               C2 = initC2[i], Tu2 = initT2[i])
     print("In trajectory calculation function")
-    out <- lsode(y = state, times = times, func = MumbyOpen_Elmhirst_2PatchExt, parms = parameters)	
+    out <- lsode(y = state, times = times, func = MumbyOpen_Elmhirst_2PatchExt, 
+                 parms = parameters)	
     print(paste("first row of out = ", out[1,]))
     mumbytrajectories[mumbytrajectories$Run == i,"M1"] <- out[,2]
-    print(paste("M1 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"M1"][1]))
+    print(paste("M1 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"M1"][1]))
     mumbytrajectories[mumbytrajectories$Run == i,"C1"] <- out[,3]
-    print(paste("C1 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"C1"][1]))
+    print(paste("C1 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"C1"][1]))
     mumbytrajectories[mumbytrajectories$Run == i,"T1"] <- out[,4]
-    print(paste("T1 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"T1"][1]))
+    print(paste("T1 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"T1"][1]))
     mumbytrajectories[mumbytrajectories$Run == i,"M2"] <- out[,5]
-    print(paste("M2 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"M2"][1]))
+    print(paste("M2 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"M2"][1]))
     mumbytrajectories[mumbytrajectories$Run == i,"C2"] <- out[,6]
-    print(paste("C2 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"C2"][1]))
+    print(paste("C2 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"C2"][1]))
     mumbytrajectories[mumbytrajectories$Run == i,"T2"] <- out[,7]
-    print(paste("T2 worked and first element is",mumbytrajectories[mumbytrajectories$Run == i,"T2"][1]))
-    print(paste("First row of mumbytrajectories post-indexing", mumbytrajectories[1,]))
+    print(paste("T2 worked and first element is",
+                mumbytrajectories[mumbytrajectories$Run == i,"T2"][1]))
+    print(paste("First row of mumbytrajectories post-indexing",
+                mumbytrajectories[1,]))
   }
   return(mumbytrajectories)
 }
 #[HERE]
 
-BOA <- function(glvl, lvl, recruitvalue,g_val,twopatch_ext_IDs,basinofattractionID,basins,ntrajectory,radius,times,finaltime){
+BOA <- function(glvl, lvl, recruitvalue,g_val,twopatch_ext_IDs,
+                basinofattractionID,basins,ntrajectory,radius,times,finaltime){
   print("In BOA, glvl = ", glvl, "lvl =", lvl)
   #STEP 4: colour code each grid point as determined by which basin of attraction it's in
   #number of stable equi at that recruitment and grazing value combo
-  numequi <- dim(twopatch_ext_IDs[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$q_c == recruitvalue & twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl & twopatch_ext_IDs$stability == "stable_node",])[1]
+  numequi <- dim(twopatch_ext_IDs[twopatch_ext_IDs$p_c == recruitvalue & 
+                                    twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
+                                    twopatch_ext_IDs$q_c == recruitvalue & 
+                                    twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                    twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl & 
+                                    twopatch_ext_IDs$stability == "stable_node",])[1]
   #coordinates of the stable equi at that recruitment and grazing value combo
-  M1equi <- twopatch_ext_IDs$M1[twopatch_ext_IDs$p_c == recruitvalue &  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  twopatch_ext_IDs$q_c == recruitvalue &  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) &  twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  twopatch_ext_IDs$stability == "stable_node"]
+  M1equi <- twopatch_ext_IDs$M1[twopatch_ext_IDs$p_c == recruitvalue &  
+                                  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  
+                                  twopatch_ext_IDs$q_c == recruitvalue &  
+                                  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) &  
+                                  twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  
+                                  twopatch_ext_IDs$stability == "stable_node"]
   print(paste("M1equi worked and is",M1equi))
-  M2equi <- twopatch_ext_IDs$M2[twopatch_ext_IDs$p_c == recruitvalue &  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  twopatch_ext_IDs$q_c == recruitvalue &  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  twopatch_ext_IDs$stability == "stable_node"]
+  M2equi <- twopatch_ext_IDs$M2[twopatch_ext_IDs$p_c == recruitvalue &  
+                                  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
+                                  twopatch_ext_IDs$q_c == recruitvalue & 
+                                  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                  twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  
+                                  twopatch_ext_IDs$stability == "stable_node"]
   print(paste("M2equi worked and is",M2equi))
-  C1equi <- twopatch_ext_IDs$C1[twopatch_ext_IDs$p_c == recruitvalue &  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  twopatch_ext_IDs$q_c == recruitvalue &  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  twopatch_ext_IDs$stability == "stable_node"]
+  C1equi <- twopatch_ext_IDs$C1[twopatch_ext_IDs$p_c == recruitvalue &  
+                                  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  
+                                  twopatch_ext_IDs$q_c == recruitvalue &  
+                                  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                  twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  
+                                  twopatch_ext_IDs$stability == "stable_node"]
   print(paste("C1equi worked and is",C1equi))
-  C2equi <- twopatch_ext_IDs$C2[twopatch_ext_IDs$p_c == recruitvalue &  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  twopatch_ext_IDs$q_c == recruitvalue &  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  twopatch_ext_IDs$stability == "stable_node"]
+  C2equi <- twopatch_ext_IDs$C2[twopatch_ext_IDs$p_c == recruitvalue &  
+                                  twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &  
+                                  twopatch_ext_IDs$q_c == recruitvalue &  
+                                  twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                  twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &  
+                                  twopatch_ext_IDs$stability == "stable_node"]
   print(paste("C2equi worked and is",C2equi))
   
   for(n in 1:ntrajectory){
     for(m in 1:numequi){
       print(paste("n = ",n,"m = ", m))
       #if stay within that radius for the final 10th of the time, initial conditions + run # assigned that colour + equi number
-      if((((M1equi[m] - radius) < mumbytrajectories$M1[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)]) && ((M1equi[m] + radius) > mumbytrajectories$M1[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)])) & (((C1equi[m] - radius) < mumbytrajectories$C1[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)]) && ((C1equi[m] + radius) > mumbytrajectories$C1[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)])) & (((M2equi[m] - radius) < mumbytrajectories$M2[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)]) && ((M2equi[m] + radius) > mumbytrajectories$M2[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)])) & (((C2equi[m] - radius) < mumbytrajectories$C2[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)]) && ((C2equi[m] + radius) > mumbytrajectories$C2[mumbytrajectories$Run == n & mumbytrajectories$TimeStep > (length(times) - finaltime)]))){
-        basinofattractionID$Equilibrium[basinofattractionID$InitCond ==  n] <- 	twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$q_c == recruitvalue & twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &twopatch_ext_IDs$stability == "stable_node" & twopatch_ext_IDs$M1 == M1equi[m] & twopatch_ext_IDs$M2 == M2equi[m] & twopatch_ext_IDs$C1 == C1equi[m] & twopatch_ext_IDs$C2 == C2equi[m]]
-        basins$Size[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$q_c == recruitvalue & twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl & twopatch_ext_IDs$stability == "stable_node" & twopatch_ext_IDs$M1 == M1equi[m] & twopatch_ext_IDs$M2 == M2equi[m] & twopatch_ext_IDs$C1 == C1equi[m] & twopatch_ext_IDs$C2 == C2equi[m]]] <- 1 + basins$Size[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$q_c == recruitvalue & twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl & twopatch_ext_IDs$stability == "stable_node" & twopatch_ext_IDs$M1 == M1equi[m] & twopatch_ext_IDs$M2 == M2equi[m] &twopatch_ext_IDs$C1 == C1equi[m] & twopatch_ext_IDs$C2 == C2equi[m]]]}
+      if((((M1equi[m] - radius) < mumbytrajectories$M1[mumbytrajectories$Run == n & 
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)]) &&
+          ((M1equi[m] + radius) > mumbytrajectories$M1[mumbytrajectories$Run == n & 
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)])) &
+         (((C1equi[m] - radius) < mumbytrajectories$C1[mumbytrajectories$Run == n & 
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)]) &&
+          ((C1equi[m] + radius) > mumbytrajectories$C1[mumbytrajectories$Run == n & 
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)])) &
+         (((M2equi[m] - radius) < mumbytrajectories$M2[mumbytrajectories$Run == n &
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)]) &&
+          ((M2equi[m] + radius) > mumbytrajectories$M2[mumbytrajectories$Run == n &
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)])) &
+         (((C2equi[m] - radius) < mumbytrajectories$C2[mumbytrajectories$Run == n & 
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)]) &&
+          ((C2equi[m] + radius) > mumbytrajectories$C2[mumbytrajectories$Run == n &
+                                                       mumbytrajectories$TimeStep > (length(times) - finaltime)]))){
+        basinofattractionID$Equilibrium[basinofattractionID$InitCond ==  n] <- 	
+          twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &
+                                twopatch_ext_IDs$q_c == recruitvalue & 
+                                twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &
+                                twopatch_ext_IDs$stability == "stable_node" & twopatch_ext_IDs$M1 == M1equi[m] &
+                                twopatch_ext_IDs$M2 == M2equi[m] & twopatch_ext_IDs$C1 == C1equi[m] &
+                                twopatch_ext_IDs$C2 == C2equi[m]]
+        basins$Size[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & #each of size is coded as zero before it goes into this loop - and so every trajectory from every initial condition that falls within that basin of attraction adds 1 
+                      basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & 
+                                                                    twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
+                                                                    twopatch_ext_IDs$q_c == recruitvalue &
+                                                                    twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) &
+                                                                    twopatch_ext_IDs$g == g_val & 
+                                                                    twopatch_ext_IDs$g2 == glvl & 
+                                                                    twopatch_ext_IDs$stability == "stable_node" & 
+                                                                    twopatch_ext_IDs$M1 == M1equi[m] & 
+                                                                    twopatch_ext_IDs$M2 == M2equi[m] & 
+                                                                    twopatch_ext_IDs$C1 == C1equi[m] & 
+                                                                    twopatch_ext_IDs$C2 == C2equi[m]]] <- 1 + basins$Size[basins$RecruitValue == recruitvalue & 
+                                                                                                                            basins$grazlvl == glvl & 
+                                                                                                                            basins$Grazing == g_val & 
+                                                                                                                            basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue &
+                                                                                                                                                                          twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
+                                                                                                                                                                          twopatch_ext_IDs$q_c == recruitvalue & 
+                                                                                                                                                                          twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                                                                                                                                                          twopatch_ext_IDs$g == g_val & 
+                                                                                                                                                                          twopatch_ext_IDs$g2 == glvl & 
+                                                                                                                                                                          twopatch_ext_IDs$stability == "stable_node" &
+                                                                                                                                                                          twopatch_ext_IDs$M1 == M1equi[m] &
+                                                                                                                                                                          twopatch_ext_IDs$M2 == M2equi[m] &
+                                                                                                                                                                          twopatch_ext_IDs$C1 == C1equi[m] & 
+                                                                                                                                                                          twopatch_ext_IDs$C2 == C2equi[m]]]}
     }}
   output <- list("basinofattractionID" <- basinofattractionID, "basins" <- basins)
   return(output)
@@ -185,15 +314,22 @@ BOA <- function(glvl, lvl, recruitvalue,g_val,twopatch_ext_IDs,basinofattraction
 #mumbytrajectories$T2 <- NA
 #basinofattractionID$Equilibrium <- NA
 
-parameters <- c(a <- 0.1, d <- 0.24, g <- g_val, r <- 0.55, gamma <- 0.77, p_c <- recruitvalue, q_c <- round(recruitvalue*lvl,4), p_m <- recruitvalue, q_m <- round(recruitvalue*lvl,4), glvl <- glvl)
+parameters <- c(a <- 0.1, d <- 0.24, g <- g_val, r <- 0.55, gamma <- 0.77, 
+                p_c <- recruitvalue, q_c <- round(recruitvalue*lvl,4),
+                p_m <- recruitvalue, q_m <- round(recruitvalue*lvl,4), 
+                glvl <- glvl)
 
 #determining the trajectories
 i=1
 print("About to start calculating trajectories")
-mumbytraj <- CalcTrajectories(i,parameters,recruitvalue, g_val, glvl, lvl, ntrajectory,times,mumbytrajectories,initM,initC,initT,initM2,initC2,initT2,MumbyOpen_Elmhirst_2PatchExt)
+mumbytraj <- CalcTrajectories(i,parameters,recruitvalue, g_val, glvl, 
+                              lvl, ntrajectory,times,mumbytrajectories,
+                              initM,initC,initT,initM2,initC2,initT2,
+                              MumbyOpen_Elmhirst_2PatchExt)
 mumbytrajectories <- mumbytraj
 print(paste("The first row of mumbytraj = ", mumbytrajectories[1,]))
-save(mumbytrajectories, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/mumbytraj_heteroggrazlong/mumbytrajectories_recr",recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
+save(mumbytrajectories, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/mumbytraj_heteroggrazlong/mumbytrajectories_recr",
+                                      recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
 
 #code each initial condition as determined by which basin of attraction it's in
 output <- BOA(glvl, lvl, recruitvalue,g_val,twopatch_ext_heterograz_ID_full,basinofattractionID,basins,ntrajectory,radius,times,finaltime)
@@ -203,16 +339,25 @@ basins$Grazing <- as.numeric(as.character(basins$Grazing))
 basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
 basins$grazlvl <- as.numeric(as.character(basins$grazlvl))
 basins$level <- as.numeric(as.character(basins$level))
-save(basinofattractionID, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/BoAID_heteroggrazlong/basinofattractionID_recr",recruitvalue,"g",g_val,"_glvl",glvl,"percentofcoral_20000.RData"))
-save(basins, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong/basins_recr",recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
+save(basinofattractionID, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/BoAID_heteroggrazlong/basinofattractionID_recr",
+                                        recruitvalue,"g",g_val,"_glvl",glvl,"percentofcoral_20000.RData"))
+save(basins, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong/basins_recr",recruitvalue,"g",g_val,"_glvl",
+                           glvl,"_lvl",lvl*100,"_20000.RData"))
 basinsabr <- basins[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & basins$level = lvl,]
-save(basinsabr, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong_abr/basins_recr",recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
+save(basinsabr, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong_abr/basins_recr",recruitvalue,"g",g_val,
+                              "_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
 
 
 #save whether a set of parameters has any NAs and how many it has
-basins$numNA[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & basins$level == lvl] <-length(which(is.na(basinofattractionID$Equilibrium)))
-save(basins, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong/basins_recr",recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
-basinsabr <- basins[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & basins$level == lvl,]
+basins$numNA[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & 
+               basins$Grazing == g_val & 
+               basins$level == lvl] <-length(which(is.na(basinofattractionID$Equilibrium)))
+save(basins, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong/basins_recr",
+                           recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
+basinsabr <- basins[basins$RecruitValue == recruitvalue &
+                      basins$grazlvl == glvl &
+                      basins$Grazing == g_val &
+                      basins$level == lvl,]
 save(basinsabr, file = paste0("/home/agreiner/scratch/BoA_calculations/scenariofour/bsns_heteroggrazlong_abr/basins_recr",recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
 
 #iterator[j,4] <- length(which(is.na(basinofattractionID$Equilibrium)))
