@@ -175,3 +175,14 @@ trajectories['M'] = M
 trajectories['C'] = C
 trajectories['T'] = T
 trajectories['time_step'] = time_step
+
+basinofattraction_id_dt = {'names': ['init_cond', ' equilibrium', \
+                                    'init_M', 'init_C', 'init_T'], \
+        'formats':[np.float64, np.float64, np.float64, np.float64, np.float64]}
+basinofattraction_id = np.ones(num_trajectory, \
+                        dtype = basinofattraction_id_dt)
+basinofattraction_id['init_cond'] = range(1,num_trajectory+1)
+basinofattraction_id['equilibrium'] = [2]*(num_trajectory+1)
+basinofattraction_id['init_M'] = init_M[0:num_trajectory]
+basinofattraction_id['init_C'] = init_C[0:num_trajectory]
+basinofattraction_id['init_T'] = init_T[0:num_trajectory]
