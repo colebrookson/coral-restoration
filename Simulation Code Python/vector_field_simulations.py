@@ -17,6 +17,14 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
+import os
+
+# get relative path
+path = ("C:/Users/brookson/Documents/Github/"
+        "Coral-Restoration-Modeling/data/all_parameters_ordered.csv")
+start = "Users / brookson / Documents / Github /"
+relative_path = os.path.relpath(path, start)
+print(relative_path)
 
 # Set the initial conditions
 #x and y coords of all of the initial starting points
@@ -189,9 +197,19 @@ basinofattraction_id['init_M'] = init_M[0:num_trajectory]
 basinofattraction_id['init_C'] = init_C[0:num_trajectory]
 basinofattraction_id['init_T'] = init_T[0:num_trajectory]
 
-new = (basinofattraction_id['init_M'] > 0.5) & (basinofattraction_id['init_C'] > 0.2)
-basinofattraction_id[new]
-len(basinofattraction_id[new])
+# read in data into pre-formatted array
+ordered_param_data_dt = {'names': ['r', 'd', 'y', 'a', 'g', 'z', 'Equilibrium',\
+                         'C', 'M', 'eig_1', 'eig_2', 'stability', 'Colour',\
+                         'ID', 'paramcombo'], \
+        'formats':[np.float64, np.float64, np.float64, np.float64, np.float64, \
+        np.float64, np.float64, np.float64, np.float64, np.float64, np.float64, \
+        np.str, np.str, np.float64, np.float64]}
+file = open(("C:/Users/brookson/Documents/Github/"
+             "Coral-Resotration-Modeling/data/"
+             "intermediate-files/"
+             "all_parameters_ordered.csv"))
+ordered_param_data = np.loadtxt(file, delimiter = ',', skiprows = 1, \
+                                     dtype = ordered_param_data_dt)
 
 ## Make basin of attraction function ===========================================
 def basin_finder(grazing_level, recruit_level, competition_level, \
