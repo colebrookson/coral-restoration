@@ -128,8 +128,8 @@ cols = 7
 basins_init = np.ones(shape = (rows, cols)) #initialize as ones, make a sep one
 
 #name the columns
-dtype_float64 = [np.float64]*7
-basins_dt = {'names':['r', 'd', 'y', 'a', 'g', 'z', 'equil_id'], \
+dtype_float64 = [np.float64]*9
+basins_dt = {'names':['r','d','y','a','g','z','equil_id','size','numNA'], \
 'formats':dtype_float64}
 basins = np.ones(rows, dtype = basins_dt) #now make the real df
 
@@ -141,6 +141,8 @@ basins['a'] = a_vec
 basins['g'] = g_vec
 basins['z'] = z_vec
 basins['equil_id'] = equil_id
+basins['size'] = 0
+basins['numNA'] = -1
 len(basins[0])
 
 ## make initial values and other two matrices ==================================
@@ -176,13 +178,70 @@ trajectories['C'] = C
 trajectories['T'] = T
 trajectories['time_step'] = time_step
 
-basinofattraction_id_dt = {'names': ['init_cond', ' equilibrium', \
+basinofattraction_id_dt = {'names': ['init_cond', 'equilibrium', \
                                     'init_M', 'init_C', 'init_T'], \
         'formats':[np.float64, np.float64, np.float64, np.float64, np.float64]}
 basinofattraction_id = np.ones(num_trajectory, \
                         dtype = basinofattraction_id_dt)
 basinofattraction_id['init_cond'] = range(1,num_trajectory+1)
-basinofattraction_id['equilibrium'] = [2]*(num_trajectory+1)
+basinofattraction_id['equilibrium'] = [2]*(num_trajectory)
 basinofattraction_id['init_M'] = init_M[0:num_trajectory]
 basinofattraction_id['init_C'] = init_C[0:num_trajectory]
 basinofattraction_id['init_T'] = init_T[0:num_trajectory]
+
+new = (basinofattraction_id['init_M'] > 0.5) & (basinofattraction_id['init_C'] > 0.2)
+basinofattraction_id[new]
+len(basinofattraction_id[new])
+
+## Make basin of attraction function ===========================================
+def basin_finder(grazing_level, recruit_level, competition_level, \
+                 ordered_param_data, basinofattraction_id, basins, \
+                 num_trajectory, radius, times, final_time):
+    print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
+    "(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
+
+    # number of stable equilibria at that parameter combo
+    shape = (ordered_param_data['g'] == grazing_level) & \
+            (ordered_param_data['a'] == competition_level) & \
+            (ordered_param_data['z'] == recruit_level)
+    ordered_param_shape = ordered_param_data[temp_shape]
+    stable_ordered_param = ordered_param_shape['stability'] == "stable_node"
+    num_eq = len(stable_ordered_param)
+
+    # get coordinates of the stable equilibria at that parameter combo
+    m_equi = stable_ordered_param['M']
+    c_equi = stable_ordered_param['C']
+    print("m coordinate is = ", m_equi, " and c coordinate is = ", c_equi)
+
+    # loop through all num_trajectories for each stable equilibrium
+    i = 0
+    j = 0
+    while i <= (num_trajectory-1):
+        while j <= num_eq:
+            # set up conditions to deal with trajectories shape
+            time_diff = (len(times) - final_time)
+            traj_shape = (trajectories['run'] == j) &
+                         (trajectories['time_step'] > time_diff)
+            traj_j = trajectories[traj_shape]
+
+            # set up data to get the appropriate part
+            assign_shape = (stable_ordered_param['M'] = m_equi[i]) & \
+                           (stable_ordered_param['C'] = c_equi[i])
+
+            # get basins shape
+            basins_shape = (basins['g'] == grazing_level) & \
+                           (basins['a'] == competition_level) & \
+                           (basins['z'] == recruit_value) & \
+                           (basins['equil_id'] == \
+                                    stable_ordered_param[assign_shape]['ID'])
+
+            # big if statement to test if the trajectory stays within radius
+            if (((m_equi[i] - radius) < traj_j['M']) and \
+            (((m_equi[i] + radius) < traj_j['M'])) and \
+            (((c_equi[i] - radius) < traj_j['C']) and \
+            (((c_equi[i] + radius) < traj_j['C'])):
+                basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
+                    stable_ordered_param[assign_shape]['ID']
+                basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+    output = [basinofattraction_id, basins]
+    return output
