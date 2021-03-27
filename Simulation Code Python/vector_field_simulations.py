@@ -26,6 +26,14 @@ start = "Users / brookson / Documents / Github /"
 relative_path = os.path.relpath(path, start)
 print(relative_path)
 
+# get all unique parameter combinations to loop through
+z = [0, 0.05, 0.25, 0.5]
+a = np.arange(0,1.01,0.01)
+g = np.arange(0,0.51,0.01)
+
+# set dtype for the array I'm going to make
+parameter_grid = np.array(np.meshgrid(z, a, g), ).T.reshape(-1,3)
+
 # Set the initial conditions
 #x and y coords of all of the initial starting points
 x_coords = np.arange(0.01,1,0.05)
@@ -78,6 +86,8 @@ for i in range(0,len(C_points)):
     #columns in each) and then should just be able to plot like [14]
     M_array[:,i] = res.y.T[:,1]
     C_array[:,i] = res.y.T[:,0] #[0:50,2]
+with np.printoptions(threshold=np.inf):
+    print(C_array)
 
 ## create dataframe to store values in =========================================
 
@@ -215,6 +225,27 @@ ordered_param_data = np.loadtxt(file, delimiter = ',', skiprows = 1, \
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
                  num_trajectory, radius, times, final_time):
+
+    """ This function takes in a series of parameters and finds whether or not
+    a particular basin of attraction is stable?
+
+    Parameters:
+        grazing_level (float): the parameter value for grazing (g)
+        recruit_level (float): the parameterfor recruitment level (z)
+        competition_level (float): the parameter value for competition level (a)
+        ordered_param_data (np.array): data holding all of the ordered
+            equilibria across the different parameter values. Read in via
+            loadtext() above
+        basinofattraction_id (np.array): array holding initial conditions for
+            the different equilibria values.
+        basins ():
+        num_trajectory:
+        radius:
+        times:
+        final_time:
+        
+    """
+
     print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
     "(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
 

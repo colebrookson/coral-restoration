@@ -265,12 +265,16 @@ BOA <- function(glvl, lvl, recruitvalue,g_val,twopatch_ext_IDs,
           ((C2equi[m] + radius) > mumbytrajectories$C2[mumbytrajectories$Run == n &
                                                        mumbytrajectories$TimeStep > (length(times) - finaltime)]))){
         basinofattractionID$Equilibrium[basinofattractionID$InitCond ==  n] <- 	
-          twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &
+          twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & 
+                                twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) &
                                 twopatch_ext_IDs$q_c == recruitvalue & 
                                 twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
-                                twopatch_ext_IDs$g == g_val & twopatch_ext_IDs$g2 == glvl &
-                                twopatch_ext_IDs$stability == "stable_node" & twopatch_ext_IDs$M1 == M1equi[m] &
-                                twopatch_ext_IDs$M2 == M2equi[m] & twopatch_ext_IDs$C1 == C1equi[m] &
+                                twopatch_ext_IDs$g == g_val & 
+                                twopatch_ext_IDs$g2 == glvl &
+                                twopatch_ext_IDs$stability == "stable_node" & 
+                                twopatch_ext_IDs$M1 == M1equi[m] &
+                                twopatch_ext_IDs$M2 == M2equi[m] & 
+                                twopatch_ext_IDs$C1 == C1equi[m] &
                                 twopatch_ext_IDs$C2 == C2equi[m]]
         basins$Size[basins$RecruitValue == recruitvalue & basins$grazlvl == glvl & basins$Grazing == g_val & #each of size is coded as zero before it goes into this loop - and so every trajectory from every initial condition that falls within that basin of attraction adds 1 
                       basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue & 
@@ -283,20 +287,21 @@ BOA <- function(glvl, lvl, recruitvalue,g_val,twopatch_ext_IDs,
                                                                     twopatch_ext_IDs$M1 == M1equi[m] & 
                                                                     twopatch_ext_IDs$M2 == M2equi[m] & 
                                                                     twopatch_ext_IDs$C1 == C1equi[m] & 
-                                                                    twopatch_ext_IDs$C2 == C2equi[m]]] <- 1 + basins$Size[basins$RecruitValue == recruitvalue & 
-                                                                                                                            basins$grazlvl == glvl & 
-                                                                                                                            basins$Grazing == g_val & 
-                                                                                                                            basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue &
-                                                                                                                                                                          twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
-                                                                                                                                                                          twopatch_ext_IDs$q_c == recruitvalue & 
-                                                                                                                                                                          twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
-                                                                                                                                                                          twopatch_ext_IDs$g == g_val & 
-                                                                                                                                                                          twopatch_ext_IDs$g2 == glvl & 
-                                                                                                                                                                          twopatch_ext_IDs$stability == "stable_node" &
-                                                                                                                                                                          twopatch_ext_IDs$M1 == M1equi[m] &
-                                                                                                                                                                          twopatch_ext_IDs$M2 == M2equi[m] &
-                                                                                                                                                                          twopatch_ext_IDs$C1 == C1equi[m] & 
-                                                                                                                                                                          twopatch_ext_IDs$C2 == C2equi[m]]]}
+                                                                    twopatch_ext_IDs$C2 == C2equi[m]]] <- 
+          1 + basins$Size[basins$RecruitValue == recruitvalue & 
+                            basins$grazlvl == glvl & 
+                            basins$Grazing == g_val & 
+                            basins$EquilibriumID == twopatch_ext_IDs$ID[twopatch_ext_IDs$p_c == recruitvalue &
+                                                                          twopatch_ext_IDs$p_m == round(recruitvalue*lvl,4) & 
+                                                                          twopatch_ext_IDs$q_c == recruitvalue & 
+                                                                          twopatch_ext_IDs$q_m == round(recruitvalue*lvl,4) & 
+                                                                          twopatch_ext_IDs$g == g_val & 
+                                                                          twopatch_ext_IDs$g2 == glvl & 
+                                                                          twopatch_ext_IDs$stability == "stable_node" &
+                                                                          twopatch_ext_IDs$M1 == M1equi[m] &
+                                                                          twopatch_ext_IDs$M2 == M2equi[m] &
+                                                                          twopatch_ext_IDs$C1 == C1equi[m] & 
+                                                                          twopatch_ext_IDs$C2 == C2equi[m]]]}
     }}
   output <- list("basinofattractionID" <- basinofattractionID, "basins" <- basins)
   return(output)
