@@ -14,6 +14,7 @@
 import numpy as np
 import scipy.integrate as spi
 import pandas as pd
+import math
 import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
@@ -208,18 +209,10 @@ basinofattraction_id['init_C'] = init_C[0:num_trajectory]
 basinofattraction_id['init_T'] = init_T[0:num_trajectory]
 
 # read in data into pre-formatted array
-ordered_param_data_dt = {'names': ['r', 'd', 'y', 'a', 'g', 'z', 'Equilibrium',\
-                         'C', 'M', 'eig_1', 'eig_2', 'stability', 'Colour',\
-                         'ID', 'paramcombo'], \
-        'formats':[np.float64, np.float64, np.float64, np.float64, np.float64, \
-        np.float64, np.float64, np.float64, np.float64, np.float64, np.float64, \
-        np.str, np.str, np.float64, np.float64]}
-file = open(("C:/Users/brookson/Documents/Github/"
-             "Coral-Resotration-Modeling/data/"
-             "intermediate-files/"
-             "all_parameters_ordered.csv"))
-ordered_param_data = np.loadtxt(file, delimiter = ',', skiprows = 1, \
-                                     dtype = ordered_param_data_dt)
+ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
+                                    "Coral-Resotration-Modeling/data/"
+                                    "intermediate-files/"
+                                    "all_parameters_ordered.csv")
 
 ## Make basin of attraction function ===========================================
 def basin_finder(grazing_level, recruit_level, competition_level, \
@@ -253,18 +246,19 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
     shape = (ordered_param_data['g'] == grazing_level) & \
             (ordered_param_data['a'] == competition_level) & \
             (ordered_param_data['z'] == recruit_level)
-    ordered_param_shape = ordered_param_data[temp_shape]
-    stable_ordered_param = ordered_param_shape['stability'] == "stable_node"
+    ordered_param_shape = ordered_param_data[shape]
+    stable_ordered_param = ordered_param_shape[ordered_param_shape['stability']\
+                                                == "stable_node"]
     num_eq = len(stable_ordered_param)
 
     # get coordinates of the stable equilibria at that parameter combo
-    m_equi = stable_ordered_param['M']
-    c_equi = stable_ordered_param['C']
+    m_equi = stable_ordered_param['M'].tolist()
+    c_equi = stable_ordered_param['C'].tolist()
     print("m coordinate is = ", m_equi, " and c coordinate is = ", c_equi)
 
     # loop through all num_trajectories for each stable equilibrium
     i = 0
-    j = 0
+    j = 1
     while i <= (num_trajectory-1):
         while j <= num_eq:
             # set up conditions to deal with trajectories shape
@@ -280,23 +274,32 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             # get basins shape
             basins_shape = (basins['g'] == grazing_level) & \
                            (basins['a'] == competition_level) & \
-                           (basins['z'] == recruit_value) & \
+                           (basins['z'] == recruit_level) & \
                            (basins['equil_id'] == \
-                                    stable_ordered_param[assign_shape]['ID'])
+                            stable_ordered_param[assign_shape]['ID'].tolist())
 
             # big if statement to test if the trajectory stays within radius
             if ((m_equi[i] - radius) < traj_j['M']) and \
             ((m_equi[i] + radius) < traj_j['M']) and \
             ((c_equi[i] - radius) < traj_j['C']) and \
             ((c_equi[i] + radius) < traj_j['C']):
-                basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
-                    stable_ordered_param[assign_shape]['ID']
-                basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+                print('yes')
+                #basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
+                    #stable_ordered_param[assign_shape]['ID']
+                #basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
     output = [basinofattraction_id, basins]
     return output
 
 
 # run actual model =============================================================
-output_test = basin_finder(grazing_level, recruit_level, competition_level, \
-                 ordered_param_data, basinofattraction_id, basins, \
-                 num_trajectory, radius, times, final_time)
+output_test = basin_finder(grazing_level = g_current,\
+                           recruit_level = z_current, \
+                           competition_level = a_current, \
+                           ordered_param_data = ordered_param_data, \
+                           basinofattraction_id = basinofattraction_id, \
+                           basins = basins, \
+                           num_trajectory = num_trajectory, \
+                           radius = 0.005, \
+                           times = np.linspace(start = 0, stop = 2000, \
+                                               num = 20000),\
+                           final_time =  math.floor(len(times)*0.1))
