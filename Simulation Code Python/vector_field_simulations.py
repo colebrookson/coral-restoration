@@ -243,7 +243,7 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
         radius:
         times:
         final_time:
-        
+
     """
 
     print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
@@ -269,13 +269,13 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
         while j <= num_eq:
             # set up conditions to deal with trajectories shape
             time_diff = (len(times) - final_time)
-            traj_shape = (trajectories['run'] == j) &
+            traj_shape = (trajectories['run'] == j) & \
                          (trajectories['time_step'] > time_diff)
             traj_j = trajectories[traj_shape]
 
             # set up data to get the appropriate part
-            assign_shape = (stable_ordered_param['M'] = m_equi[i]) & \
-                           (stable_ordered_param['C'] = c_equi[i])
+            assign_shape = (stable_ordered_param['M'] == m_equi[i]) & \
+                           (stable_ordered_param['C'] == c_equi[i])
 
             # get basins shape
             basins_shape = (basins['g'] == grazing_level) & \
@@ -285,12 +285,18 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                                     stable_ordered_param[assign_shape]['ID'])
 
             # big if statement to test if the trajectory stays within radius
-            if (((m_equi[i] - radius) < traj_j['M']) and \
-            (((m_equi[i] + radius) < traj_j['M'])) and \
-            (((c_equi[i] - radius) < traj_j['C']) and \
-            (((c_equi[i] + radius) < traj_j['C'])):
+            if ((m_equi[i] - radius) < traj_j['M']) and \
+            ((m_equi[i] + radius) < traj_j['M']) and \
+            ((c_equi[i] - radius) < traj_j['C']) and \
+            ((c_equi[i] + radius) < traj_j['C']):
                 basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
                     stable_ordered_param[assign_shape]['ID']
                 basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
     output = [basinofattraction_id, basins]
     return output
+
+
+# run actual model =============================================================
+output_test = basin_finder(grazing_level, recruit_level, competition_level, \
+                 ordered_param_data, basinofattraction_id, basins, \
+                 num_trajectory, radius, times, final_time)
