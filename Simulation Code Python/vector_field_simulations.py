@@ -266,7 +266,8 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             traj_shape = (trajectories['run'] == j) & \
                          (trajectories['time_step'] > time_diff)
             traj_j = trajectories[traj_shape]
-
+            if len(np.unique(traj_j['M'])) > 1:
+                sys.exit("more than one unique value for traj_j['M']")
             # set up data to get the appropriate part
             assign_shape = (stable_ordered_param['M'] == m_equi[i]) & \
                            (stable_ordered_param['C'] == c_equi[i])
@@ -279,14 +280,16 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                             stable_ordered_param[assign_shape]['ID'].tolist())
 
             # big if statement to test if the trajectory stays within radius
-            if ((m_equi[i] - radius) < traj_j['M']) and \
-            ((m_equi[i] + radius) < traj_j['M']) and \
-            ((c_equi[i] - radius) < traj_j['C']) and \
-            ((c_equi[i] + radius) < traj_j['C']):
-                print('yes')
-                #basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
-                    #stable_ordered_param[assign_shape]['ID']
-                #basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+            if ((m_equi[i] - radius) < np.unique(traj_j['M'])[0]) and \
+            ((m_equi[i] + radius) < np.unique(traj_j['M'])[0]) and \
+            ((c_equi[i] - radius) < np.unique(traj_j['C'])[0]) and \
+            ((c_equi[i] + radius) < np.unique(traj_j['C'])[0]):
+                basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
+                    stable_ordered_param[assign_shape]['ID']
+                basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+            j=j+1
+        i = i+1
+        print('Current i is', i)
     output = [basinofattraction_id, basins]
     return output
 

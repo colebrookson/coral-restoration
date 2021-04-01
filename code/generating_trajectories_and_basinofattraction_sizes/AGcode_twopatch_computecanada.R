@@ -337,7 +337,8 @@ save(mumbytrajectories, file = paste0("/home/agreiner/scratch/BoA_calculations/s
                                       recruitvalue,"g",g_val,"_glvl",glvl,"_lvl",lvl*100,"_20000.RData"))
 
 #code each initial condition as determined by which basin of attraction it's in
-output <- BOA(glvl, lvl, recruitvalue,g_val,twopatch_ext_heterograz_ID_full,basinofattractionID,basins,ntrajectory,radius,times,finaltime)
+output <- BOA(glvl, lvl, recruitvalue,g_val,twopatch_ext_heterograz_ID_full,
+              basinofattractionID,basins,ntrajectory,radius,times,finaltime)
 basinofattractionID <- output[[1]]
 basins <- output[[2]]
 basins$Grazing <- as.numeric(as.character(basins$Grazing))
