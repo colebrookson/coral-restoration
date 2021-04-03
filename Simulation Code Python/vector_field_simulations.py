@@ -203,11 +203,11 @@ basinofattraction_id_dt = {'names': ['init_cond', 'equilibrium', \
 basinofattraction_id = np.ones(num_trajectory, \
                         dtype = basinofattraction_id_dt)
 basinofattraction_id['init_cond'] = range(1,num_trajectory+1)
-basinofattraction_id['equilibrium'] = [2]*(num_trajectory)
+basinofattraction_id['equilibrium'] = [0]*(num_trajectory)
 basinofattraction_id['init_M'] = init_M[0:num_trajectory]
 basinofattraction_id['init_C'] = init_C[0:num_trajectory]
 basinofattraction_id['init_T'] = init_T[0:num_trajectory]
-
+basinofattraction_id = pd.DataFrame(basinofattraction_id)
 # read in data into pre-formatted array
 ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
                                     "Coral-Resotration-Modeling/data/"
@@ -257,20 +257,20 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
     print("m coordinate is = ", m_equi, " and c coordinate is = ", c_equi)
 
     # loop through all num_trajectories for each stable equilibrium
-    i = 0
-    j = 1
-    while i <= (num_trajectory-1):
-        while j <= num_eq:
+    i = 1
+    while i <= num_trajectory:
+        j = 0
+        while j <= (num_eq-1):
             # set up conditions to deal with trajectories shape
             time_diff = (len(times) - final_time)
-            traj_shape = (trajectories['run'] == j) & \
+            traj_shape = (trajectories['run'] == i) & \
                          (trajectories['time_step'] > time_diff)
             traj_j = trajectories[traj_shape]
             if len(np.unique(traj_j['M'])) > 1:
                 sys.exit("more than one unique value for traj_j['M']")
             # set up data to get the appropriate part
-            assign_shape = (stable_ordered_param['M'] == m_equi[i]) & \
-                           (stable_ordered_param['C'] == c_equi[i])
+            assign_shape = (stable_ordered_param['M'] == m_equi[j]) & \
+                           (stable_ordered_param['C'] == c_equi[j])
 
             # get basins shape
             basins_shape = (basins['g'] == grazing_level) & \
@@ -280,16 +280,20 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                             stable_ordered_param[assign_shape]['ID'].tolist())
 
             # big if statement to test if the trajectory stays within radius
-            if ((m_equi[i] - radius) < np.unique(traj_j['M'])[0]) and \
-            ((m_equi[i] + radius) < np.unique(traj_j['M'])[0]) and \
-            ((c_equi[i] - radius) < np.unique(traj_j['C'])[0]) and \
-            ((c_equi[i] + radius) < np.unique(traj_j['C'])[0]):
-                basinofattraction_id[basinofattraction_id['init_cond'] == i] = \
-                    stable_ordered_param[assign_shape]['ID']
+            if ((m_equi[j] - radius) < np.unique(traj_j['M'])[0]) and \
+            ((m_equi[j] + radius) < np.unique(traj_j['M'])[0]) and \
+            ((c_equi[j] - radius) < np.unique(traj_j['C'])[0]) and \
+            ((c_equi[j] + radius) < np.unique(traj_j['C'])[0]):
+                print('yes')
+                basinofattraction_id.loc[basinofattraction_id.init_cond == i, 'equilibrium']= \
+                    np.unique(stable_ordered_param[assign_shape]['ID'])[0]
                 basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+            else:
+                print('no')
             j=j+1
         i = i+1
-        print('Current i is', i)
+        print(i,j)
+        #print('Current i is', i)
     output = [basinofattraction_id, basins]
     return output
 
@@ -306,3 +310,24 @@ output_test = basin_finder(grazing_level = g_current,\
                            times = np.linspace(start = 0, stop = 2000, \
                                                num = 20000),\
                            final_time =  math.floor(len(times)*0.1))
+output_basinofattraction = pd.DataFrame(output_test[0])
+file_name = print("C:/Users/brookson/Documents/Github/"
+                    "Coral-Resotration-Modeling/data/"
+                    "intermediate-files/basins_ouput/"
+                    "output_basinofattraction_a",a_current,'_g',g_current,'_z',\
+                  z_current, '.csv')
+output_basinofattraction.to_csv("C:/Users/brookson/Documents/Github/Coral-Resotration-Modeling/data/intermediate-files/basins_output/output_basinofattraction_a0.3_g0.3_z0.05.csv")
+output_basins = pd.DataFrame(output_test[1])
+output_basins.to_csv("C:/Users/brookson/Documents/Github/Coral-Resotration-Modeling/data/intermediate-files/basins_output/output_basins_a0.3_g0.3_z0.05.csv")
+
+
+# make figures =================================================================
+groups = output_basinofattraction.groupby('equilibrium')
+for name, group in groups:
+    plt.plot(group.init_M, group.init_C, marker = 'o', linestyle = '',\
+             label = name)
+plt.legend()
+
+plt.scatter(output_basinofattraction['init_M'], \
+            output_basinofattraction['init_C'], \
+            c = output_basinofattraction['equilibrium'])
