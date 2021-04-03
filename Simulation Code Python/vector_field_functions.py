@@ -9,7 +9,7 @@
 ###########################
 ###########################
 
-## set-up ======================================================================
+# set-up =======================================================================
 
 import numpy as np
 import scipy.integrate as spi
@@ -19,7 +19,7 @@ import decimal
 from scipy.integrate import solve_ivp
 import os
 
-
+# make function to create objects needed for basin calculations ================
 def creat_prereq_objects(a_current, z_current, g_current):
     #x and y coords of all of the initial starting points
     x_coords = np.arange(0.01,1,0.05)
@@ -132,3 +132,91 @@ def creat_prereq_objects(a_current, z_current, g_current):
                                         "Coral-Resotration-Modeling/data/"
                                         "intermediate-files/"
                                         "all_parameters_ordered.csv")
+
+    output = [ordered_param_data, basinofattraction_id, basins, \
+              num_trajectory]
+    return output
+
+# make function to get all basins of attraction values =========================
+
+def basin_finder(grazing_level, recruit_level, competition_level, \
+                 ordered_param_data, basinofattraction_id, basins, \
+                 num_trajectory, radius, times, final_time):
+
+    """ This function takes in a series of parameters and finds whether or not
+    a particular basin of attraction is stable?
+
+    Parameters:
+        grazing_level (float): the parameter value for grazing (g)
+        recruit_level (float): the parameterfor recruitment level (z)
+        competition_level (float): the parameter value for competition level (a)
+        ordered_param_data (np.array): data holding all of the ordered
+            equilibria across the different parameter values. Read in via
+            loadtext() above
+        basinofattraction_id (np.array): array holding initial conditions for
+            the different equilibria values.
+        basins ():
+        num_trajectory:
+        radius:
+        times:
+        final_time:
+
+    """
+
+    print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
+    "(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
+
+    # number of stable equilibria at that parameter combo
+    shape = (ordered_param_data['g'] == grazing_level) & \
+            (ordered_param_data['a'] == competition_level) & \
+            (ordered_param_data['z'] == recruit_level)
+    ordered_param_shape = ordered_param_data[shape]
+    stable_ordered_param = ordered_param_shape[ordered_param_shape['stability']\
+                                                == "stable_node"]
+    num_eq = len(stable_ordered_param)
+
+    # get coordinates of the stable equilibria at that parameter combo
+    m_equi = stable_ordered_param['M'].tolist()
+    c_equi = stable_ordered_param['C'].tolist()
+    print("m coordinate is = ", m_equi, " and c coordinate is = ", c_equi)
+
+    # loop through all num_trajectories for each stable equilibrium
+    i = 1
+    while i <= num_trajectory:
+        j = 0
+        while j <= (num_eq-1):
+            # set up conditions to deal with trajectories shape
+            time_diff = (len(times) - final_time)
+            traj_shape = (trajectories['run'] == i) & \
+                         (trajectories['time_step'] > time_diff)
+            traj_j = trajectories[traj_shape]
+            if len(np.unique(traj_j['M'])) > 1:
+                sys.exit("more than one unique value for traj_j['M']")
+            # set up data to get the appropriate part
+            assign_shape = (stable_ordered_param['M'] == m_equi[j]) & \
+                           (stable_ordered_param['C'] == c_equi[j])
+
+            # get basins shape
+            basins_shape = (basins['g'] == grazing_level) & \
+                           (basins['a'] == competition_level) & \
+                           (basins['z'] == recruit_level) & \
+                           (basins['equil_id'] == \
+                            stable_ordered_param[assign_shape]['ID'].tolist())
+
+            # big if statement to test if the trajectory stays within radius
+            if ((m_equi[j] - radius) < np.unique(traj_j['M'])[0]) and \
+            ((m_equi[j] + radius) < np.unique(traj_j['M'])[0]) and \
+            ((c_equi[j] - radius) < np.unique(traj_j['C'])[0]) and \
+            ((c_equi[j] + radius) < np.unique(traj_j['C'])[0]):
+                print('yes')
+                basinofattraction_id.loc[basinofattraction_id.init_cond == i, 'equilibrium']= \
+                    np.unique(stable_ordered_param[assign_shape]['ID'])[0]
+                basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+            else:
+                print('no')
+            j=j+1
+        i = i+1
+        print(i,j)
+        #print('Current i is', i)
+    output = [basinofattraction_id, basins]
+    return output
