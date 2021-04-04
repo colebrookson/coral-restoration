@@ -118,7 +118,7 @@ def creat_prereq_objects(a_current, z_current, g_current):
 
     basinofattraction_id_dt = {'names': ['init_cond', 'equilibrium', \
                                         'init_M', 'init_C', 'init_T'], \
-            'formats':[np.float64, np.float64, np.float64, np.float64, np.float64]}
+        'formats':[np.float64, np.float64, np.float64, np.float64, np.float64]}
     basinofattraction_id = np.ones(num_trajectory, \
                             dtype = basinofattraction_id_dt)
     basinofattraction_id['init_cond'] = range(1,num_trajectory+1)
@@ -209,7 +209,8 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             ((c_equi[j] - radius) < np.unique(traj_j['C'])[0]) and \
             ((c_equi[j] + radius) < np.unique(traj_j['C'])[0]):
                 print('yes')
-                basinofattraction_id.loc[basinofattraction_id.init_cond == i, 'equilibrium']= \
+                basinofattraction_id.loc[basinofattraction_id.init_cond == i, \
+                                        'equilibrium']= \
                     np.unique(stable_ordered_param[assign_shape]['ID'])[0]
                 basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
             else:
