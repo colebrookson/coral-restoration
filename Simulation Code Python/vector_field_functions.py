@@ -179,7 +179,22 @@ def create_prereq_objects(a_current, z_current, g_current):
     return output
 
 # make function to get all basins of attraction values =========================
-
+#ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
+#                                        "Coral-Resotration-Modeling/data/"
+#                                        "intermediate-files/"
+#                                        "all_parameters_ordered.csv")
+#output = create_prereq_objects(0.05, 0.05, 0)
+#grazing_level = 0.05
+#recruit_level = 0.05
+#competition_level = 0
+#ordered_param_data = ordered_param_data
+#basinofattraction_id = output[0]
+#basins = output[1]
+#trajectories = output[2]
+#num_trajectory = output[3]
+#radius = 0.005
+#times = np.linspace(start = 0, stop = 2000, num = 20000)
+#final_time =  math.floor(len(times)*0.1)
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
                  trajectories, num_trajectory, radius, times, final_time):
@@ -248,7 +263,7 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                            (basins['a'] == competition_level) & \
                            (basins['z'] == recruit_level) & \
                            (basins['equil_id'] == \
-                            stable_ordered_param[assign_shape]['ID'].tolist())
+                        stable_ordered_param[assign_shape]['ID'].tolist()[0])
 
             # big if statement to test if the trajectory stays within radius
             if ((m_equi[j] - radius) < np.unique(traj_j['M'])[0]) and \
