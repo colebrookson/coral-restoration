@@ -21,6 +21,10 @@ import os
 
 # make function to create objects needed for basin calculations ================
 def create_prereq_objects(a_current, z_current, g_current):
+
+    # all combos of parameters
+    combos = 51*101*4
+
     #x and y coords of all of the initial starting points
     x_coords = np.arange(0.01,1,0.05)
     #this makes a mesh grid at those points (the whole square)
