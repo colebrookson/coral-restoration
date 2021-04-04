@@ -270,7 +270,7 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             ((m_equi[j] + radius) < np.unique(traj_j['M'])[0]) and \
             ((c_equi[j] - radius) < np.unique(traj_j['C'])[0]) and \
             ((c_equi[j] + radius) < np.unique(traj_j['C'])[0]):
-                print('yes')
+                #print('yes')
                 basinofattraction_id.loc[basinofattraction_id.init_cond == i, \
                                         'equilibrium']= \
                     np.unique(stable_ordered_param[assign_shape]['ID'])[0]
@@ -282,10 +282,10 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                            (basins['z'] == recruit_level), \
                            'size'] += 1
             else:
-                print('no')
+                #print('no')
             j=j+1
         i = i+1
-        print(i,j)
+        #print(i,j)
         #print('Current i is', i)
     output = [basinofattraction_id, basins]
     return output

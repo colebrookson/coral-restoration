@@ -19,14 +19,9 @@ import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
 import os
+import time
 from vector_field_functions import create_prereq_objects
 from vector_field_functions import basin_finder
-
-# get relative path
-path = ("C:/Users/brookson/Documents/Github/"
-        "Coral-Restoration-Modeling/data/all_parameters_ordered.csv")
-start = "Users / brookson / Documents / Github /"
-relative_path = os.path.relpath(path, start)
 
 # get all unique parameter combinations to loop through
 z = [0, 0.05, 0.25, 0.5]
@@ -38,24 +33,28 @@ ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
                                         "Coral-Resotration-Modeling/data/"
                                         "intermediate-files/"
                                         "all_parameters_ordered.csv")
+# make lists of first values to loop through (i.e. essential demo values)
 a_essential = [0.05, 0.3, 0.5, 0.99]
 g_essential = [0.05, 0.21, 0.5]
 z_essential = [0, 0.05, 0.25, 0.5]
+# make all unique combos of demo values
 essential_list = [[i, j, k] for i in a_essential
                             for j in g_essential
                             for k in z_essential]
 param_combo = essential_list[0]
 for param_combo in essential_list:
+    start = time.time()
+    # set a, z, and g parameters
     a_current = param_combo[0]
     g_current = param_combo[1]
     z_current = param_combo[2]
-
+    # make amount of time for stability calculation
     times = np.linspace(start = 0, stop = 2000, num = 20000)
-    # get objects
+    # get objects from function in other script
     prereq_obs = create_prereq_objects(a_current = a_current, \
                                        z_current = g_current, \
                                        g_current = z_current)
-
+    # run actual model
     basin_output = basin_finder(grazing_level = g_current,\
                                recruit_level = z_current, \
                                competition_level = a_current, \
@@ -67,39 +66,36 @@ for param_combo in essential_list:
                                radius = 0.005, \
                                times = times,\
                                final_time =  math.floor(len(times)*0.1))
+    # separate the different output objects
+    output_basinofattraction = pd.DataFrame(basin_output[0])
+    output_basins = pd.DataFrame(basin_output[1])
+    # write output objects to file
+    output_basinofattraction.to_csv("C:/Users/brookson/Documents/Github/"
+                                    "Coral-Resotration-Modeling/data/"
+                                    "intermediate-files/basins_output/"
+                                    "basinofattraction_a%.2f_g%.2f_z%.2f.csv"\
+                                    % (g_current, z_current, a_current))
+    output_basins.to_csv("C:/Users/brookson/Documents/Github/"
+                         "Coral-Resotration-Modeling/data/"
+                         "intermediate-files/basins_output/"
+                         "basins_a%.2f_g%.2f_z%.2f.csv"\
+                         % (g_current, z_current, a_current))
+    # make (basic plot showing the different trajectory outcomes)
+    groups = output_basinofattraction.groupby('equilibrium')
+    for name, group in groups:
+        plt.plot(group.init_M, group.init_C, marker = 'o', linestyle = '',\
+                 label = name)
+        plt.xlabel('Proportion Macroalgae', fontsize = 15)
+        plt.ylabel('Proportion Coral', fontsize = 15)
+        plt.title('Grazing = %.2f, Recruitment = %.2f, Competition = %.2f' \
+                    % (g_current, z_current, a_current))
+    plt.legend()
+    # save plot
+    plt.savefig("C:/Users/brookson/Documents/Github/"
+                "Coral-Resotration-Modeling/graphs/"
+                "basinplots/essential_combinations/"
+                "basin_attract_g_%.2f_z_%.2f_a%.2f.png" \
+                % (g_current, z_current, a_current))
 
-
-
-# run actual model =============================================================
-output_test = basin_finder(grazing_level = g_current,\
-                           recruit_level = z_current, \
-                           competition_level = a_current, \
-                           ordered_param_data = ordered_param_data, \
-                           basinofattraction_id = prereq_obs[0], \
-                           basins = prereq_obs[1], \
-                           num_trajectory = prereq_obs[2], \
-                           radius = 0.005, \
-                           times = np.linspace(start = 0, stop = 2000, \
-                                               num = 20000),\
-                           final_time =  math.floor(len(times)*0.1))
-output_basinofattraction = pd.DataFrame(output_test[0])
-file_name = print("C:/Users/brookson/Documents/Github/"
-                    "Coral-Resotration-Modeling/data/"
-                    "intermediate-files/basins_ouput/"
-                    "output_basinofattraction_a",a_current,'_g',g_current,'_z',\
-                  z_current, '.csv')
-output_basinofattraction.to_csv("C:/Users/brookson/Documents/Github/Coral-Resotration-Modeling/data/intermediate-files/basins_output/output_basinofattraction_a0.3_g0.3_z0.05.csv")
-output_basins = pd.DataFrame(output_test[1])
-output_basins.to_csv("C:/Users/brookson/Documents/Github/Coral-Resotration-Modeling/data/intermediate-files/basins_output/output_basins_a0.3_g0.3_z0.05.csv")
-
-
-# make figures =================================================================
-groups = output_basinofattraction.groupby('equilibrium')
-for name, group in groups:
-    plt.plot(group.init_M, group.init_C, marker = 'o', linestyle = '',\
-             label = name)
-plt.legend()
-
-plt.scatter(output_basinofattraction['init_M'], \
-            output_basinofattraction['init_C'], \
-            c = output_basinofattraction['equilibrium'])
+# figure out how long loop takes
+    elapsed_time_fl = (time.time() - start)
