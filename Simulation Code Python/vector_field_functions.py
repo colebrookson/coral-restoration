@@ -20,7 +20,7 @@ from scipy.integrate import solve_ivp
 import os
 
 # make function to create objects needed for basin calculations ================
-def creat_prereq_objects(a_current, z_current, g_current):
+def create_prereq_objects(a_current, z_current, g_current):
     #x and y coords of all of the initial starting points
     x_coords = np.arange(0.01,1,0.05)
     #this makes a mesh grid at those points (the whole square)
