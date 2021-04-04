@@ -19,18 +19,54 @@ import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
 import os
+from vector_field_functions import create_prereq_objects
+from vector_field_functions import basin_finder
 
 # get relative path
 path = ("C:/Users/brookson/Documents/Github/"
         "Coral-Restoration-Modeling/data/all_parameters_ordered.csv")
 start = "Users / brookson / Documents / Github /"
 relative_path = os.path.relpath(path, start)
-print(relative_path)
 
 # get all unique parameter combinations to loop through
 z = [0, 0.05, 0.25, 0.5]
 a = np.arange(0,1.01,0.01)
 g = np.arange(0,0.51,0.01)
+
+# read in data in
+ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
+                                        "Coral-Resotration-Modeling/data/"
+                                        "intermediate-files/"
+                                        "all_parameters_ordered.csv")
+a_essential = [0.05, 0.3, 0.5, 0.99]
+g_essential = [0.05, 0.21, 0.5]
+z_essential = [0, 0.05, 0.25, 0.5]
+essential_list = [[i, j, k] for i in a_essential
+                            for j in g_essential
+                            for k in z_essential]
+param_combo = essential_list[0]
+for param_combo in essential_list:
+    a_current = param_combo[0]
+    g_current = param_combo[1]
+    z_current = param_combo[2]
+
+    times = np.linspace(start = 0, stop = 2000, num = 20000)
+    # get objects
+    prereq_obs = create_prereq_objects(a_current = a_current, \
+                                       z_current = g_current, \
+                                       g_current = z_current)
+
+    basin_output = basin_finder(grazing_level = g_current,\
+                               recruit_level = z_current, \
+                               competition_level = a_current, \
+                               ordered_param_data = ordered_param_data, \
+                               basinofattraction_id = prereq_obs[0], \
+                               basins = prereq_obs[1], \
+                               trajectories = prereq_obs[2], \
+                               num_trajectory = prereq_obs[3], \
+                               radius = 0.005, \
+                               times = times,\
+                               final_time =  math.floor(len(times)*0.1))
 
 
 
@@ -39,9 +75,9 @@ output_test = basin_finder(grazing_level = g_current,\
                            recruit_level = z_current, \
                            competition_level = a_current, \
                            ordered_param_data = ordered_param_data, \
-                           basinofattraction_id = basinofattraction_id, \
-                           basins = basins, \
-                           num_trajectory = num_trajectory, \
+                           basinofattraction_id = prereq_obs[0], \
+                           basins = prereq_obs[1], \
+                           num_trajectory = prereq_obs[2], \
                            radius = 0.005, \
                            times = np.linspace(start = 0, stop = 2000, \
                                                num = 20000),\

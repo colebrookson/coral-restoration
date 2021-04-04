@@ -14,16 +14,58 @@
 import numpy as np
 import scipy.integrate as spi
 import pandas as pd
+import math
 import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
 import os
 
 # make function to create objects needed for basin calculations ================
+
 def create_prereq_objects(a_current, z_current, g_current):
 
-    # all combos of parameters
-    combos = 51*101*4
+    # all (51*101*4) of parameters
+    combos = (51*101*4)
+    # rate coral overgrow turf
+    r_vec = [0.55]*(20*(51*101*4))
+
+    # rate of natural coral mortality
+    d_vec = [0.24]*(20*(51*101*4))
+
+    # rate a unit macroalgae overgrows a unit of turf algae
+    y_vec = [0.77]*(20*(51*101*4))
+
+    # rate coral larvae recruit and overgrow turf algae
+    z = [0, 0.05, 0.25, 0.5]
+    z_vec = []
+    for i in z:
+        z_vec_temp = [i]*(20*int((51*101*4)/4))
+        z_vec.extend(z_vec_temp)
+
+    # rate macroalgae overgrow coral
+    a = np.arange(0,1.01,0.01)
+    a_vec = []
+    for i in range(0, len(z)):
+        a_vec_temp_1 = []
+        for j in a:
+            a_vec_temp_2 = [j]*20
+            a_vec_temp_2 = a_vec_temp_2*51
+            a_vec_temp_1.extend(a_vec_temp_2)
+        a_vec.extend(a_vec_temp_1)
+
+    # rate of grazing on macroalgae and turf algae
+    g = np.arange(0,0.51,0.01)
+    g_vec = []
+    for i in range(0, int((51*101*4)/len(g))):
+        g_vec_temp_1 = []
+        for j in g:
+            g_vec_temp_2 = [j]*(20)
+            g_vec_temp_1.extend(g_vec_temp_2)
+        g_vec.extend(g_vec_temp_1)
+
+    # equil id is just 20 times the length of the (51*101*4)
+    equil_id = list(range(1,21))
+    equil_id = equil_id*(51*101*4)
 
     #x and y coords of all of the initial starting points
     x_coords = np.arange(0.01,1,0.05)
@@ -64,11 +106,11 @@ def create_prereq_objects(a_current, z_current, g_current):
         #columns in each) and then should just be able to plot like [14]
         M_array[:,i] = res.y.T[:,1]
         C_array[:,i] = res.y.T[:,0] #[0:50,2]
-    with np.printoptions(threshold=np.inf):
-        print(C_array)
+    #with np.printoptions(threshold=np.inf):
+        #print(C_array)
 
     # define matrix for the data
-    rows = 20*combos
+    rows = 20*(51*101*4)
     cols = 7
     basins_init = np.ones(shape = (rows, cols)) #initialize as ones
 
@@ -88,7 +130,7 @@ def create_prereq_objects(a_current, z_current, g_current):
     basins['equil_id'] = equil_id
     basins['size'] = 0
     basins['numNA'] = -1
-
+    basins = pd.DataFrame(basins)
     # make initial conditions
     def drange(x, y, jump):
       while x < y:
@@ -131,21 +173,16 @@ def create_prereq_objects(a_current, z_current, g_current):
     basinofattraction_id['init_C'] = init_C[0:num_trajectory]
     basinofattraction_id['init_T'] = init_T[0:num_trajectory]
     basinofattraction_id = pd.DataFrame(basinofattraction_id)
-    # read in data into pre-formatted array
-    ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
-                                        "Coral-Resotration-Modeling/data/"
-                                        "intermediate-files/"
-                                        "all_parameters_ordered.csv")
 
-    output = [ordered_param_data, basinofattraction_id, basins, \
-              num_trajectory]
+
+    output = [basinofattraction_id, basins, trajectories, num_trajectory]
     return output
 
 # make function to get all basins of attraction values =========================
 
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
-                 num_trajectory, radius, times, final_time):
+                 trajectories, num_trajectory, radius, times, final_time):
 
     """ This function takes in a series of parameters and finds whether or not
     a particular basin of attraction is stable?
@@ -171,6 +208,12 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
     "(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
 
     # number of stable equilibria at that parameter combo
+    grazing_level = 0
+    competition_level = 0
+    recruit_level = 0
+    radius = 0.005
+    times = np.linspace(start = 0, stop = 2000, num = 20000)
+    final_time = math.floor(len(times)*0.1)
     shape = (ordered_param_data['g'] == grazing_level) & \
             (ordered_param_data['a'] == competition_level) & \
             (ordered_param_data['z'] == recruit_level)
@@ -216,7 +259,13 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                 basinofattraction_id.loc[basinofattraction_id.init_cond == i, \
                                         'equilibrium']= \
                     np.unique(stable_ordered_param[assign_shape]['ID'])[0]
-                basins[basins_shape]['size'] = 1 + basins[basins_shape]['size']
+                equil_id_iter = \
+                    stable_ordered_param[assign_shape]['ID'].tolist()[0]
+                basins.loc[(basins['equil_id'] == equil_id_iter) & \
+                           (basins['g'] == grazing_level) & \
+                           (basins['a'] == competition_level) & \
+                           (basins['z'] == recruit_level), \
+                           'size'] += 1
             else:
                 print('no')
             j=j+1
