@@ -41,9 +41,8 @@ z_essential = [0, 0.05, 0.25, 0.5]
 essential_list = [[i, j, k] for i in a_essential
                             for j in g_essential
                             for k in z_essential]
-param_combo = essential_list[0]
+start = time.time()
 for param_combo in essential_list:
-    start = time.time()
     # set a, z, and g parameters
     a_current = param_combo[0]
     g_current = param_combo[1]
@@ -80,22 +79,26 @@ for param_combo in essential_list:
                          "intermediate-files/basins_output/"
                          "basins_a%.2f_g%.2f_z%.2f.csv"\
                          % (g_current, z_current, a_current))
+    if len(output_basinofattraction.equilibrium.unique()) > 1:
+        print('a = ', a_current, ', z = ', z_current, ', g = ', g_current, \
+              'has more than one unique equilibrium value')
     # make (basic plot showing the different trajectory outcomes)
-    groups = output_basinofattraction.groupby('equilibrium')
-    for name, group in groups:
-        plt.plot(group.init_M, group.init_C, marker = 'o', linestyle = '',\
-                 label = name)
-        plt.xlabel('Proportion Macroalgae', fontsize = 15)
-        plt.ylabel('Proportion Coral', fontsize = 15)
-        plt.title('Grazing = %.2f, Recruitment = %.2f, Competition = %.2f' \
-                    % (g_current, z_current, a_current))
-    plt.legend()
+    #groups = output_basinofattraction.groupby('equilibrium')
+    #for name, group in groups:
+    #    plt.plot(group.init_M, group.init_C, marker = 'o', linestyle = '',\
+    #             label = name)
+    #    plt.xlabel('Proportion Macroalgae', fontsize = 15)
+    #    plt.ylabel('Proportion Coral', fontsize = 15)
+    #    plt.title('Grazing = %.2f, Recruitment = %.2f, Competition = %.2f' \
+    #                % (g_current, z_current, a_current))
+    #    plt.legend()
+    #plt.legend()
     # save plot
-    plt.savefig("C:/Users/brookson/Documents/Github/"
-                "Coral-Resotration-Modeling/graphs/"
-                "basinplots/essential_combinations/"
-                "basin_attract_g_%.2f_z_%.2f_a%.2f.png" \
-                % (g_current, z_current, a_current))
+    #plt.savefig("C:/Users/brookson/Documents/Github/"
+    #            "Coral-Resotration-Modeling/graphs/"
+    #            "basinplots/essential_combinations/"
+    #            "basin_attract_g_%.2f_z_%.2f_a%.2f.png" \
+    #            % (g_current, z_current, a_current))
 
 # figure out how long loop takes
-    elapsed_time_fl = (time.time() - start)
+elapsed_time_fl = (time.time() - start)

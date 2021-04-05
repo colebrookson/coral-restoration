@@ -179,22 +179,22 @@ def create_prereq_objects(a_current, z_current, g_current):
     return output
 
 # make function to get all basins of attraction values =========================
-#ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
-#                                        "Coral-Resotration-Modeling/data/"
-#                                        "intermediate-files/"
-#                                        "all_parameters_ordered.csv")
-#output = create_prereq_objects(0.05, 0.05, 0)
-#grazing_level = 0.05
-#recruit_level = 0.05
-#competition_level = 0
-#ordered_param_data = ordered_param_data
-#basinofattraction_id = output[0]
-#basins = output[1]
-#trajectories = output[2]
-#num_trajectory = output[3]
-#radius = 0.005
-#times = np.linspace(start = 0, stop = 2000, num = 20000)
-#final_time =  math.floor(len(times)*0.1)
+ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
+                                        "Coral-Resotration-Modeling/data/"
+                                        "intermediate-files/"
+                                        "all_parameters_ordered.csv")
+output = create_prereq_objects(0.3, 0, 0.25)
+grazing_level = 0.3
+recruit_level = 0
+competition_level = 0.25
+ordered_param_data = ordered_param_data
+basinofattraction_id = output[0]
+basins = output[1]
+trajectories = output[2]
+num_trajectory = output[3]
+radius = 0.005
+times = np.linspace(start = 0, stop = 2000, num = 20000)
+final_time =  math.floor(len(times)*0.1)
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
                  trajectories, num_trajectory, radius, times, final_time):
@@ -219,16 +219,10 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
 
     """
 
-    print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
-    "(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
+    #print("In BOA, grazing level (g) = ", grazing_level, ", competition level ",
+    #"(a) = ",competition_level,", and recruitment level (z) = ", recruit_level)
 
     # number of stable equilibria at that parameter combo
-    grazing_level = 0
-    competition_level = 0
-    recruit_level = 0
-    radius = 0.005
-    times = np.linspace(start = 0, stop = 2000, num = 20000)
-    final_time = math.floor(len(times)*0.1)
     shape = (ordered_param_data['g'] == grazing_level) & \
             (ordered_param_data['a'] == competition_level) & \
             (ordered_param_data['z'] == recruit_level)
@@ -240,7 +234,11 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
     # get coordinates of the stable equilibria at that parameter combo
     m_equi = stable_ordered_param['M'].tolist()
     c_equi = stable_ordered_param['C'].tolist()
-    print("m coordinate is = ", m_equi, " and c coordinate is = ", c_equi)
+    if len(m_equi) > 1:
+        print("m coordinates are = ", m_equi, \
+              " and c coordinates are = ", c_equi, \
+              "a = ", competition_level, "g = ", \
+              grazing_level, "z = ", recruit_level)
 
     # loop through all num_trajectories for each stable equilibrium
     i = 1
@@ -281,7 +279,7 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                            (basins['a'] == competition_level) & \
                            (basins['z'] == recruit_level), \
                            'size'] += 1
-            else:
+            #else:
                 #print('no')
             j=j+1
         i = i+1
