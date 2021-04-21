@@ -3,11 +3,12 @@ library(deSolve)
 library(geometry)
 library(fields)
 library(here)
+library(tidyverse)
 
 here()
 
 #LOAD IN data
-load(here("code", "allparam_data_ordered"))
+load(here("code", "allparam_data_ordered.RData"))
 
 #STEP 1: create grid of starting points for trajectories in the region of the [0,1] x [0,1] space allowed by 1 = M+C+T 
 
@@ -199,7 +200,7 @@ for(j in 1:length(g_val_vec)){
   #basinofattractionID$colour[basinofattractionID$Equilibrium == malgcoral] <- "#E9C46A"
   pdf(here("graphs", "BOAplots", "AG_Rgenerated_4.9.2021", paste0("PLOT_basinofattractionID_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.pdf")))
   #pdf(paste0("~/Dropbox/University of Toronto/Working on Non-Thesis Papers/Cole_CoralRestoration/BOAplots/PLOT_basinofattractionID_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.pdf"))
-  plot(x=basinofattractionID$initM1, y=basinofattractionID$initC1, col = basinofattractionID$colour, xlab = "Percent Initial Macroalgal Level", ylab = "Percent Initial Coral Level", main = paste("Dispersal = ", recruitvalue, "Grazing Rate = ", g_val, "Macroalgal-Coral Level = ", mc_comp), pch = 16) 
+  plot(x=basinofattractionID$initM1, y=basinofattractionID$initC1, col = basinofattractionID$colour, xlab = "Percent Initial Macroalgal Level", ylab = "Percent Initial Coral Level", main = paste("Dispersal = ", recruitvalue, "Grazing Rate = ", g_val, "Macroalgal-Coral Level = ", mc_comp), pch = 16, cex = 2) 
   legend("topright", c("Only Macroalgae", "Only Coral", "Mostly Macroalgae", "MAlg + Coral"), col = c("#0E4D92", "#A00000", "#90EE90","#FFC0CB"), pch = c(20,20))
   dev.off()
 }
