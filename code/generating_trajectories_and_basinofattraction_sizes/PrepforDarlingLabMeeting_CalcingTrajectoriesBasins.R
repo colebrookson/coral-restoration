@@ -85,6 +85,8 @@ CalcTrajectories <- function(i,parameters,recruitvalue, g_val, mc_comp, ntraject
   }
   return(mumbytrajectories)
 }
+#for Cole 5.6.2021
+#plot(x=times, y=mumbytrajectories[mumbytrajectories$Run==1,"M1"])
 
 BOA <- function(mc_comp, recruitvalue,g_val,data_IDs,basinofattractionID,basins,ntrajectory,radius,times,finaltime){
   #print(paste0("In BOA, glvl = ", glvl, "lvl =", lvl))
