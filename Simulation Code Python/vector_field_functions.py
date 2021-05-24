@@ -19,11 +19,17 @@ import matplotlib.pyplot as plt
 import decimal
 from scipy.integrate import solve_ivp
 import os
+import sys
 
 # make function to create objects needed for basin calculations ================
 
-def create_prereq_objects(a_current, z_current, g_current):
+# for testing, have some values
+g_current = 0.3
+z_current = 0
+a_current = 0.25
 
+def create_prereq_objects(a_current, z_current, g_current):
+# %%
     # all (51*101*4) of parameters
     combos = (51*101*4)
     # rate coral overgrow turf
@@ -78,8 +84,8 @@ def create_prereq_objects(a_current, z_current, g_current):
     T_points = 1 - C_points - M_points
 
     # initialize array
-    M_array = np.zeros((50,len(C_points)))
-    C_array = np.zeros((50,len(C_points)))
+    M_array = np.zeros((5000,len(C_points)))
+    C_array = np.zeros((5000,len(C_points)))
 
     for i in range(0,len(C_points)):
         a_run = a_current
@@ -97,18 +103,30 @@ def create_prereq_objects(a_current, z_current, g_current):
             return [r*v[0]*v[2] + z*r*v[2] - d*v[0] - a*v[0]*v[1], a*v[0]*v[1] -
             (g*v[1])/(v[1]+v[2]) + y*v[1]*v[2],-r*v[0]*v[2] - z*r*v[2] + d*v[0]+
             (g*v[1])/(v[1]+v[2]) - y*v[1]*v[2]]
-        res = solve_ivp(rhs, (0, 50),
+        res = solve_ivp(rhs, (0, 5000),
         [C_points[i], M_points[i], T_points[i]],
-        t_eval =np.arange(0,50,1)) #solves from t =0 -> t = 5000 and for initial
+        t_eval =np.arange(0,5000,1)) #solves from t =0 -> t = 5000 and for initial
         #values C_points, M_points, T_points
         #res_output.append(res.y.T) #appends to the end
         #instead of saving in a list, save into an M array and a C array (4949
         #columns in each) and then should just be able to plot like [14]
         M_array[:,i] = res.y.T[:,1]
         C_array[:,i] = res.y.T[:,0] #[0:50,2]
+        # len(C_array[:,i])
+
+
+
+        # temp demo plot
+    # %%
+        plt.scatter(M_array[:,i], C_array[:,i])
+# %%
+
+
+
+
     #with np.printoptions(threshold=np.inf):
         #print(C_array)
-
+    length_of_CM_arrays = len(M_array[:,i])
     # define matrix for the data
     rows = 20*(51*101*4)
     cols = 7
@@ -144,22 +162,24 @@ def create_prereq_objects(a_current, z_current, g_current):
     init_T = T_points
 
     # make matrices for the trajectories and the basinofattractionID
-    run = list(range(1,num_trajectory+1))*num_points
+    run = np.repeat(np.array(list(range(1,num_trajectory+1))), \
+                    len(M_array[:,i]), axis = 0)
     M = [2]*len(run)
     C = [2]*len(run)
     T = [2]*len(run)
-    time_step = list(range(1,num_points+1))*210
+    time_step = list(range(1,len(M_array[:,i])+1))*210
 
-    trajectories_init =  np.ones(shape = (len(run), 5))
+    #trajectories_init =  np.ones(shape = (len(run), 5))
 
     # make the dt object so we can use column names
     trajectories_dt = {'names':['run', 'M', 'C', 'T', 'time_step'], \
     'formats':[np.float64, np.float64, np.float64, np.float64, np.float64]}
-    trajectories = np.ones(len(run), dtype = trajectories_dt)
+    trajectories = np.ones(num_trajectory*len(M_array[:,i]), \
+                           dtype = trajectories_dt)
     trajectories['run'] = run
-    trajectories['M'] = M
-    trajectories['C'] = C
-    trajectories['T'] = T
+    trajectories['M'] = M_array.flatten()
+    trajectories['C'] = C_array.flatten()
+    trajectories['T'] = (1 - trajectories['C'] - trajectories['M'])
     trajectories['time_step'] = time_step
 
     basinofattraction_id_dt = {'names': ['init_cond', 'equilibrium', \
@@ -175,10 +195,13 @@ def create_prereq_objects(a_current, z_current, g_current):
     basinofattraction_id = pd.DataFrame(basinofattraction_id)
 
 
-    output = [basinofattraction_id, basins, trajectories, num_trajectory]
+    output = [basinofattraction_id, basins, trajectories, num_trajectory, \
+              length_of_CM_arrays]
     return output
 
 # make function to get all basins of attraction values =========================
+
+# for testing, give values
 ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
                                         "Coral-Resotration-Modeling/data/"
                                         "intermediate-files/"
@@ -193,8 +216,13 @@ basins = output[1]
 trajectories = output[2]
 num_trajectory = output[3]
 radius = 0.005
+final_time = output[4] - math.floor(0.1*output[4])
+times = output[4]
+
 times = np.linspace(start = 0, stop = 2000, num = 20000)
 final_time =  math.floor(len(times)*0.1)
+
+
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
                  trajectories, num_trajectory, radius, times, final_time):
@@ -246,9 +274,9 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
         j = 0
         while j <= (num_eq-1):
             # set up conditions to deal with trajectories shape
-            time_diff = (len(times) - final_time)
+
             traj_shape = (trajectories['run'] == i) & \
-                         (trajectories['time_step'] > time_diff)
+                         (trajectories['time_step'] > final_time)
             traj_j = trajectories[traj_shape]
             if len(np.unique(traj_j['M'])) > 1:
                 sys.exit("more than one unique value for traj_j['M']")
@@ -287,3 +315,5 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
         #print('Current i is', i)
     output = [basinofattraction_id, basins]
     return output
+
+# %%

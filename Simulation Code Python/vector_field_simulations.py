@@ -44,15 +44,15 @@ essential_list = [[i, j, k] for i in a_essential
 start = time.time()
 for param_combo in essential_list:
     # set a, z, and g parameters
-    a_current = param_combo[0]
-    g_current = param_combo[1]
-    z_current = param_combo[2]
+    a_current = 0.05#param_combo[0]
+    g_current = 0.21#param_combo[1]
+    z_current = 0#param_combo[2]
     # make amount of time for stability calculation
     times = np.linspace(start = 0, stop = 2000, num = 20000)
     # get objects from function in other script
     prereq_obs = create_prereq_objects(a_current = a_current, \
-                                       z_current = g_current, \
-                                       g_current = z_current)
+                                       z_current = z_current, \
+                                       g_current = g_current)
     # run actual model
     basin_output = basin_finder(grazing_level = g_current,\
                                recruit_level = z_current, \
@@ -101,4 +101,5 @@ for param_combo in essential_list:
     #            % (g_current, z_current, a_current))
 
 # figure out how long loop takes
+print('DONE')
 elapsed_time_fl = (time.time() - start)
