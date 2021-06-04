@@ -13,8 +13,8 @@ C_points = C_temp[M_temp + C_temp <=1]
 M_points = M_temp[M_temp + C_temp <=1]
 T_points = 1 - C_points - M_points
 # initialize array
-M_array = np.zeros((5000,len(C_points)))
-C_array = np.zeros((5000,len(C_points)))
+M_array = np.zeros((50000,len(C_points)))
+C_array = np.zeros((50000,len(C_points)))
 
 # %%
 for i in range(0,len(C_points)):
@@ -29,9 +29,9 @@ for i in range(0,len(C_points)):
         (g*v[1])/(v[1]+v[2]) + y*v[1]*v[2],-r*v[0]*v[2] - z*r*v[2] + d*v[0]+
         (g*v[1])/(v[1]+v[2]) - y*v[1]*v[2]]
 
-    res = solve_ivp(rhs, (0, 5000),
+    res = solve_ivp(rhs, (0, 50000),
     [C_points[i], M_points[i], T_points[i]],
-    t_eval =np.arange(0,5000,1)) #solves from t =0 -> t = 50000
+    t_eval =np.arange(0,50000,1)) #solves from t =0 -> t = 50000
     M_array[:,i] = res.y.T[:,1]
     C_array[:,i] = res.y.T[:,0] #[0:50,2]
 
@@ -41,3 +41,5 @@ trajectories['M'] = M_array.flatten()
 trajectories['C'] = C_array.flatten()
 
 print(trajectories['M'][1049900:1049999])
+
+# %%

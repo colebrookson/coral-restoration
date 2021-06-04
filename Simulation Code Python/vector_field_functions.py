@@ -10,7 +10,7 @@
 ###########################
 
 # set-up =======================================================================
-
+# %%
 import numpy as np
 import scipy.integrate as spi
 import pandas as pd
@@ -25,11 +25,11 @@ import sys
 
 # for testing, have some values
 g_current = 0.3
-z_current = 0
+z_current = 0.05
 a_current = 0.25
 
-def create_prereq_objects(a_current, z_current, g_current):
 # %%
+def create_prereq_objects(a_current, z_current, g_current):
     # all (51*101*4) of parameters
     combos = (51*101*4)
     # rate coral overgrow turf
@@ -114,16 +114,6 @@ def create_prereq_objects(a_current, z_current, g_current):
         C_array[:,i] = res.y.T[:,0] #[0:50,2]
         # len(C_array[:,i])
 
-
-
-        # temp demo plot
-    # %%
-        plt.scatter(M_array[:,i], C_array[:,i])
-# %%
-
-
-
-
     #with np.printoptions(threshold=np.inf):
         #print(C_array)
     length_of_CM_arrays = len(M_array[:,i])
@@ -202,13 +192,14 @@ def create_prereq_objects(a_current, z_current, g_current):
 # make function to get all basins of attraction values =========================
 
 # for testing, give values
+# %%
 ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
                                         "Coral-Resotration-Modeling/data/"
                                         "intermediate-files/"
                                         "all_parameters_ordered.csv")
-output = create_prereq_objects(0.3, 0, 0.25)
+output = create_prereq_objects(0.3, 0.05, 0.25)
 grazing_level = 0.3
-recruit_level = 0
+recruit_level = 0.05
 competition_level = 0.25
 ordered_param_data = ordered_param_data
 basinofattraction_id = output[0]
@@ -222,7 +213,7 @@ times = output[4]
 times = np.linspace(start = 0, stop = 2000, num = 20000)
 final_time =  math.floor(len(times)*0.1)
 
-
+# %%
 def basin_finder(grazing_level, recruit_level, competition_level, \
                  ordered_param_data, basinofattraction_id, basins, \
                  trajectories, num_trajectory, radius, times, final_time):
@@ -278,8 +269,8 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             traj_shape = (trajectories['run'] == i) & \
                          (trajectories['time_step'] > final_time)
             traj_j = trajectories[traj_shape]
-            if len(np.unique(traj_j['M'])) > 1:
-                sys.exit("more than one unique value for traj_j['M']")
+            #if len(np.unique(traj_j['M'])) > 1:
+            #    sys.exit("more than one unique value for traj_j['M']")
             # set up data to get the appropriate part
             assign_shape = (stable_ordered_param['M'] == m_equi[j]) & \
                            (stable_ordered_param['C'] == c_equi[j])
@@ -296,7 +287,7 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
             ((m_equi[j] + radius) < np.unique(traj_j['M'])[0]) and \
             ((c_equi[j] - radius) < np.unique(traj_j['C'])[0]) and \
             ((c_equi[j] + radius) < np.unique(traj_j['C'])[0]):
-                #print('yes')
+                print('yes')
                 basinofattraction_id.loc[basinofattraction_id.init_cond == i, \
                                         'equilibrium']= \
                     np.unique(stable_ordered_param[assign_shape]['ID'])[0]
@@ -307,8 +298,8 @@ def basin_finder(grazing_level, recruit_level, competition_level, \
                            (basins['a'] == competition_level) & \
                            (basins['z'] == recruit_level), \
                            'size'] += 1
-            #else:
-                #print('no')
+            else:
+                print('no')
             j=j+1
         i = i+1
         #print(i,j)
