@@ -193,10 +193,9 @@ def create_prereq_objects(a_current, z_current, g_current):
 
 # for testing, give values
 # %%
-ordered_param_data = pd.read_csv("C:/Users/brookson/Documents/Github/"
-                                        "Coral-Resotration-Modeling/data/"
-                                        "intermediate-files/"
-                                        "all_parameters_ordered.csv")
+ordered_param_data = pd.read_csv("~/Github/coral-restoration/data/"
+                                    "intermediate-files/"
+                                    "all_parameters_ordered.csv")
 output = create_prereq_objects(0.3, 0.05, 0.25)
 grazing_level = 0.3
 recruit_level = 0.05
