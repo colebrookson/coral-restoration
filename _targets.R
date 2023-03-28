@@ -17,7 +17,7 @@ library(here)
 # read in functions files
 
 
-tar_option_set(packages = c("readr"),
+tar_option_set(packages = c("readr", "dplyr", "magrittr"),
                error = "stop")
 
 
