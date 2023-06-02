@@ -8,6 +8,7 @@ here()
 
 #load in the dataset
 load(here("code", "allparam_data_pre_ordering"))
+load(here("./data/allparam_data_pre_ordering.RData"))
 data <- allparam_data_abr
 
 #want to add IDs to the stable nodes
