@@ -11,7 +11,7 @@ for(j in 1:length(g_val_vec)){ #just manually increased j because was too lazy t
   mc_comp <- mc_comp_vec[j]
   print(paste("recruit value =", recruitvalue, "grazing rate = ", g_val, "mc comp = ", mc_comp))
   data[data$a == mc_comp & data$z == recruitvalue & data$g == g_val & data$stability == "stable_node",]
-  #print(paste("IDs = ", data$ID[data$a == mc_comp_vec[j] & data$z == recruitvalue_vec[j] & data$g == g_val_vec[j]])) 
+  print(paste("IDs = ", data$ID[data$a == mc_comp_vec[j] & data$z == recruitvalue_vec[j] & data$g == g_val_vec[j]])) 
 }
 #(C*, M*) [using colours from here: https://i.pinimg.com/originals/05/66/2d/05662d0154e4b1742045e16fb32db5c0.png]
 
