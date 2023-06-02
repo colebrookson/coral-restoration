@@ -25,9 +25,13 @@ df$C <- 2; df$M <- 2; df$eig_1 <- 2; df$eig_2 <- 2
 # order them as we had them already 
 df <- df %>% dplyr::select(r, d, y, a, g, z, Equilibrium, C, M, eig_1, eig_2)
 
-# save as a csv
-# readr::write_csv(
-#   df,
-#   here("./data/parameter-data/full-params-for-matlab.csv")
-# )
+#save as a csv
+readr::write_csv(
+  df,
+  here("./data/parameter-data/full-params-for-matlab.csv")
+)
 
+# check the old version ========================================================
+df <- readr::read_csv(here("./data/parameter-data/dep/full_combo_data.csv"))
+names(df) <- c("r","d","y","a","g","z",
+                          "Equilibrium","C","M","eig_1","eig_2")

@@ -2,7 +2,7 @@ clear  % Clears command window
 clc    % Clears command history
 clf    % Removes anything in the figure window before simulation.
 
-data = readmatrix('C:\Users\brookson\Documents\Github\Coral-Resotration-Modeling\code\equilibria\full_combo_data.csv');
+data = readmatrix('C:\Users\brookson\Documents\Github\coral-restoration\data\parameter-data\full-params-for-matlab.csv');
 
 %%%%%% loop through the combinations
 for i = 0:20603
