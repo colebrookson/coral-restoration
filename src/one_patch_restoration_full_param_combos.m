@@ -5,7 +5,8 @@ clf    % Removes anything in the figure window before simulation.
 data = readmatrix('C:\Users\brookson\Documents\Github\coral-restoration\data\parameter-data\full-params-for-matlab.csv');
 
 %%%%%% loop through the combinations
-for i = 0:20603
+for i = 0:149999
+    
 syms c m %state variables 
 
 %equations: dC/dt = rCT + zrT - dC - aMC, dM/dt = aMC - (gM)/(T+M) + yMT
@@ -52,6 +53,8 @@ for j = 1:length(S.c)
     data((i*20)+j,11) = e_Jval(2);
 end
 
+disp(i)
+
 end
 
 %let's try to get the analytical solutions
@@ -75,5 +78,6 @@ end
 %the code below failed to 'start the Excel server' so it made a bunch of
 %.csv files...hence why I gave them different names bc only 1 sheet
 xlswrite("full_restoration_model_output.xlsx",data,'All data','A1');
+writematrix(data, "C:/Users/brookson/Documents/GitHub/coral-restoration/data/parameter-data/full-restoration-model-output.txt");
 
 

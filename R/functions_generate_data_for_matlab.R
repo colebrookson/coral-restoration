@@ -1,16 +1,17 @@
-library(tidyverse)
+library(dplyr)
+library(readr)
 library(here)
 
 # define variables =============================================================
 
 # a = rate macroalgae overgrows turf algae
-a_vec <- seq(0, 0.7, 0.01)
+a_vec <- seq(0, 0.7, 0.02)
 
 # g = rate of grazing on algae
-g_vec <- seq(0, 0.99, 0.01)
+g_vec <- seq(0, 0.99, 0.02)
 
 # z = rate coral larvae recruit and overgrow turf algae
-z_vec <- seq(0, 0.99, 0.01)
+z_vec <- seq(0, 0.99, 0.02)
 
 equil_nums <- c(1:20)
 
@@ -28,7 +29,8 @@ df <- df %>% dplyr::select(r, d, y, a, g, z, Equilibrium, C, M, eig_1, eig_2)
 #save as a csv
 readr::write_csv(
   df,
-  here("./data/parameter-data/full-params-for-matlab.csv")
+  here("./data/parameter-data/full-params-for-matlab.csv"),
+  col_names = FALSE
 )
 
 # check the old version ========================================================
