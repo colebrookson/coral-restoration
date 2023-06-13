@@ -3,3 +3,5 @@
 .RData
 .Ruserdata
 ./data/parameter-data/full-params-for-matlab.csv
+./data/parameter-data/full-params-for-matlab.csv
+./data/parameter-data/full-restoration-model-output.txt
