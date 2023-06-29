@@ -5,7 +5,7 @@ library(here)
 # define variables =============================================================
 
 # a = rate macroalgae overgrows turf algae
-a_vec <- seq(0, 0.7, 0.05)
+a_vec <- seq(0, 0.99, 0.01)
 
 # g = rate of grazing on algae
 g_vec <- seq(0, 0.99, 0.01)
