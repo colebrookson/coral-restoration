@@ -6,9 +6,11 @@ library(readxl)
 library(here)
 library(qs)
 
-load(here("./data/allparam_data_pre_ordering.RData"))
-data <- allparam_data_abr
 
+data <- readr::read_delim(
+  here("./data/parameter-data/full-restoration-model-output.txt"),
+  col_names = c("r","d","y","a","g","z",
+                "Equilibrium","C","M","eig_1","eig_2"))
 
 # BEGIN NOTE ###########
 # The goal here is to add ID's to stable nodes in our information that's coming
@@ -21,15 +23,13 @@ data <- allparam_data_abr
 data$ID <- NA
 
 #column indicating when change to a new parameter combination
-data$paramcombo <- NA
-paramcomb <- 1
-data$paramcombo[1] <- 1
-for(i in 2:dim(data)[1]){
-  if(data$Equilibrium[i] == 1){
-    paramcomb <- paramcomb + 1
-    data$paramcombo[i] <- paramcomb	
-  }else{data$paramcombo[i] <- paramcomb} 
-}
+data <- data %>% 
+  dplyr::group_by(g, a, z) %>% 
+  dplyr::mutate(
+    paramcombo = dplyr::cur_group_id()
+  )
+max(data$paramcombo)
+s
 #paramcomb got up to 20604 (4 dispersal values * 51 g values * 101 a values)
 
 #does every paramcombo have a stable node?
