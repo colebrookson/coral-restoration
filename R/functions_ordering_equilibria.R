@@ -22,17 +22,15 @@ data <- readr::read_delim(
 #want to add IDs to the stable nodes
 data$ID <- NA
 
-#column indicating when change to a new parameter combination
-data <- data %>% 
-  dplyr::group_by(g, a, z) %>% 
-  dplyr::mutate(
-    paramcombo = dplyr::cur_group_id()
-  )
-max(data$paramcombo)
-s
+
+
 #paramcomb got up to 20604 (4 dispersal values * 51 g values * 101 a values)
 
 #does every paramcombo have a stable node?
+data %>% 
+  dplyr::group_by(paramcombo) %>% 
+  dplyr::filter(any(Equilibrium == "stable_node"))
+
 stable <- rep(NA, paramcomb)
 for(i in 1:paramcomb){
   stable[i] <- "no"
