@@ -6,8 +6,7 @@ library(here)
 
 here() #here is now set to your root directory with .Rproj file
 
-allparam_data <- read.csv("~/GitHub/Cole_CoralRestorationModelling/Coral-Restoration-Modeling/code/equilibria/full_restoration_model_output.csv",header = FALSE)
-head(allparam_data)
+allparam_data <- read_csv(here("./data/parameter-data/all-parameter-vals-equilibria-unordered.csv"))
 
 #assigning column names in accordance with their contents
 names(allparam_data) <- c("r","d","y","a","g","z","Equilibrium","C","M","eig_1","eig_2")
@@ -31,7 +30,7 @@ allparam_data_abr$Colour[allparam_data_abr$stability == "unstable_node"] <- 'gol
 allparam_data_abr$Colour[allparam_data_abr$stability == "saddle_node"] <- 'purple'
 allparam_data_abr$Colour[allparam_data_abr$stability == "bifurcation_point"] <- 'green'
 
-save(allparam_data_abr, file = here("code", "allparam_data_pre_ordering.RData"))
+qs::qsave(allparam_data_abr, file = here("data", "parameter-data", "allparam_data_pre_ordering.qs"))
 
 #maybe at some point have the stable nodes ordered to be on top of the unstable nodes and saddle nodes like did for the two patch model but that may not be necessary
 

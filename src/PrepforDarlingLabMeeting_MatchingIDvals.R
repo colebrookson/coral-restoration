@@ -1,6 +1,6 @@
 #note: can eventually use the code Ariel wrote for bistab paper (making basinsfinal code) to do this but for right now this is sufficient, gives an idea of the categories to look for 
 
-load('~/GitHub/Cole_CoralRestorationModelling/Coral-Restoration-Modeling/code/allparam_data_ordered.RData')
+data <- qs::qread(here("./data/parameter-data/allparam_data_old_ordered.qs"))
 #check what IDs are in the 48 combos im looking at rn
 recruitvalue_vec = rep(c(0, 0.05, 0.25, 0.5), each = 3*4)
 g_val_vec = rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
@@ -46,7 +46,7 @@ mostlymalg <- c(111,138,159,209,225,252,273,324,363,383,433)
 malgcoral <- 339
 
 basinofattractionID$colour <- NA
-basinofattractionID$colour[basinofattractionID$Equilibrium == onlymalg] <- "#E76F51"
-basinofattractionID$colour[basinofattractionID$Equilibrium == onlycoral] <- "#264653"
-basinofattractionID$colour[basinofattractionID$Equilibrium == mostlymalg] <- "#F4A261"
-basinofattractionID$colour[basinofattractionID$Equilibrium == malgcoral] <- "#E9C46A"
+basinofattractionID$colour[basinofattractionID$Equilibrium == "onlymalg"] <- "#E76F51"
+basinofattractionID$colour[basinofattractionID$Equilibrium == "onlycoral"] <- "#264653"
+basinofattractionID$colour[basinofattractionID$Equilibrium == "mostlymalg"] <- "#F4A261"
+basinofattractionID$colour[basinofattractionID$Equilibrium == "malgcoral"] <- "#E9C46A"
