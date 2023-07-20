@@ -5,19 +5,19 @@ library(here)
 # define variables =============================================================
 
 # a = rate macroalgae overgrows turf algae
-a_vec <- seq(0, 0.99, 0.01)
+a_vec <- seq(0, 0.99, 0.05)
 
 # g = rate of grazing on algae
 g_vec <- seq(0, 0.99, 0.01)
 
 # z = rate coral larvae recruit and overgrow turf algae
-z_vec <- seq(0, 0.99, 0.01)
+z_vec <- seq(0, 0.99, 0.1)
 
 equil_nums <- c(1:20)
 
 # put them all in a data.frame
-df <- expand.grid(a = a_vec, g  = g_vec, z = z_vec, 
-                  Equilibrium = equil_nums)
+df <- expand.grid(Equilibrium = equil_nums,
+                  a = a_vec, g  = g_vec, z = z_vec)
 
 # now add in the other variables that stay consistent
 df$r <- 0.55; df$d <- 0.24; df$y <- 0.77
