@@ -5,7 +5,7 @@ clf    % Removes anything in the figure window before simulation.
 data = readmatrix('C:\Users\brookson\Documents\Github\coral-restoration\data\parameter-data\full-params-for-matlab.csv');
 
 %%%%%% loop through the combinations
-for i = 0:999999
+for i = 0:39999
     
 syms c m %state variables 
 
