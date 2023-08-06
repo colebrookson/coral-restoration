@@ -33,6 +33,7 @@ data <- data[which(data$paramcombo %in% keep_combos$paramcombo), ]
 # now let's make a new set of parameter combinations with only the ones
 # that did in fact have a stable node
 data <- data %>% 
+  dplyr::ungroup() %>% 
   dplyr::select(-c(paramcombo, g_fac, a_fac, z_fac)) 
 data <- data %>% 
   dplyr::group_by(g, a, z) %>% 

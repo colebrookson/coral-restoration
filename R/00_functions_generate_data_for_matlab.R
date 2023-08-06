@@ -11,7 +11,10 @@ a_vec <- seq(0, 0.99, 0.05)
 g_vec <- seq(0, 0.99, 0.01)
 
 # z = rate coral larvae recruit and overgrow turf algae
-z_vec <- seq(0, 0.99, 0.1)
+z_vec <- seq(0, 0.99, 0.05)
+
+# get length of unique number of params 
+length(a_vec) * length(g_vec) * length(z_vec)
 
 equil_nums <- c(1:20)
 

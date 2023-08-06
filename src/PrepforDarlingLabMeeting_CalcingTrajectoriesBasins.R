@@ -8,7 +8,7 @@ library(tidyverse)
 here()
 
 #LOAD IN data
-data <- qs::qread(here("./data/parameter-data/allparam_data_old_ordered.qs"))
+data <- qs::qread(here("./data/parameter-data/allparam_data_ordered.qs"))
 
 #STEP 1: create grid of starting points for trajectories in the region of the [0,1] x [0,1] space allowed by 1 = M+C+T 
 
@@ -119,9 +119,9 @@ BOA <- function(mc_comp, recruitvalue,g_val,data_IDs,basinofattractionID,basins,
 #g = 0.05, 0.21, 0.5
 #a = 0.05, 0.3, 0.5, 0.99
 
-recruitvalue_vec = rep(c(0.05, 0.25, 0.5), each = 3*4) #rep(c(0, 0.05, 0.25, 0.5), each = 3*4) don't need to redo z=0 because that worked
-g_val_vec = rep(rep(c(0.1, 0.21, 0.5), each = 4),3) #rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
-mc_comp_vec = rep(c(0.05, 0.3, 0.5, 0.99),3*3) #rep(c(0.05, 0.3, 0.5, 0.99),4*3)
+recruitvalue_vec = unique(data$a) #rep(c(0, 0.05, 0.25, 0.5), each = 3*4) don't need to redo z=0 because that worked
+g_val_vec = unique(data$g) #rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
+mc_comp_vec = unique(data$z) #rep(c(0.05, 0.3, 0.5, 0.99),4*3)
 
 for(j in 1:length(g_val_vec)){
   mumbytraj <- NA
@@ -140,9 +140,8 @@ for(j in 1:length(g_val_vec)){
   mumbytraj <- CalcTrajectories(i,parameters,recruitvalue, g_val, mc_comp, ntrajectory,times,mumbytrajectories,initM,initC,initT,MumbyOpen_Restoration)
   mumbytrajectories <- mumbytraj
   print("done mumbytraj")
-  save(mumbytrajectories, file = here("data", "AG_Rgenerated_4.9.2021", "trajectory_files", paste0("mumbytrajectories_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
-  #save(mumbytrajectories, file = paste0("~/Dropbox/University of Toronto/Working on Non-Thesis Papers/Cole_CoralRestoration/mumbytrajectories_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData"))
-  
+  save(mumbytrajectories, file = here("data", "boa-outputs", "trajectory_files", paste0("mumbytrajectories_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
+
   basins <- data.frame(RecruitValue=c(rep(recruitvalue,440)),Grazing=c(rep(g_val,440)),mc_comp=c(rep(mc_comp,440)),EquilibriumID=seq(1,440,by=1), Size = 0, numNA = -1)
   
   basins$Grazing <- as.numeric(as.character(basins$Grazing))
@@ -158,19 +157,16 @@ for(j in 1:length(g_val_vec)){
   basins$Grazing <- as.numeric(as.character(basins$Grazing))
   basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
   basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
-  save(basinofattractionID, file = here("data", "AG_Rgenerated_4.9.2021", "basinofattractionID_files", paste0("basinofattractionID_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
-  #save(basinofattractionID, file = paste0("~/Dropbox/University of Toronto/Working on Non-Thesis Papers/Cole_CoralRestoration/basinofattractionID_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData"))
-  #save(basins, file = paste0("~/Dropbox/University of Toronto/Working on Non-Thesis Papers/Cole_CoralRestoration/basins_recr",recruitvalue[j],"g",g_val[j],"_mccomp",mc_comp[j],"_20000.RData"))
-  
+  save(basinofattractionID, file = here("data", "boa-outputs", "basinofattractionID_files", paste0("basinofattractionID_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
+
   basinsabr <- basins[basins$RecruitValue == recruitvalue & basins$Grazing == g_val & basins$mc_comp == mc_comp,] #this is now the same thing as basins but that's fine
-  save(basinsabr, file = here("data", "AG_Rgenerated_4.9.2021", "basinsabr_files", paste0("basins_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
-  #save(basinsabr, file = paste0("~/Dropbox/University of Toronto/Working on Non-Thesis Papers/Cole_CoralRestoration/basins_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData"))
+  save(basinsabr, file = here("data", "boa-outputs", "basinsabr_files", paste0("basins_recr",recruitvalue,"g",g_val,"_mccomp",mc_comp,"_20000.RData")))
 }
 
 #Plotting basinofattraction data in a C vs M scatterplot
-recruitvalue_vec = rep(c(0, 0.05, 0.25, 0.5), each = 3*4)
-g_val_vec = rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
-mc_comp_vec = rep(c(0.05, 0.3, 0.5, 0.99),4*3)
+recruitvalue_vec = unique(data$a) #rep(c(0, 0.05, 0.25, 0.5), each = 3*4) don't need to redo z=0 because that worked
+g_val_vec = unique(data$g) #rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
+mc_comp_vec = unique(data$z) #rep(c(0.05, 0.3, 0.5, 0.99),4*3)
 
 #see: PrepforDarlingLabMeeting_MatchingIDvals.R 
 onlymalg <- c(7,32,52,101)

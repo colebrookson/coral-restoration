@@ -7,7 +7,7 @@ library(here)
 library(qs)
 
 # read in the data with all the IDs ============================================
-data <- qs::qread(here("./data/parameter-data/allparam_data_old_ordered.qs"))
+data <- qs::qread(here("./data/parameter-data/allparam_data_ordered.qs"))
 
 data <- data[, names(data)[which(!is.na(names(data)))]]
 # get the correct IDs ==========================================================
