@@ -6,6 +6,7 @@ library(readxl)
 library(here)
 library(qs)
 
+source(here("./R/01_functions_clean_data.R"))
 
 # BEGIN NOTE ###########
 # The goal here is to add ID's to stable nodes in our information that's coming
@@ -93,7 +94,7 @@ bifurc <- rep(0, max(data$paramcombo))
 # first set, assign them IDs in line w said identification
 
 
-for(i in 1:max(data$paramcombo)){ #2:paramcomb
+for(i in 2:max(data$paramcombo)){ #2:paramcomb
   if(i %% 10 == 0) {
     print(paste("Parameter combination ", i))
   }

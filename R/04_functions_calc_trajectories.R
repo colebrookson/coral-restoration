@@ -137,7 +137,7 @@ BOA <- function(mc_comp, recruitvalue, g_val, data_IDs, basinofattractionID,
   
   for(n in 1:ntrajectory){
     for(m in 1:numequi){
-      print(n); print(m)
+      print(paste0("n = ", n, "m = ", m))
       # if stay within that radius for the final 10th of the time, 
       # initial conditions + run # assigned that colour + equi number
       if((all(((M1equi[m] - radius) <  
@@ -219,7 +219,7 @@ for(j in 1:length(g_val_vec)){
     T1 = NA, 
     TimeStep = rep(1:npoints))
   
-  print(paste("j = ", j))
+  print(paste("starting j = ", j))
   
   i=1
   # set parameter values 
@@ -236,6 +236,7 @@ for(j in 1:length(g_val_vec)){
     i, parameters, recruitvalue, g_val, mc_comp, 
     ntrajectory, times, mumbytrajectories, 
     initM, initC, initT, MumbyOpen_Restoration)
+  print(paste("trajectories calculated for j = ", j))
   
   # put in the trajectories 
   mumbytrajectories <- mumbytraj
@@ -267,9 +268,17 @@ for(j in 1:length(g_val_vec)){
     initC1 = initC[1:ntrajectory], 
     initT1 = initT[1:ntrajectory])
   
-  output <- BOA(mc_comp, recruitvalue, 
-                g_val, data, basinofattractionID, 
-                basins, ntrajectory, radius, times, finaltime)
+  output <- BOA(
+    mc_comp = mc_comp, 
+    recruitvalue = recruitvalue,
+    g_val = g_val, 
+    data_IDs = data, 
+    basinofattractionID = basinofattractionID, 
+    basins = basins, 
+    ntrajectory = ntrajectory, 
+    radius = radius, 
+    times = times, 
+    finaltime = finaltime)
   
   basinofattractionID <- output[[1]]
   basins <- output[[2]]
@@ -290,6 +299,8 @@ for(j in 1:length(g_val_vec)){
                               paste0("basins_recr",
                                      recruitvalue,"g",g_val,
                                      "_mccomp",mc_comp,"_20000.RData")))
+  
+  print(paste("finished j = ", j))
 }
 
 #Plotting basinofattraction data in a C vs M scatterplot
