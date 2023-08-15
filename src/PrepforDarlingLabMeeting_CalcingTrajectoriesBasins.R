@@ -123,6 +123,10 @@ recruitvalue_vec = unique(data$a) #rep(c(0, 0.05, 0.25, 0.5), each = 3*4) don't 
 g_val_vec = unique(data$g) #rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
 mc_comp_vec = unique(data$z) #rep(c(0.05, 0.3, 0.5, 0.99),4*3)
 
+recruitvalue_vec = rep(c(0, 0.05, 0.25, 0.5), each = 3*4) #don't need to redo z=0 because that worked
+g_val_vec = rep(rep(c(0.1, 0.21, 0.5), each = 4),4)
+mc_comp_vec = rep(c(0.05, 0.3, 0.5, 0.99),4*3)
+
 for(j in 1:length(g_val_vec)){
   mumbytraj <- NA
   mumbytrajectories <- NA

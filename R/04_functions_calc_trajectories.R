@@ -137,7 +137,7 @@ BOA <- function(mc_comp, recruitvalue, g_val, data_IDs, basinofattractionID,
   
   for(n in 1:ntrajectory){
     for(m in 1:numequi){
-      print(paste0("n = ", n, "m = ", m))
+
       # if stay within that radius for the final 10th of the time, 
       # initial conditions + run # assigned that colour + equi number
       if((all(((M1equi[m] - radius) <  
@@ -198,9 +198,11 @@ recruitvalue_vec = unique(data$a)
 g_val_vec = unique(data$g) 
 mc_comp_vec = unique(data$z)
 
+param_grid <- expand.grid(unique(data$a), unique(data$g), unique(data$z))
+
 # loop through each of the parameter values and follow the process outlined in 
 # these two functions
-for(j in 1:length(g_val_vec)){
+for(j in 1:1) { #length(g_val_vec)){
   
   # some initial NA values
   mumbytraj <- NA
@@ -220,6 +222,7 @@ for(j in 1:length(g_val_vec)){
     TimeStep = rep(1:npoints))
   
   print(paste("starting j = ", j))
+  start_time <- Sys.time()
   
   i=1
   # set parameter values 
@@ -301,6 +304,8 @@ for(j in 1:length(g_val_vec)){
                                      "_mccomp",mc_comp,"_20000.RData")))
   
   print(paste("finished j = ", j))
+  end_time <- Sys.time()
+  print(end_time - start_time)
 }
 
 #Plotting basinofattraction data in a C vs M scatterplot
