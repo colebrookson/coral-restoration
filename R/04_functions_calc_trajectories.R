@@ -198,7 +198,10 @@ recruitvalue_vec = unique(data$a)
 g_val_vec = unique(data$g) 
 mc_comp_vec = unique(data$z)
 
-param_grid <- expand.grid(unique(data$a), unique(data$g), unique(data$z))
+param_grid <- expand.grid(a = unique(data$a), g = unique(data$g), 
+                          z = unique(data$z))
+param_grid$group <- rep(seq(1,4000), each = 10)
+write_csv(param_grid, here("./data/parameter-data/grid-of-parameters.csv"))
 
 # loop through each of the parameter values and follow the process outlined in 
 # these two functions

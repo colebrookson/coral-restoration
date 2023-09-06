@@ -8,12 +8,15 @@ library(tidyverse)
 
 # pull in the functions that we need to do the simulations
 source(here("./R/cc/00_functions.R"))
+param_grid <- readr::read_csv(
+  here("./data/parameter-data/grid-of-parameters.csv"))
 
 # the values needed for each simulation
 args = commandArgs(TRUE)
-g_val = as.numeric(args[1])
-recruitvalue = as.numeric(args[2])
-mc_comp = as.numeric(args[3])
+curr_group = as.numeric(args[1]) # which group of parameters to simulate through
+# g_val = as.numeric(args[1])
+# recruitvalue = as.numeric(args[2])
+# mc_comp = as.numeric(args[3])
 
 # create grid of starting points ===============================================
 
@@ -71,116 +74,123 @@ times <- seq(0,2000, by = 0.1) #changed from 0,100 by = 0.1
 #needs to spend last tenth of the total time within 0.005 radius of stable_node
 finaltime <- floor(length(times)*0.1) 
 
-# instead of the loop this is where the simulation bit happens =================
+# this is where the simulation bit happens =====================================
 
-# some initial NA values
-mumbytraj <- NA
-mumbytrajectories <- NA
-basins<-NA
-basinofattractionID <- NA	
-# recruitvalue <- recruitvalue_vec[j]
-# g_val <- g_val_vec[j]
-# mc_comp <- mc_comp_vec[j]
+param_grid <- param_grid[which(param_grid$group == curr_group),]
 
-#initializing the dataframes beforehand
-mumbytrajectories <- data.frame(
-  Run=rep(1:ntrajectory, each = npoints),
-  M1 = NA, 
-  C1 = NA,
-  T1 = NA, 
-  TimeStep = rep(1:npoints))
-
-# set parameter values 
-parameters <- c(
-  a <- mc_comp, 
-  d <- 0.24, 
-  g <- g_val, 
-  r <- 0.55, 
-  y <- 0.77, 
-  z <- recruitvalue)
-
-i=1 # this is the run
-
-# do the actual simulation
-mumbytraj <- CalcTrajectories(
-  i = i, # this is the run number
-  parameters = parameters, # all the parameters
-  recruitvalue = recruitvalue,
-  g_val = g_val,
-  mc_comp = mc_comp,
-  ntrajectory = ntrajectory, # the number of the trajectory (there are many)
-  times = times, # times to be put into the simulation
-  mumbytrajectories = mumbytrajectories, # the dataframe to use
-  initM = initM,
-  initC = initC,
-  initT = initT,
-  MumbyOpen_Restoration = MumbyOpen_Restoration # the function for simulation
+for(row in seq_len(nrow(param_grid))) {
+  
+  # some initial NA values
+  mumbytraj <- NA
+  mumbytrajectories <- NA
+  basins<-NA
+  basinofattractionID <- NA	
+  recruitvalue <- param_grid$a[row]
+  g_val <- param_grid$g[row]
+  mc_comp <- param_grid$z[row]
+  
+  #initializing the dataframes beforehand
+  mumbytrajectories <- data.frame(
+    Run=rep(1:ntrajectory, each = npoints),
+    M1 = NA, 
+    C1 = NA,
+    T1 = NA, 
+    TimeStep = rep(1:npoints))
+  
+  # set parameter values 
+  parameters <- c(
+    a <- mc_comp, 
+    d <- 0.24, 
+    g <- g_val, 
+    r <- 0.55, 
+    y <- 0.77, 
+    z <- recruitvalue)
+  
+  i=1 # this is the run
+  
+  # do the actual simulation
+  mumbytraj <- CalcTrajectories(
+    i = i, # this is the run number
+    parameters = parameters, # all the parameters
+    recruitvalue = recruitvalue,
+    g_val = g_val,
+    mc_comp = mc_comp,
+    ntrajectory = ntrajectory, # the number of the trajectory (there are many)
+    times = times, # times to be put into the simulation
+    mumbytrajectories = mumbytrajectories, # the dataframe to use
+    initM = initM,
+    initC = initC,
+    initT = initT,
+    MumbyOpen_Restoration = MumbyOpen_Restoration # the function for simulation
   ) 
+  
+  # save the trajectories
+  save(
+    mumbytraj, 
+    file = here("data", "boa-outputs", "updated", "trajectory_files", 
+                paste0("mumbytrajectories_recr",
+                       recruitvalue,"g",g_val,"_mccomp",
+                       mc_comp,"_20000.RData")))
+  
+  # data frame of results put in the values 
+  basins <- data.frame(
+    RecruitValue = c(rep(recruitvalue, length(unique(data$ID)))),
+    Grazing=c(rep(g_val,length(unique(data$ID)))),
+    mc_comp=c(rep(mc_comp,length(unique(data$ID)))),
+    EquilibriumID=seq(1,length(unique(data$ID)),by=1), 
+    Size = 0, 
+    numNA = -1)
+  
+  basins$Grazing <- as.numeric(as.character(basins$Grazing))
+  basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
+  basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
+  
+  basinofattractionID <- data.frame(
+    InitCond=rep(1:ntrajectory), 
+    Equilibrium = NA, 
+    initM1 = initM[1:ntrajectory], 
+    initC1 = initC[1:ntrajectory], 
+    initT1 = initT[1:ntrajectory])
+  
+  # calculate the basins of attraction given the trajectories
+  output <- BOA(
+    mc_comp = mc_comp, 
+    recruitvalue = recruitvalue,
+    g_val = g_val, 
+    data_IDs = data, 
+    basinofattractionID = basinofattractionID, 
+    basins = basins, 
+    ntrajectory = ntrajectory, 
+    mumbytrajectories = mumbytraj,
+    radius = radius, 
+    times = times, 
+    finaltime = finaltime)
+  
+  basinofattractionID <- output[[1]]
+  basins <- output[[2]]
+  basins$Grazing <- as.numeric(as.character(basins$Grazing))
+  basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
+  basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
+  
+  save(basinofattractionID, 
+       file = here("data", "boa-outputs", "updated", "basinofattractionID_files",
+                   paste0("basinofattractionID_recr",
+                          recruitvalue,"g",g_val,"_mccomp"
+                          ,mc_comp,"_20000.RData")))
+  
+  basinsabr <- basins[basins$RecruitValue == recruitvalue & 
+                        basins$Grazing == g_val & 
+                        basins$mc_comp == mc_comp,] 
+  save(basinsabr, file = here("data", "boa-outputs", "updated", 
+                              "basinsabr_files",
+                              paste0("basins_recr",
+                                     recruitvalue,"g",g_val,
+                                     "_mccomp",mc_comp,"_20000.RData")))
+  
+}
 
-# save the trajectories
-save(
-  mumbytraj, 
-  file = here("data", "boa-outputs", "updated", "trajectory_files", 
-              paste0("mumbytrajectories_recr",
-                     recruitvalue,"g",g_val,"_mccomp",
-                     mc_comp,"_20000.RData")))
 
-# data frame of results put in the values 
-basins <- data.frame(
-  RecruitValue = c(rep(recruitvalue,440)),
-  Grazing=c(rep(g_val,440)),
-  mc_comp=c(rep(mc_comp,440)),
-  EquilibriumID=seq(1,440,by=1), 
-  Size = 0, 
-  numNA = -1)
 
-basins$Grazing <- as.numeric(as.character(basins$Grazing))
-basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
-basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
-
-basinofattractionID <- data.frame(
-  InitCond=rep(1:ntrajectory), 
-  Equilibrium = NA, 
-  initM1 = initM[1:ntrajectory], 
-  initC1 = initC[1:ntrajectory], 
-  initT1 = initT[1:ntrajectory])
-
-# calculate the basins of attraction given the trajectories
-output <- BOA(
-  mc_comp = mc_comp, 
-  recruitvalue = recruitvalue,
-  g_val = g_val, 
-  data_IDs = data, 
-  basinofattractionID = basinofattractionID, 
-  basins = basins, 
-  ntrajectory = ntrajectory, 
-  mumbytrajectories = mumbytraj,
-  radius = radius, 
-  times = times, 
-  finaltime = finaltime)
-
-basinofattractionID <- output[[1]]
-basins <- output[[2]]
-basins$Grazing <- as.numeric(as.character(basins$Grazing))
-basins$RecruitValue <- as.numeric(as.character(basins$RecruitValue))
-basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
-
-save(basinofattractionID, 
-     file = here("data", "boa-outputs", "updated", "basinofattractionID_files",
-                 paste0("basinofattractionID_recr",
-                        recruitvalue,"g",g_val,"_mccomp"
-                        ,mc_comp,"_20000.RData")))
-
-basinsabr <- basins[basins$RecruitValue == recruitvalue & 
-                      basins$Grazing == g_val & 
-                      basins$mc_comp == mc_comp,] 
-save(basinsabr, file = here("data", "boa-outputs", "updated", 
-                            "basinsabr_files",
-                            paste0("basins_recr",
-                                   recruitvalue,"g",g_val,
-                                   "_mccomp",mc_comp,"_20000.RData")))
-
-end <- Sys.time()
 
 
 
