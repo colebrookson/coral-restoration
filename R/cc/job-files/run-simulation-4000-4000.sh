@@ -8,7 +8,7 @@
 #SBATCH --mail-type=REQUEUE 
 #SBATCH --job-name='sims 4000 to 4000'
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks-per-node=1
 #SBATCH --mem-per-cpu=3GB
 #SBATCH --time=0-01:00:00
 
