@@ -7,9 +7,9 @@ library(here)
 library(tidyverse)
 
 # pull in the functions that we need to do the simulations
-source(here("./R/cc/00_functions.R"))
+source("/brookson/scratch/coral-resotration/R/cc/00_functions.R")
 param_grid <- readr::read_csv(
-  here("./data/parameter-data/grid-of-parameters.csv"))
+  "/brookson/scratch/coral-resotration/data/parameter-data/grid-of-parameters.csv")
 
 # the values needed for each simulation
 args = commandArgs(TRUE)
