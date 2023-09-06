@@ -127,7 +127,8 @@ for(row in seq_len(nrow(param_grid))) {
   # save the trajectories
   save(
     mumbytraj, 
-    file = here("data", "boa-outputs", "updated", "trajectory_files", 
+    file = here("/brookson/scratch/coral-resotration/data/",
+                "boa-outputs", "updated", "trajectory_files", 
                 paste0("mumbytrajectories_recr",
                        recruitvalue,"g",g_val,"_mccomp",
                        mc_comp,"_20000.RData")))
@@ -173,7 +174,8 @@ for(row in seq_len(nrow(param_grid))) {
   basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
   
   save(basinofattractionID, 
-       file = here("data", "boa-outputs", "updated", "basinofattractionID_files",
+       file = here("/brookson/scratch/coral-resotration/data/",
+                   "boa-outputs", "updated", "basinofattractionID_files",
                    paste0("basinofattractionID_recr",
                           recruitvalue,"g",g_val,"_mccomp"
                           ,mc_comp,"_20000.RData")))
@@ -181,7 +183,8 @@ for(row in seq_len(nrow(param_grid))) {
   basinsabr <- basins[basins$RecruitValue == recruitvalue & 
                         basins$Grazing == g_val & 
                         basins$mc_comp == mc_comp,] 
-  save(basinsabr, file = here("data", "boa-outputs", "updated", 
+  save(basinsabr, file = here("/brookson/scratch/coral-resotration/data/",
+                              "boa-outputs", "updated", 
                               "basinsabr_files",
                               paste0("basins_recr",
                                      recruitvalue,"g",g_val,
