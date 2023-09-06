@@ -1,0 +1,1 @@
+nargument=4000 && Rscript /home/brookson/scratch/coral-restoration/R/cc/01_simulation.R ${nargument}
