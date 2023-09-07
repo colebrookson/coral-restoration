@@ -5,11 +5,15 @@ library(geometry)
 library(fields)
 library(here)
 library(tidyverse)
+library(qs)
 
 # pull in the functions that we need to do the simulations
 source("/home/brookson/scratch/coral-restoration/R/cc/00_functions.R")
 param_grid <- readr::read_csv(
   "/home/brookson/scratch/coral-restoration/data/parameter-data/grid-of-parameters.csv")
+
+#LOAD IN data
+data <- qs::qread("/home/brookson/scratch/coral-restoration/data/parameter-data/allparam_data_ordered.qs")
 
 # the values needed for each simulation
 args = commandArgs(TRUE)
@@ -22,7 +26,7 @@ curr_group = as.numeric(args[1]) # which group of parameters to simulate through
 
 # the grid is a bunch of starting points in the region of [0,1] x [0,1] that is 
 # allowed by 1 = M + C + T
-start <- Sys.time()
+
 #x and y coords of all of the initial starting points
 interval <- 0.05
 x_coords <- seq(0.01,0.99, by = interval)
