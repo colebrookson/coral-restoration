@@ -7,9 +7,9 @@ library(here)
 library(tidyverse)
 
 # pull in the functions that we need to do the simulations
-source("/brookson/scratch/coral-restoration/R/cc/00_functions.R")
+source("/home/brookson/scratch/coral-restoration/R/cc/00_functions.R")
 param_grid <- readr::read_csv(
-  "/brookson/scratch/coral-restoration/data/parameter-data/grid-of-parameters.csv")
+  "/home/brookson/scratch/coral-restoration/data/parameter-data/grid-of-parameters.csv")
 
 # the values needed for each simulation
 args = commandArgs(TRUE)
@@ -127,7 +127,7 @@ for(row in seq_len(nrow(param_grid))) {
   # save the trajectories
   save(
     mumbytraj, 
-    file = here("/brookson/scratch/coral-restoration/data/",
+    file = here("/home/brookson/scratch/coral-restoration/data/",
                 "boa-outputs", "updated", "trajectory_files", 
                 paste0("mumbytrajectories_recr",
                        recruitvalue,"g",g_val,"_mccomp",
@@ -174,7 +174,7 @@ for(row in seq_len(nrow(param_grid))) {
   basins$mc_comp <- as.numeric(as.character(basins$mc_comp))
   
   save(basinofattractionID, 
-       file = here("/brookson/scratch/coral-restoration/data/",
+       file = here("/home/brookson/scratch/coral-restoration/data/",
                    "boa-outputs", "updated", "basinofattractionID_files",
                    paste0("basinofattractionID_recr",
                           recruitvalue,"g",g_val,"_mccomp"
@@ -183,7 +183,7 @@ for(row in seq_len(nrow(param_grid))) {
   basinsabr <- basins[basins$RecruitValue == recruitvalue & 
                         basins$Grazing == g_val & 
                         basins$mc_comp == mc_comp,] 
-  save(basinsabr, file = here("/brookson/scratch/coral-restoration/data/",
+  save(basinsabr, file = here("/home/brookson/scratch/coral-restoration/data/",
                               "boa-outputs", "updated", 
                               "basinsabr_files",
                               paste0("basins_recr",
