@@ -5,6 +5,7 @@ library(deSolve)
 library(geometry)
 library(fields)
 library(here)
+library(plotly)
 library(tidyverse)
 
 `%notin%` <- Negate(`%in%`)
@@ -51,11 +52,14 @@ process_prop <- function(a, g, z, prop_df, basinsabr, allparam_data_ordered,
     # now if check if the ID is a "good" id
     if(temp %notin% good_ids$ID) {
       # if not a good ID, note 
-      prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"] <- 0
-      print("did 1"); print(prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"])
+      prop_df[
+        which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"
+        ] <- 0
     } else {
       # if the ID is good, make sure the param combo is valid 
-      prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"] <- 
+      prop_df[
+        which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"
+        ] <- 
         ifelse( # checks if there is in fact that combo in df
           nrow(good_ids[which(good_ids$ID == temp & 
                                 good_ids$a == a & 
@@ -64,7 +68,6 @@ process_prop <- function(a, g, z, prop_df, basinsabr, allparam_data_ordered,
           0, # if the combo is NOT valid, assign zero
           val # if combo IS vaid, assign the val
       )
-      print("did 2"); print(prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"])
     }
   } else if(length(temp) > 1) { # if multiple IDs
     
@@ -94,9 +97,11 @@ process_prop <- function(a, g, z, prop_df, basinsabr, allparam_data_ordered,
     }
     # once all the ID's have been checked and the sum is checked, put into 
     # the prop df
-    prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"] <- sum
-    print("did 3"); print(prop_df[which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"])
+    prop_df[
+      which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"
+            ] <- sum
   }
+  return(prop_df)
 }
 
 # loop through the function runs ===============================================
@@ -114,7 +119,7 @@ for(row in seq_len(nrow(prop_df))) {
     load(
       file
     )
-    process_prop(
+    prop_df <- process_prop(
       a = a,
       g = g,
       z = z,
@@ -128,8 +133,38 @@ for(row in seq_len(nrow(prop_df))) {
       which(prop_df$g == g & prop_df$a == a & prop_df$z == z), "prop"
     ] <- -999999
   }
+  if(row %% 100 == 0){print(row)}
 }
 
 
 # we want coral > 0.3 and MacroAlgae < 0.3 
 
+# plot in 3d ===================================================================
+
+
+# Plot
+library(plotly)
+
+prop_df <- prop_df[which(prop_df$prop >= 0),]
+fig <- plot_ly(prop_df,
+               marker = list(color = ~prop, 
+                             colorscale = list(c(0, 1), 
+                                               c("seagreen", "skyblue")), 
+                             showscale = TRUE)) %>% 
+  add_trace(fig, x = ~a, y = ~g, z = ~z,
+                 type = "scatter3d", mode = "markers",
+          opacity = .2) %>% 
+  layout(scene = list(xaxis = 
+                        list(title = 'Dispersal'),
+                      yaxis = list(title = 'Grazing'),
+                      zaxis = list(title = 'Coral/Macroalgae Comp.')),
+                      annotations = list(  
+                        x = 1.13,
+                        y = 1.05,
+                        text = 'Proportion in a "Good" eq',
+                        xref = 'paper',
+                        yref = 'paper',
+                        showarrow = FALSE
+                      ))
+
+fig
