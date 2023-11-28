@@ -115,7 +115,7 @@ for(row in seq_len(nrow(prop_df))) {
   file <- paste0(path, "basins_recr",z,"g",g,"_mccomp",a,"_20000.RData")
 
   
-  if(file.exists(file)) {
+  if(file.exists(file) & file.size(file) > 0) {
     load(
       file
     )
@@ -139,32 +139,6 @@ for(row in seq_len(nrow(prop_df))) {
 
 # we want coral > 0.3 and MacroAlgae < 0.3 
 
-# plot in 3d ===================================================================
-
-
-# Plot
-library(plotly)
-
-prop_df <- prop_df[which(prop_df$prop >= 0),]
-fig <- plot_ly(prop_df,
-               marker = list(color = ~prop, 
-                             colorscale = list(c(0, 1), 
-                                               c("seagreen", "skyblue")), 
-                             showscale = TRUE)) %>% 
-  add_trace(fig, x = ~a, y = ~g, z = ~z,
-                 type = "scatter3d", mode = "markers",
-          opacity = .2) %>% 
-  layout(scene = list(xaxis = 
-                        list(title = 'Dispersal'),
-                      yaxis = list(title = 'Grazing'),
-                      zaxis = list(title = 'Coral/Macroalgae Comp.')),
-                      annotations = list(  
-                        x = 1.13,
-                        y = 1.05,
-                        text = 'Proportion in a "Good" eq',
-                        xref = 'paper',
-                        yref = 'paper',
-                        showarrow = FALSE
-                      ))
-
-fig
+# write out file 
+readr::write_csv(prop_df, paste0(here::here("./data/plotting-data/"),
+                                 "proportion-of-ICs-to-good-coral-state.csv"))
