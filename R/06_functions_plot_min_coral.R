@@ -6,152 +6,165 @@ library(readxl)
 library(here)
 library(qs)
 
-# read in the data with all the IDs ============================================
-data <- qs::qread(here("./data/parameter-data/allparam_data_ordered.qs"))
+`%notin%` <- Negate(`%in%`)
 
-data <- data[, names(data)[which(!is.na(names(data)))]]
-# get the correct IDs ==========================================================
+allparam_data_ordered <- qs::qread(
+  here::here("./data/parameter-data/allparam_data_ordered.qs")
+)
 
-gt30_ids <- data %>% 
-  dplyr::filter(C >= 0.3) %>% 
-  dplyr::distinct(ID)
+all_g <- unique(allparam_data_ordered$g)
+all_z <- unique(allparam_data_ordered$z)
+all_a <- unique(allparam_data_ordered$a)
 
-# loop through all the files ===================================================
+# find which IDs have > 0.3 coral and < 0.3 MA =================================
+
+good_ids <- allparam_data_ordered[
+  which(allparam_data_ordered$C >= 0.3 & allparam_data_ordered$M < 0.3 &
+          allparam_data_ordered$stability == "stable_node"), 
+]
+
+# process all files ============================================================
 
 # NOTE
 #' So what we'll do here is loop through each basin of attraction file, 
 #' pull in the info, see if any of the ids are in in the file, if so, find 
 #' the minimum coral value that corresponds to that id 
 
-# get the list of all the files 
-path <- here("./data/cc/basinofattractionID_files/")
-files <- list.files(path)
+# process all files ============================================================
 
-# make empty df 
-matching_df <- data.frame(
-  recruitment = as.numeric(),
-  grazing = as.numeric(),
-  competition = as.numeric(),
-  ID = as.integer(),
-  min_coral_cover = as.numeric()
-)
+# process the files to find the percentage of ICs for each parameter combo that
+# end up at a stable equilibrium with the "good" conditions
 
-# loop through all files and add to the df
-count <- 1
-for(file in files) {
+# make a df to put all the percentages in 
+matching_df <- expand.grid(g = all_g, a = all_a, z = all_z)
+matching_df$min_coral <- NA
+
+# process one file 
+process_prop <- function(a, g, z, matching_df, basinofattractionID, 
+                         allparam_data_ordered, good_ids) {
   
-  # load in the file - each one is called "basinofattractionID"
-  full_file <- paste0(path, file)
-  if(file.exists(full_file) & file.size(full_file) > 0) {
-    load(full_file)
-  }
-  else {
-    next 
+  # if there's no ID's return NA
+  if(!any(basinofattractionID$Equilibrium %in% good_ids$ID)) {
+    matching_df[
+      which(matching_df$g == g 
+            & matching_df$a == a & 
+              matching_df$z == z), "min_coral"
+    ] <- NA
+    return(matching_df)
   }
   
+  # get only the ID's that are in the good ids
+  temp <- basinofattractionID[
+    which(basinofattractionID$Equilibrium %in% good_ids$ID), 
+  ]
   
-  # check to see if any of the id's are the ones we want
-  if(any(basinofattractionID$Equilibrium %in% gt30_ids$ID)) {
+  matching_df[
+    which(matching_df$g == g 
+          & matching_df$a == a & 
+            matching_df$z == z), "min_coral"
+  ] <- min(temp$initC1)  
+
+  return(matching_df)
     
-    # get the ID or IDs
-    if(length(
-      unique(
-        (basinofattractionID %>% 
-        dplyr::filter(Equilibrium %in% gt30_ids$ID))$Equilibrium
-      )) == 1) {
-      id_val <- as.integer(basinofattractionID %>% 
-                             dplyr::filter(Equilibrium %in% gt30_ids$ID) %>% 
-                             dplyr::select(Equilibrium) %>% 
-                             unique())
-      
-      # get the info needed 
-      # first, find the min coral cover that has an ID we want
-      min_coral_val <- as.numeric(basinofattractionID %>% 
-                                    dplyr::filter(Equilibrium 
-                                                  %in% gt30_ids$ID) %>% 
-                                    dplyr::summarize(min(initC1)))
-      
-      # now get the other parameter values
-      recruit_val <- 
-        as.numeric(stringr::str_split(
-          string = stringr::str_split(file, pattern = 
-                                        "basinofattractionID_recr", 
-                                      n = 2)[[1]][2],
-          pattern = "g", n = 3)[[1]][1])
-      grazing_val <- 
-        as.numeric(stringr::str_split(
-          string = stringr::str_split(file, 
-                                      pattern = "g",  n = 2)[[1]][2],
-          pattern = "_mccomp", n = 3)[[1]][1])
-      competition_val <- 
-        as.numeric(stringr::str_split(
-          string = stringr::str_split(file, 
-                                      pattern = "_mccomp",  n = 2)[[1]][2],
-          pattern = "_20000", n = 3)[[1]][1])
-      
-      # put values into a dataframe
-      curr_row <- data.frame(
-        recruitment = recruit_val,
-        grazing = grazing_val,
-        competition = competition_val,
-        ID = id_val,
-        min_coral_cover = min_coral_val
-      )
-      
-      # bind to the higher level df
-      matching_df <- rbind(
-        matching_df, curr_row
-      )
-      } else {
-        for(id_val in unique(basinofattractionID$Equilibrium)) {
-          
-          # get the df with just that eq 
-          temp <- basinofattractionID %>% 
-            dplyr::filter(Equilibrium == id_val) 
-          
-          # first, find the min coral cover that has an ID we want
-          min_coral_val <- as.numeric(temp %>% 
-                                        dplyr::filter(Equilibrium 
-                                                      %in% gt30_ids$ID) %>% 
-                                        dplyr::summarize(min(initC1)))
-          
-          # now get the other parameter values
-          recruit_val <- 
-            as.numeric(stringr::str_split(
-              string = stringr::str_split(file, pattern = 
-                                            "basinofattractionID_recr", 
-                                          n = 2)[[1]][2],
-              pattern = "g", n = 3)[[1]][1])
-          grazing_val <- 
-            as.numeric(stringr::str_split(
-              string = stringr::str_split(file, 
-                                          pattern = "g",  n = 2)[[1]][2],
-              pattern = "_mccomp", n = 3)[[1]][1])
-          competition_val <- 
-            as.numeric(stringr::str_split(
-              string = stringr::str_split(file, 
-                                          pattern = "_mccomp",  n = 2)[[1]][2],
-              pattern = "_20000", n = 3)[[1]][1])
-          
-          # put values into a dataframe
-          curr_row <- data.frame(
-            recruitment = recruit_val,
-            grazing = grazing_val,
-            competition = competition_val,
-            ID = id_val,
-            min_coral_cover = min_coral_val
-          )
-          
-          # bind to the higher level df
-          matching_df <- rbind(
-            matching_df, curr_row
-          )
-        }
-      }
-  }
-  if(count %% 1000 == 0){print(count)}
 }
+
+for(row in seq_len(nrow(matching_df))) {
+  a = matching_df$a[row]
+  g = matching_df$g[row]
+  z = matching_df$z[row]
+  
+  path <- here::here("./data/cc/basinofattractionID_files/")
+  file <- paste0(path, "basinofattractionID_recr",z,"g",g,"_mccomp",
+                 a,"_20000.RData")
+  
+  
+  if(file.exists(file) & file.size(file) > 0) {
+    load(
+      file
+    )
+    matching_df <- process_prop(
+      a = a,
+      g = g,
+      z = z,
+      basinofattractionID = basinofattractionID,
+      matching_df = matching_df,
+      allparam_data_ordered = allparam_data_ordered,
+      good_ids = good_ids
+    )
+  } else {
+    matching_df[
+      which(matching_df$g == g & matching_df$a == a & matching_df$z == z), "min_coral"
+    ] <- -999999
+  }
+  if(row %% 100 == 0){print(row)}
+}
+
+
 readr::write_csv(matching_df, here::here("./data/plotting-data/min-coral-ids.csv"))
+
+matching_df <- readr::read_csv(here::here("./data/plotting-data/min-coral-ids.csv"))
+
+matching_df <- matching_df %>% dplyr::filter(min_coral != -999999)
+
+matching_df$grazing_level <- NA
+matching_df[which(matching_df$g <= 0.33),"grazing_level"] <- "low"
+matching_df[which(matching_df$g > 0.33 & 
+                matching_df$g <= 0.66),"grazing_level"] <- "med"
+matching_df[which(matching_df$g > 0.66),"grazing_level"] <- "high"
+matching_df$grazing_level <- factor(matching_df$grazing_level,
+                                levels = c("low", "med", "high"))
+
+matching_df$recruit_level <- NA
+matching_df[which(matching_df$a <= 0.33),"recruit_level"] <- "low"
+matching_df[which(matching_df$a > 0.33 & 
+                matching_df$a <= 0.66),"recruit_level"] <- "med"
+matching_df[which(matching_df$a > 0.66),"recruit_level"] <- "high"
+matching_df$recruit_level <- factor(matching_df$recruit_level,
+                                levels = c("low", "med", "high"))
+
+matching_df$overgrow_level <- NA
+matching_df[which(matching_df$z <= 0.33),"overgrow_level"] <- "low"
+matching_df[which(matching_df$z > 0.33 & 
+                matching_df$z <= 0.66),"overgrow_level"] <- "med"
+matching_df[which(matching_df$z > 0.66),"overgrow_level"] <- "high"
+matching_df$overgrow_level <- factor(matching_df$overgrow_level,
+                                 levels = c("low", "med", "high"))
+
 ggplot(data = matching_df) + 
-  geom_point(aes(x = grazing, y = min_coral_cover, 
-                 shape = )) 
+  geom_point(aes(x = a, y = g, colour = min_coral)) + 
+  facet_grid(~overgrow_level) + 
+  theme_base() + 
+  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = -1) + 
+  labs(x = "Recruitment", y = "Grazing") +
+  scale_x_continuous(
+    breaks = c(0, 0.25, 0.5, 0.75, 0.99),
+    labels = c(0, 0.25, 0.5, 0.75, 1.0),
+    sec.axis = sec_axis(~ . , name = "Coral/Macroalgae Comp.", 
+                        breaks = NULL, labels = NULL)) 
+ggplot(data = matching_df) + 
+  geom_point(aes(x = z, y = g, colour = min_coral)) + 
+  facet_grid(~recruit_level) + 
+  theme_base() + 
+  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = -1) + 
+  labs(x = "Coral/Macroalgae Comp.", y = "Grazing") + 
+  scale_x_continuous(
+    breaks = c(0, 0.25, 0.5, 0.75, 0.99),
+    labels = c(0, 0.25, 0.5, 0.75, 1.0),
+    sec.axis = sec_axis(~ . , name = "Recruitment", 
+                        breaks = NULL, labels = NULL)) 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

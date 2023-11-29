@@ -6,6 +6,8 @@ library(magrittr)
 library(dplyr)
 library(ggplot2)
 
+source(here("./R/00_global_funs.R"))
+
 
 `%notin%` <- Negate(`%in%`)
 prop_df <- readr::read_csv(
@@ -50,10 +52,10 @@ plotly::save_image(fig, )
 # seprate out grazing into three groups ========================================
 
 prop_df$grazing_level <- NA
-prop_df[which(prop_df$g <= 0.33),"grazing_level"] <- "low"
-prop_df[which(prop_df$g > 0.33 & 
-                prop_df$g <= 0.66),"grazing_level"] <- "med"
-prop_df[which(prop_df$g > 0.66),"grazing_level"] <- "high"
+prop_df[which(prop_df$g <= 0.2),"grazing_level"] <- "low"
+prop_df[which(prop_df$g > 0.2 & 
+                prop_df$g <= 0.4),"grazing_level"] <- "med"
+prop_df[which(prop_df$g > 0.4),"grazing_level"] <- "high"
 prop_df$grazing_level <- factor(prop_df$grazing_level,
                                 levels = c("low", "med", "high"))
 
