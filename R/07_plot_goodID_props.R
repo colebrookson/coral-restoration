@@ -57,12 +57,12 @@ plotly::save_image(fig, )
 # seprate out grazing into three groups ========================================
 
 prop_df$grazing_level <- NA
-prop_df[which(prop_df$g <= 0.2),"grazing_level"] <- "low"
+prop_df[which(prop_df$g <= 0.2),"grazing_level"] <- "0-0.2"
 prop_df[which(prop_df$g > 0.2 & 
-                prop_df$g <= 0.4),"grazing_level"] <- "med"
-prop_df[which(prop_df$g > 0.4),"grazing_level"] <- "high"
+                    prop_df$g <= 0.4),"grazing_level"] <- "0.2-0.4"
+prop_df[which(prop_df$g > 0.4),"grazing_level"] <- ">0.4"
 prop_df$grazing_level <- factor(prop_df$grazing_level,
-                                levels = c("low", "med", "high"))
+                                    levels = c("0-0.2", "0.2-0.4", ">0.4"))
 
 prop_df$overgrow_level <- NA
 prop_df[which(prop_df$a <= 0.33),"overgrow_level"] <- "low"
@@ -80,7 +80,7 @@ prop_df[which(prop_df$z > 0.66),"recruit_level"] <- "high"
 prop_df$recruit_level <- factor(prop_df$recruit_level,
                                  levels = c("low", "med", "high"))
 
-div_by_comp <- ggplot(data = prop_df) + 
+div_by_recruit <- ggplot(data = prop_df) + 
   geom_point(aes(x = a, y = g, colour = prop)) + 
   facet_grid(~overgrow_level) + 
   theme_base() + 
@@ -92,11 +92,11 @@ div_by_comp <- ggplot(data = prop_df) +
     sec.axis = sec_axis(~ . , name = "Recruitment", 
                         breaks = NULL, labels = NULL)) 
 ggsave(
-  here::here("./graphs/conclusions-plots/prop_div_by_comp.png"),
-  div_by_comp
+  here::here("./graphs/conclusions-plots/prop_div_by_recruit.png"),
+  div_by_recruit
 )
 
-div_by_recruit <- ggplot(data = prop_df) + 
+div_by_comp <- ggplot(data = prop_df) + 
   geom_point(aes(x = z, y = g, colour = prop)) + 
   facet_grid(~recruit_level) + 
   theme_base() + 
@@ -108,8 +108,8 @@ div_by_recruit <- ggplot(data = prop_df) +
     sec.axis = sec_axis(~ . , name = "Coral/Macroalgae Comp.", 
                         breaks = NULL, labels = NULL)) 
 ggsave(
-  here::here("./graphs/conclusions-plots/prop_div_by_recruit.png"),
-  div_by_recruit
+  here::here("./graphs/conclusions-plots/prop_div_by_comp.png"),
+  div_by_comp
 )
 
 div_by_grazing <- ggplot(data = prop_df) + 
