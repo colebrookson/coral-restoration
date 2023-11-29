@@ -31,7 +31,6 @@ good_ids <- allparam_data_ordered[
 # end up at a stable equilibrium with the "good" conditions
 
 # make a df to put all the percentages in 
-macro = c("low", "med", "high")
 prop_df <- expand.grid(g = all_g, a = all_a, z = all_z)
 prop_df$prop <- NA
 
@@ -143,3 +142,4 @@ for(row in seq_len(nrow(prop_df))) {
 # write out file 
 readr::write_csv(prop_df, paste0(here::here("./data/plotting-data/"),
                                  "proportion-of-ICs-to-good-coral-state.csv"))
+
