@@ -19,10 +19,11 @@ prop_df <- readr::read_csv(
   here::here(paste0("./data/plotting-data/proportion",
                     "-of-ICs-to-good-coral-state.csv")))
 
+prop_df <- prop_df[which(prop_df$prop >= 0),]
+
 # plot in 3d ===================================================================
 
 # Plot
-prop_df <- prop_df[which(prop_df$prop >= 0),]
 fig <- plotly::plot_ly(prop_df,
                marker = list(color = ~prop, 
                              colorscale = list(c(0, 1), 
