@@ -5,6 +5,7 @@ library(plotly)
 library(magrittr)
 library(dplyr)
 library(ggplot2)
+library(viridis)
 
 # a - macro algae comp
 # z - recruitment
@@ -81,11 +82,23 @@ prop_df[which(prop_df$z > 0.66),"recruit_level"] <- "high"
 prop_df$recruit_level <- factor(prop_df$recruit_level,
                                  levels = c("low", "med", "high"))
 
+# define colours for the plots =================================================
+#prop has 181 different levels and ranges from 0 to 1, want to highlight 0 and 1
+cols <- c("black", plasma(180), "lightgreen")
+proplvls <- levels(as.factor(prop_df$prop))
+prop_df$prop_cols <- NA
+for(i in 1:length(proplvls)){
+  prop_df$prop_cols[prop_df$prop == proplvls[i]] <- cols[i]
+}
+
+
 div_by_recruit <- ggplot(data = prop_df) + 
-  geom_point(aes(x = a, y = g, colour = prop)) + 
+  geom_point(aes(x = a, y = g, colour = as.factor(prop))) + #colour = prop
   facet_grid(~overgrow_level) + 
   theme_base() + 
-  scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
+  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  guides(color = FALSE)+
+  #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -98,10 +111,12 @@ ggsave(
 )
 
 div_by_comp <- ggplot(data = prop_df) + 
-  geom_point(aes(x = z, y = g, colour = prop)) + 
+  geom_point(aes(x = z, y = g, colour = as.factor(prop))) + #colour = prop
   facet_grid(~recruit_level) + 
   theme_base() + 
-  scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
+  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  guides(color = FALSE)+
+  #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Recruitment", y = "Grazing") + 
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -114,10 +129,12 @@ ggsave(
 )
 
 div_by_grazing <- ggplot(data = prop_df) + 
-  geom_point(aes(x = a, y = z, colour = prop)) + 
+  geom_point(aes(x = a, y = z, colour = as.factor(prop))) + 
   facet_grid(~grazing_level) + 
   theme_base() + 
-  scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
+  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  guides(color = FALSE)+
+  #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
