@@ -5,6 +5,8 @@ library(tidyverse)
 library(readxl)
 library(here)
 library(qs)
+library(ggthemes)
+library(viridis)
 
 `%notin%` <- Negate(`%in%`)
 
@@ -40,13 +42,20 @@ matching_df[which(matching_df$z > 0.66),"recruit_level"] <- "high"
 matching_df$recruit_level <- factor(matching_df$recruit_level,
                                  levels = c("low", "med", "high"))
 
+# define colours for the plots =================================================
+#0.01 is the lowest value and 0.96 is the highest value of min_coral, want these two to have distinctly different colours
+#the values of min_coral are max 2 decimal points, so there are only 96 possible discrete values
+cols <- c("black", viridis(94), "red")
+matching_df$mincoral_cols <- cols[matching_df$min_coral*100]
+
 # make the plots ===============================================================
 div_by_recruit <- ggplot(data = matching_df) + 
-  geom_point(aes(x = a, y = g, colour = min_coral)) + 
+  geom_point(aes(x = a, y = g, color = as.factor(min_coral))) + 
   facet_grid(~overgrow_level) + 
   theme_base() + 
-  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = -1,
-                        breaks = c(0.01, 0.5, 0.96)) + 
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
+                        #breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.99),
@@ -58,11 +67,12 @@ ggsave(
   div_by_recruit
 )
 div_by_comp <- ggplot(data = matching_df) + 
-  geom_point(aes(x = z, y = g, colour = min_coral)) + 
+  geom_point(aes(x = z, y = g, colour = as.factor(min_coral))) + 
   facet_grid(~recruit_level) + 
   theme_base() + 
-  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = -1,
-                        breaks = c(0.01, 0.5, 0.96)) + 
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
+   #                     breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Recruitment", y = "Grazing") + 
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -75,11 +85,12 @@ ggsave(
 )
 
 div_by_grazing <- ggplot(data = matching_df) + 
-  geom_point(aes(x = a, y = z, colour = min_coral)) + 
+  geom_point(aes(x = a, y = z, colour = as.factor(min_coral))) + 
   facet_grid(~grazing_level) + 
   theme_base() + 
-  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = -1,
-                        breaks = c(0.01, 0.5, 0.96)) + 
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
+                      #  breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") + 
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -92,7 +103,19 @@ ggsave(
   div_by_grazing
 )
 
-
+#####OLD
+div_by_grazing <- ggplot(data = matching_df) + 
+  geom_point(aes(x = a, y = z, colour = min_coral)) + 
+  facet_grid(~grazing_level) + 
+  theme_base() + 
+  scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
+                        breaks = c(0.01, 0.5, 0.96)) + 
+  labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") + 
+  scale_x_continuous(
+    breaks = c(0, 0.25, 0.5, 0.75, 0.99),
+    labels = c(0, 0.25, 0.5, 0.75, 1.0),
+    sec.axis = sec_axis(~ . , name = "Grazing", 
+                        breaks = NULL, labels = NULL)) 
 
 
 
