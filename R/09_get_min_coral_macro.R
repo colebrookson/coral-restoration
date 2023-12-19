@@ -34,7 +34,7 @@ good_ids <- allparam_data_ordered[
 
 macro <- c("low", "med", "high")
 
-matching_macro_df <- expand.grid(g = all_g, a = all_a, z = all_z, macro)
+matching_macro_df <- expand.grid(g = all_g, a = all_a, z = all_z, macro = macro)
 matching_macro_df$min_coral <- NA
 
 # NOTE
