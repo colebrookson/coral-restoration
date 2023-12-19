@@ -11,7 +11,7 @@ library(qs)
 matching_df <- readr::read_csv(
   here::here("./data/plotting-data/min-coral-ids-macro.csv")) %>% 
   dplyr::rename(macro = Var4) %>% 
-  dplyr::mutate(macro = as.factor(macro))
+  dplyr::mutate(macro = factor(macro, levels = c("low", "med", "high")))
 
 # set up the data for the different levels =====================================
 matching_df <- matching_df %>% dplyr::filter(min_coral != -999999)

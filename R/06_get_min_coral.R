@@ -72,7 +72,6 @@ for(row in seq_len(nrow(matching_df))) {
   file <- paste0(path, "basinofattractionID_recr",z,"g",g,"_mccomp",
                  a,"_20000.RData")
   
-  
   if(file.exists(file) & file.size(file) > 0) {
     load(
       file
