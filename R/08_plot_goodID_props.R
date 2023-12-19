@@ -83,8 +83,8 @@ prop_df$recruit_level <- factor(prop_df$recruit_level,
                                  levels = c("low", "med", "high"))
 
 # define colours for the plots =================================================
-#prop has 181 different levels and ranges from 0 to 1, want to highlight 0 and 1
-cols <- c("black", plasma(180), "lightgreen")
+#prop has 182 different levels and ranges from 0 to 1, want to highlight 0 and 1
+cols <- c("seagreen", plasma(180),"pink")
 proplvls <- levels(as.factor(prop_df$prop))
 prop_df$prop_cols <- NA
 for(i in 1:length(proplvls)){
@@ -94,9 +94,9 @@ for(i in 1:length(proplvls)){
 
 div_by_recruit <- ggplot(data = prop_df) + 
   geom_point(aes(x = a, y = g, colour = as.factor(prop))) + #colour = prop
-  facet_grid(~overgrow_level) + 
+  facet_grid(~recruit_level) + 
   theme_base() + 
-  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  scale_color_manual(breaks = proplvls, values = c("seagreen", plasma(180),"pink"))+
   guides(color = FALSE)+
   #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
@@ -112,9 +112,9 @@ ggsave(
 
 div_by_comp <- ggplot(data = prop_df) + 
   geom_point(aes(x = z, y = g, colour = as.factor(prop))) + #colour = prop
-  facet_grid(~recruit_level) + 
+  facet_grid(~overgrow_level) + 
   theme_base() + 
-  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  scale_color_manual(breaks = proplvls, values = c("lightblue", plasma(180),"pink"))+
   guides(color = FALSE)+
   #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Recruitment", y = "Grazing") + 
@@ -132,7 +132,7 @@ div_by_grazing <- ggplot(data = prop_df) +
   geom_point(aes(x = a, y = z, colour = as.factor(prop))) + 
   facet_grid(~grazing_level) + 
   theme_base() + 
-  scale_color_manual(breaks = proplvls, values = c("black", plasma(180), "lightgreen"))+
+  scale_color_manual(breaks = proplvls, values = c("lightblue", plasma(180),"pink"))+
   guides(color = FALSE)+
   #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
   labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") +
