@@ -51,7 +51,7 @@ matching_df$mincoral_cols <- cols[matching_df$min_coral*100]
 # make the plots ===============================================================
 div_by_recruit <- ggplot(data = matching_df) + 
   geom_point(aes(x = a, y = g, color = as.factor(min_coral))) + 
-  facet_grid(~overgrow_level) + 
+  facet_grid(~recruit_level) + 
   theme_base() + 
   scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
@@ -68,7 +68,7 @@ ggsave(
 )
 div_by_comp <- ggplot(data = matching_df) + 
   geom_point(aes(x = z, y = g, colour = as.factor(min_coral))) + 
-  facet_grid(~recruit_level) + 
+  facet_grid(~overgrow_level) + 
   theme_base() + 
   scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
