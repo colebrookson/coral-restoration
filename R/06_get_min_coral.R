@@ -87,7 +87,8 @@ for(row in seq_len(nrow(matching_df))) {
     )
   } else {
     matching_df[
-      which(matching_df$g == g & matching_df$a == a & matching_df$z == z), "min_coral"
+      which(matching_df$g == g & matching_df$a == a & matching_df$z == z), 
+      "min_coral"
     ] <- -999999
   }
   if(row %% 100 == 0){print(row)}

@@ -25,12 +25,12 @@ restoration_sim <- function(t,state,parameters){
 # NHRCP: C_i = 0.25, M_i = 0.01, g = 0-0.2, gamma = 0.66-0.99, z = 0
 # New Heaven Reef Conservation Program 
 
-C1 <- 0.25; M1 <- 0.01; T1 <- 1 - (C1 + M1)
+Cinit <- 0.25; Minit <- 0.01; Tinit <- 1 - (Cinit + Minit)
 g_val_all <- seq(0, 0.2, by = 0.01)
 mc_comp_all <- seq(0.66, 0.99, by = 0.01)
 recruitvalue_all <- 0
 
-param_grid <- expand.grid(C1 = C1, M1 = M1, T1 = T1, 
+param_grid <- expand.grid(Cinit = Cinit, Minit = Minit, Tinit = Tinit, 
                           g_val = g_val_all, mc_comp = mc_comp_all, 
                           recruitvalue = recruitvalue_all)
 
@@ -43,10 +43,15 @@ res_df <- data.frame(
   M1 = as.numeric(), 
   C1 = as.numeric(), 
   Tu1 = as.numeric(), 
-  C1 = as.numeric(), 
-  "M1", "T1", "g_val", "mc_comp", "recruitvalue")
+  Cinit = as.numeric(), 
+  Minit = as.numeric(),
+  Tinit = as.numeric(),
+  g_val = as.numeric(),
+  mc_comp = as.numeric(),
+  recruitvalue = as.numeric()
+)
 
-for(row in param_grid) {
+for(row in seq_len(nrow(param_grid))) {
  
   # get the parameters
   parameters <- c(
@@ -59,7 +64,11 @@ for(row in param_grid) {
   )
   
   # giving M1 and M2, C1 and C2, T1 and T2 starting conditions
-  state <- c(M1 = M1, C1 = C1, Tu1 = T1)
+  state <- c(
+    M1 = param_grid$Minit[row], 
+    C1 = param_grid$Cinit[row], 
+    Tu1 = param_grid$Tinit[row]
+  )
   
   # RUN THE ODE
   out <- lsode(
@@ -73,20 +82,8 @@ for(row in param_grid) {
                                         param_grid[row, ], simplify = FALSE))
   res <- cbind(out, vals_df)
   
-}
-
-
-
-
-
-
-
-res_df <- data.frame(
-  cbind(
-    out,
-  )
-)
+  res_df <- rbind(res_df, res)
   
-
+}
 
 # TNC: C_i = 0.1, M_i = 0.15, g = 0-0.2, gamma = 0-0.33, z = 0-0.33
