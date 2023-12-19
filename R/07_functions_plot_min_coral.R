@@ -45,15 +45,16 @@ matching_df$recruit_level <- factor(matching_df$recruit_level,
 # define colours for the plots =================================================
 #0.01 is the lowest value and 0.96 is the highest value of min_coral, want these two to have distinctly different colours
 #the values of min_coral are max 2 decimal points, so there are only 96 possible discrete values
-cols <- c("black", viridis(94), "red")
+highestval <- 96
+cols <- c("grey", rev(viridis((highestval - 1))))
 matching_df$mincoral_cols <- cols[matching_df$min_coral*100]
 
 # make the plots ===============================================================
 div_by_recruit <- ggplot(data = matching_df) + 
   geom_point(aes(x = a, y = g, color = as.factor(min_coral))) + 
-  facet_grid(~overgrow_level) + 
+  facet_grid(~recruit_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((highestval - 1)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
                         #breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
@@ -68,9 +69,9 @@ ggsave(
 )
 div_by_comp <- ggplot(data = matching_df) + 
   geom_point(aes(x = z, y = g, colour = as.factor(min_coral))) + 
-  facet_grid(~recruit_level) + 
+  facet_grid(~overgrow_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((highestval - 1)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
    #                     breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Recruitment", y = "Grazing") + 
@@ -88,7 +89,7 @@ div_by_grazing <- ggplot(data = matching_df) +
   geom_point(aes(x = a, y = z, colour = as.factor(min_coral))) + 
   facet_grid(~grazing_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("black", viridis(94), "red"))+
+  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((highestval - 1)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
                       #  breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") + 
