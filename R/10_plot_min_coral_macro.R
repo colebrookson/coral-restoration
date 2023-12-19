@@ -8,8 +8,8 @@ library(qs)
 
 `%notin%` <- Negate(`%in%`)
 
-matching_df <- readr::read_csv(matching_df, 
-                 here::here("./data/plotting-data/min-coral-ids.csv"))
+matching_df <- readr::read_csv(
+  here::here("./data/plotting-data/min-coral-ids-macro.csv"))
 
 # set up the data for the different levels =====================================
 matching_df <- matching_df %>% dplyr::filter(min_coral != -999999)
