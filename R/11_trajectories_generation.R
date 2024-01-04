@@ -89,7 +89,7 @@ for(row in seq_len(nrow(param_grid))) {
 
 qs::qsave(res_df, here::here("./data/plotting-data/nhrcp-simulation.qs"))
 
-# set up data to be plotted ====================================================
+# set up nhrcp data to be plotted ==============================================
 nhrcp_df <- res_df %>% 
   dplyr::group_by(g_val, mc_comp, recruitvalue) %>% 
   dplyr::mutate(group_num = dplyr::cur_group_id())
@@ -172,3 +172,19 @@ for(row in seq_len(nrow(param_grid))) {
 }
 
 qs::qsave(res_df, here::here("./data/plotting-data/tnc-simulation.qs"))
+
+# set up data to be plotted ====================================================
+
+tnc_df <- res_df %>% 
+  dplyr::group_by(g_val, mc_comp, recruitvalue) %>% 
+  dplyr::mutate(group_num = dplyr::cur_group_id())
+
+mean_tnc <- tnc_df %>% 
+  dplyr::group_by(time) %>% 
+  dplyr::summarize(
+    M = mean(M1),
+    C = mean(C1),
+    Tu = mean(Tu1)
+  )
+
+qs::qsave(mean_tnc, here::here("./data/plotting-data/mean-tnc-sims.qs"))

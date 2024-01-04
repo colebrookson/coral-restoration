@@ -34,7 +34,7 @@ gc()
 nhrcp_plot <- ggplot() + 
   geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),], 
             aes(x = time, y = vals, group = group_num), 
-            colour = "green4", alpha = 0.02)  +
+            colour = "#80461b", alpha = 0.02)  +
   geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),], 
             aes(x = time, y = vals, group = group_num),
             colour = "pink1", alpha = 0.02) + 
@@ -43,8 +43,8 @@ nhrcp_plot <- ggplot() +
             linewidth = 1.5) +
   theme_base() + 
   xlim(0, 50) + 
-  labs(x = "Time", y = "Macroalgae Proportion")  + 
-  scale_colour_manual("NHRCP Cover", values = c("pink1", "green4"), 
+  labs(x = "Time", y = "Cover Proportions")  + 
+  scale_colour_manual("NHRCP Cover", values = c("pink1", "#80461b"), 
                       labels = c("Coral", "Macroalgae")) + 
   theme(
     legend.position = c(0.8, 0.4)
