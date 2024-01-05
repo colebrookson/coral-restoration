@@ -40,7 +40,7 @@ nhrcp_plot <- ggplot() +
             aes(x = time, y = vals, colour = Cover),
             linewidth = 1.5) +
   theme_base() + 
-  xlim(0, 50) + 
+  xlim(0, 50) + ylim(0, 1) + 
   labs(x = "Time", y = "Cover Proportions")  + 
   scale_colour_manual("NHRCP Cover", values = c("pink1", "#80461b"), 
                       labels = c("Coral", "Macroalgae")) + 
@@ -50,4 +50,51 @@ nhrcp_plot <- ggplot() +
 ggplot2::ggsave(
   here::here("./graphs/conclusions-plots/nhrcp-scenario.png"),
   nhrcp_plot
+)  
+
+
+nhrcp_plot_c <- ggplot() + 
+  # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),], 
+  #           aes(x = time, y = vals, group = group_num), 
+  #           colour = "#80461b", alpha = 0.02)  +
+  geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),], 
+            aes(x = time, y = vals, group = group_num),
+            colour = "pink1", alpha = 0.02) + 
+  geom_line(data = mean_nhrcp[which(mean_nhrcp$Cover == "C"),],
+            aes(x = time, y = vals, colour = Cover),
+            linewidth = 1.5) +
+  theme_base() + 
+  xlim(0, 50) + ylim(0, 1) +  
+  labs(x = "Time", y = "Cover Proportions")  + 
+  scale_colour_manual("NHRCP Cover", values = c("pink1", "#80461b"), 
+                      labels = c("Coral", "Macroalgae")) + 
+  theme(
+    legend.position = c(0.8, 0.4)
+  )
+ggplot2::ggsave(
+  here::here("./graphs/conclusions-plots/nhrcp-scenario-only-coral.png"),
+  nhrcp_plot_c
+)  
+
+nhrcp_plot_m <- ggplot() + 
+  geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),],
+            aes(x = time, y = vals, group = group_num),
+            colour = "#80461b", alpha = 0.02)  +
+  # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),], 
+  #           aes(x = time, y = vals, group = group_num),
+  #           colour = "pink1", alpha = 0.02) + 
+  geom_line(data = mean_nhrcp[which(mean_nhrcp$Cover == "M"),],
+            aes(x = time, y = vals, colour = Cover),
+            linewidth = 1.5) +
+  theme_base() + 
+  xlim(0, 50) + ylim(0, 1) +  
+  labs(x = "Time", y = "Cover Proportions")  + 
+  scale_colour_manual("NHRCP Cover", values = c("#80461b"), 
+                      labels = c("Macroalgae")) + 
+  theme(
+    legend.position = c(0.8, 0.4)
+  )
+ggplot2::ggsave(
+  here::here("./graphs/conclusions-plots/nhrcp-scenario-only-macroalgae.png"),
+  nhrcp_plot_m
 )  

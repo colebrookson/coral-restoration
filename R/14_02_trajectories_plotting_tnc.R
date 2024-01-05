@@ -32,8 +32,8 @@ tnc_df <- tnc_df %>%
   )
 
 tnc_plot <- ggplot() + 
-  geom_line(data = tnc_df[which(tnc_df$Cover == "M"),], 
-            aes(x = time, y = vals, group = group_num), 
+  geom_line(data = tnc_df[which(tnc_df$Cover == "M"),],
+            aes(x = time, y = vals, group = group_num),
             colour = "#80461b", alpha = 0.05)  +
   geom_line(data = tnc_df[which(tnc_df$Cover == "C"),], 
             aes(x = time, y = vals, group = group_num),
@@ -42,7 +42,30 @@ tnc_plot <- ggplot() +
             aes(x = time, y = vals, colour = Cover),
             linewidth = 1.5) +
   theme_base() + 
-  xlim(0, 50) + 
+  xlim(0, 50) + ylim(0, 1) + 
+  labs(x = "Time", y = "Cover Proportions")  + 
+  scale_colour_manual("TNC Cover", values = c("pink1", "#80461b"), 
+                      labels = c("Coral", "Macroalgae")) + 
+  theme(
+    legend.position = c(0.8, 0.4)
+  ) 
+ggplot2::ggsave(
+  here::here("./graphs/conclusions-plots/tnc-scenario.png"),
+  tnc_plot
+)  
+
+tnc_plot_c <- ggplot() + 
+  # geom_line(data = tnc_df[which(tnc_df$Cover == "M"),], 
+  #           aes(x = time, y = vals, group = group_num), 
+  #           colour = "#80461b", alpha = 0.05)  +
+  geom_line(data = tnc_df[which(tnc_df$Cover == "C"),], 
+            aes(x = time, y = vals, group = group_num),
+            colour = "pink1", alpha = 0.05) + 
+  geom_line(data = mean_tnc[which(mean_tnc$Cover == "C"),], #[which(mean_tnc$Cover == "M"),],
+            aes(x = time, y = vals, colour = Cover),
+            linewidth = 1.5) +
+  theme_base() + 
+  xlim(0, 50) + ylim(0, 1) + 
   labs(x = "Time", y = "Cover Proportions")  + 
   scale_colour_manual("TNC Cover", values = c("pink1", "#80461b"), 
                       labels = c("Coral", "Macroalgae")) + 
@@ -50,6 +73,29 @@ tnc_plot <- ggplot() +
     legend.position = c(0.8, 0.4)
   )
 ggplot2::ggsave(
-  here::here("./graphs/conclusions-plots/tnc-scenario.png"),
-  tnc_plot
+  here::here("./graphs/conclusions-plots/tnc-scenario-only-coral.png"),
+  tnc_plot_c
+)  
+
+tnc_plot_m <- ggplot() + 
+  geom_line(data = tnc_df[which(tnc_df$Cover == "M"),],
+            aes(x = time, y = vals, group = group_num),
+            colour = "#80461b", alpha = 0.05)  +
+  # geom_line(data = tnc_df[which(tnc_df$Cover == "C"),], 
+  #           aes(x = time, y = vals, group = group_num),
+  #           colour = "#80461b", alpha = 0.05) + 
+  geom_line(data = mean_tnc[which(mean_tnc$Cover == "M"),], #[which(mean_tnc$Cover == "M"),],
+            aes(x = time, y = vals, colour = Cover),
+            linewidth = 1.5) +
+  theme_base() + 
+  xlim(0, 50) + ylim(0, 1) + 
+  labs(x = "Time", y = "Cover Proportions")  + 
+  scale_colour_manual("TNC Cover", values = c("#80461b"), 
+                      labels = c("Macroalgae")) + 
+  theme(
+    legend.position = c(0.8, 0.4)
+  )
+ggplot2::ggsave(
+  here::here("./graphs/conclusions-plots/tnc-scenario-only-macroalgae.png"),
+  tnc_plot_m
 )  
