@@ -134,4 +134,3 @@ ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-grazing.png"),
   div_by_macro_grazing
 )
-
