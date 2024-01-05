@@ -31,13 +31,13 @@ tnc_df <- tnc_df %>%
     values_to = "vals"
   )
 
-tnc_plot <- ggplot() + 
+ggplot() + 
   geom_line(data = tnc_df[which(tnc_df$Cover == "M"),],
             aes(x = time, y = vals, group = group_num),
-            colour = "#80461b", alpha = 0.05)  +
+            colour = "#bc9e82", alpha = 0.02)  +
   geom_line(data = tnc_df[which(tnc_df$Cover == "C"),], 
             aes(x = time, y = vals, group = group_num),
-            colour = "pink1", alpha = 0.05) + 
+            colour = "pink1", alpha = 0.2) + 
   geom_line(data = mean_tnc, #[which(mean_tnc$Cover == "M"),],
             aes(x = time, y = vals, colour = Cover),
             linewidth = 1.5) +
