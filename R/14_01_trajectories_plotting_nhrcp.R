@@ -29,8 +29,6 @@ nhrcp_df <- nhrcp_df %>%
     values_to = "vals"
   )
 
-gc()
-
 nhrcp_plot <- ggplot() + 
   geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),], 
             aes(x = time, y = vals, group = group_num), 

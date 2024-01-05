@@ -5,6 +5,7 @@ library(tidyverse)
 library(readxl)
 library(here)
 library(qs)
+library(viridis)
 
 `%notin%` <- Negate(`%in%`)
 
@@ -42,10 +43,16 @@ matching_df$recruit_level <- factor(matching_df$recruit_level,
 
 # make the plots ===============================================================
 div_by_macro_recruit <- ggplot(data = matching_df) + 
+  geom_point(aes(x = a, y = g, fill = min_coral)) + 
   geom_point(aes(x = a, y = g, color = as.factor(min_coral))) + 
   facet_grid(macro~recruit_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((95)))))+
+  scale_fill_gradientn("Minimum Coral",
+                     breaks = c(0.01,0.25,0.5,0.75,0.96),
+                     colors = c("grey", rev(viridis((4)))))+
+  scale_color_manual("Minimum Coral",
+                     breaks = seq(0.01,0.96,0.01),
+                     values = c("grey", rev(viridis((95)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   #breaks = c(0.01, 0.5, 0.96)) + 
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
@@ -59,16 +66,23 @@ div_by_macro_recruit <- ggplot(data = matching_df) +
     labels = c(0.01, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~ . , name = "Macroalgae Level", 
                         breaks = NULL, labels = NULL)
-  )
+  ) + 
+  guides(color="none")
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-recruit.png"),
   div_by_macro_recruit
 )
 div_by_macro_comp <- ggplot(data = matching_df) + 
-  geom_point(aes(x = z, y = g, colour = as.factor(min_coral))) + 
+  geom_point(aes(x = z, y = g, fill = min_coral)) + 
+  geom_point(aes(x = z, y = g, color = as.factor(min_coral))) + 
   facet_grid(macro~overgrow_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((95)))))+
+  scale_fill_gradientn("Minimum Coral",
+                       breaks = c(0.01,0.25,0.5,0.75,0.96),
+                       colors = c("grey", rev(viridis((4)))))+
+  scale_color_manual("Minimum Coral",
+                     breaks = seq(0.01,0.96,0.01),
+                     values = c("grey", rev(viridis((95)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   #breaks = c(0.01, 0.5, 0.96)) +
   labs(x = "Recruitment", y = "Grazing") + 
@@ -82,17 +96,24 @@ div_by_macro_comp <- ggplot(data = matching_df) +
     labels = c(0.01, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~ . , name = "Macroalgae Level", 
                         breaks = NULL, labels = NULL)
-  )
+  ) + 
+  guides(color="none")
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-comp.png"),
   div_by_macro_comp
 )
 
-div_by_macro_grazing <- ggplot(data = matching_df) + 
-  geom_point(aes(x = a, y = z, colour = as.factor(min_coral))) + 
+div_by_macro_grazing <- ggplot(data = matching_df) +   
+  geom_point(aes(x = a, y = z, fill = min_coral)) + 
+  geom_point(aes(x = a, y = z, color = as.factor(min_coral))) + 
   facet_grid(macro~grazing_level) + 
   theme_base() + 
-  scale_color_manual(breaks = seq(0.01,0.96,0.01), values = c("grey", rev(viridis((95)))))+
+  scale_fill_gradientn("Minimum Coral",
+                       breaks = c(0.01,0.25,0.5,0.75,0.96),
+                       colors = c("grey", rev(viridis((4)))))+
+  scale_color_manual("Minimum Coral",
+                     breaks = seq(0.01,0.96,0.01),
+                     values = c("grey", rev(viridis((95)))))+
   #scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   #breaks = c(0.01, 0.5, 0.96)) +
   labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") + 
@@ -106,7 +127,8 @@ div_by_macro_grazing <- ggplot(data = matching_df) +
     labels = c(0.01, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~ . , name = "Macroalgae Level", 
                         breaks = NULL, labels = NULL)
-  )
+  ) + 
+  guides(color="none")
 
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-grazing.png"),
