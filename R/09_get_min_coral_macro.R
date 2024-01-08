@@ -125,6 +125,8 @@ for(row in seq_len(nrow(matching_macro_df))) {
   if(row %% 100 == 0){print(row)}
 }
 
+matching_macro_df[which(is.infinite(matching_macro_df$min_coral)), "min_coral"]
+
 readr::write_csv(matching_macro_df, 
                  here::here("./data/plotting-data/min-coral-ids-macro.csv"))
 
