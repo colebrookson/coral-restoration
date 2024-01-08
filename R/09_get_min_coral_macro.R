@@ -43,15 +43,16 @@ matching_macro_df$min_coral <- NA
 #' the minimum coral value that corresponds to that id 
 
 # process one file 
-process_prop <- function(a, g, z, matching_macro_df, basinofattractionID, 
-                         allparam_data_ordered, good_ids) {
+process_prop_macro <- function(a, g, z, matching_macro_df, basinofattractionID, 
+                         allparam_data_ordered, good_ids, macro_level) {
   
   # if there's no ID's return NA
   if(!any(basinofattractionID$Equilibrium %in% good_ids$ID)) {
     matching_macro_df[
       which(matching_macro_df$g == g 
             & matching_macro_df$a == a & 
-              matching_macro_df$z == z), "min_coral"
+              matching_macro_df$z == z &
+              matching_macro_df$macro == macro_level), "min_coral"
     ] <- NA
     return(matching_macro_df)
   }
@@ -60,11 +61,19 @@ process_prop <- function(a, g, z, matching_macro_df, basinofattractionID,
   temp <- basinofattractionID[
     which(basinofattractionID$Equilibrium %in% good_ids$ID), 
   ]
+  if(macro_level == "low") {
+    temp <- temp[which(temp$initM1 <= 0.33), ]
+  } else if(macro_level == "med") {
+    temp <- temp[which(temp$initM1 > 0.33 & temp$initM1 <= 0.66), ]
+  } else if(macro_level == "high") {
+    temp <- temp[which(temp$initM1 > 0.66), ]
+  }
   
   matching_macro_df[
     which(matching_macro_df$g == g 
           & matching_macro_df$a == a & 
-            matching_macro_df$z == z), "min_coral"
+            matching_macro_df$z == z &
+            matching_macro_df$macro == macro_level), "min_coral"
   ] <- min(temp$initC1)  
   
   return(matching_macro_df)
@@ -85,6 +94,18 @@ for(row in seq_len(nrow(matching_macro_df))) {
     load(
       file
     )
+    for(macro_level in c("low", "med", "high")) {
+      matching_macro_df <- process_prop_macro(
+        a = a,
+        g = g,
+        z = z,
+        basinofattractionID = basinofattractionID,
+        matching_macro_df = matching_macro_df,
+        allparam_data_ordered = allparam_data_ordered,
+        good_ids = good_ids,
+        macro_level = macro_level
+      )
+    }
     matching_macro_df <- process_prop(
       a = a,
       g = g,
