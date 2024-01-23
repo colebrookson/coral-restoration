@@ -38,7 +38,8 @@ matching_df$min_coral <- NA
 process_prop <- function(a, g, z, matching_df, basinofattractionID, 
                          allparam_data_ordered, good_ids) {
   
-  #count number of different initial macroalgae values for each initial coral cover value
+  # count number of different initial macroalgae values for each initial coral 
+  # cover value
   num_malg <- basinofattractionID %>%
     count(initC1)
   
@@ -57,10 +58,14 @@ process_prop <- function(a, g, z, matching_df, basinofattractionID,
     which(basinofattractionID$Equilibrium %in% good_ids$ID), 
   ]
   
-  #determine at what initial coral cover value all initial macroalgae values go to a good basin
-  #do so by figuring out the smallest initial coral cover value that is fully represented in temp (i.e. all of the original basinofattractionID rows are in there)
+  # determine at what initial coral cover value all initial macroalgae values 
+  # go to a good basin
+  # do so by figuring out the smallest initial coral cover value that is fully 
+  # represented in temp (i.e. all of the original basinofattractionID rows 
+  # are in there)
   for(i in 1:dim(num_malg)[1]){
-    if(length(temp$InitCond[temp$initC1 == num_malg$initC1[i]]) == num_malg$n[num_malg$initC1==num_malg$initC1[i]]){
+    if(length(temp$InitCond[temp$initC1 == num_malg$initC1[i]]) == 
+       num_malg$n[num_malg$initC1==num_malg$initC1[i]]){
       minC1 <- num_malg$initC1[i]
       break
     }
