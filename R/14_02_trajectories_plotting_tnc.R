@@ -104,9 +104,8 @@ ggplot2::ggsave(
 
 # plot recovery version ========================================================
 
-tnc_df <- qs::qread(here::here("./data/plotting-data/tnc-simulation-recovery.qs"))
-
-mean_tnc <- qs::qread(here::here("./data/plotting-data/mean-tnc-sims.qs")) 
+mean_tnc <- qs::qread(
+  here::here("./data/plotting-data/mean-tnc-sims-recovery.qs")) 
 mean_tnc <- mean_tnc[which(mean_tnc$time <= 50), ] %>% 
   #dplyr::select(time, group_num, )
   tidyr::pivot_longer(
@@ -115,7 +114,8 @@ mean_tnc <- mean_tnc[which(mean_tnc$time <= 50), ] %>%
     values_to = "vals"
   )
 
-tnc_df <- qs::qread(here::here("./data/plotting-data/tnc-simulation-recovery.qs"))
+tnc_df <- qs::qread(
+  here::here("./data/plotting-data/tnc-simulation-recovery.qs"))
 tnc_df <- tnc_df[which(tnc_df$time <= 50), ] 
 tnc_df <- tnc_df %>% 
   dplyr::group_by(g_val, mc_comp, recruitvalue) %>% 
@@ -147,7 +147,7 @@ tnc_plot <- ggplot() +
     legend.position = c(0.8, 0.4)
   ) 
 ggplot2::ggsave(
-  here::here("./graphs/conclusions-plots/tnc-recovery-scenario.png"),
+  here::here("./graphs/conclusions-plots/tnc-recovered-scenario.png"),
   tnc_plot
 )  
 
