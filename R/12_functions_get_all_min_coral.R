@@ -71,7 +71,6 @@ process_prop <- function(a, g, z, matching_df, basinofattractionID,
     }
   }
   
-  
   matching_df[
     which(matching_df$g == g 
           & matching_df$a == a & 

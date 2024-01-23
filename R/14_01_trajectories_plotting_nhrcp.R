@@ -110,7 +110,7 @@ mean_nhrcp <- mean_nhrcp[which(mean_nhrcp$time <= 50), ] %>%
     values_to = "vals"
   )
 
-nhrcp_df <- qs::qread(here::here("./data/plotting-data/nhrcp-recovery-simulation"))
+nhrcp_df <- qs::qread(here::here("./data/plotting-data/nhrcp-recovery-simulation.qs"))
 nhrcp_df <- nhrcp_df[which(nhrcp_df$time <= 50), ] 
 nhrcp_df <- nhrcp_df %>% 
   dplyr::group_by(g_val, mc_comp, recruitvalue) %>% 

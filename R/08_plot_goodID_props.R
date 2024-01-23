@@ -92,19 +92,29 @@ for(i in 1:length(proplvls)){
 }
 
 
-div_by_recruit <- ggplot(data = prop_df) + 
+div_by_recruit <- ggplot(data = prop_df) +
+  geom_point(aes(x = a, y = g, fill = prop)) + 
   geom_point(aes(x = a, y = g, colour = as.factor(prop))) + #colour = prop
   facet_grid(~recruit_level) + 
   theme_base() + 
-  scale_color_manual(breaks = proplvls, values = c("#b8e3d0", plasma(180),"pink"))+
-  guides(color = FALSE)+
-  #scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") + 
+  #scale_color_manual(breaks = proplvls, values = c("#b8e3d0", plasma(180),"pink"))+
+  scale_fill_gradientn("Minimum Coral",
+                       breaks = c(0.01,0.25,0.5,0.75,0.96),
+                       colors = c("#b8e3d0", plasma(180),"pink"))+
+  scale_color_manual("Minimum Coral",
+                     breaks = seq(0.01,0.96,0.01),
+                     values = c("#b8e3d0", plasma(180),"pink"))+
   labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~ . , name = "Recruitment", 
-                        breaks = NULL, labels = NULL)) 
+                        breaks = NULL, labels = NULL))+
+  scale_y_continuous(
+    breaks = c(0.01, 0.25, 0.5, 0.75, 0.99),
+    labels = c(0.01, 0.25, 0.5, 0.75, 1.0)
+  ) + 
+  guides(color="none")
 ggsave(
   here::here("./graphs/conclusions-plots/prop_div_by_recruit.png"),
   div_by_recruit
