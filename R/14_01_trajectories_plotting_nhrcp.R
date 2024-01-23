@@ -98,3 +98,5 @@ ggplot2::ggsave(
   here::here("./graphs/conclusions-plots/nhrcp-scenario-only-macroalgae.png"),
   nhrcp_plot_m
 )  
+
+# run final conditions =========================================================
