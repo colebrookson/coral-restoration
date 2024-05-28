@@ -252,25 +252,48 @@ ggplot2::ggsave(
 all_scen_plots <- ggarrange(
   tnc_plot + rremove("ylab") + rremove("xlab") +
     theme(
-      axis.
+      legend.text = element_text(size = rel(2)),
+      legend.title = element_text(size = rel(2.5)),
+      axis.text = element_text(size = rel(2)),
+      plot.margin = margin(1, 1, 1, 1.2, "cm")
     ),
-  nhrcp_plot + rremove("ylab") + rremove("xlab"),
-  tnc_plot_rec + rremove("ylab") + rremove("xlab"),
-  nhrcp_plot_rec + rremove("ylab") + rremove("xlab"),
+  nhrcp_plot + rremove("ylab") + rremove("xlab") +
+    theme(
+      legend.text = element_text(size = rel(2)),
+      legend.title = element_text(size = rel(2.5)),
+      axis.text = element_text(size = rel(2)),
+      plot.margin = margin(1, 1, 1, 1.2, "cm")
+    ),
+  tnc_plot_rec + rremove("ylab") + rremove("xlab") +
+    theme(
+      legend.text = element_text(size = rel(2)),
+      legend.title = element_text(size = rel(2.5)),
+      axis.text = element_text(size = rel(2)),
+      plot.margin = margin(1, 1, 1, 1.2, "cm")
+    ),
+  nhrcp_plot_rec + rremove("ylab") + rremove("xlab") +
+    theme(
+      legend.text = element_text(size = rel(2)),
+      legend.title = element_text(size = rel(2.5)),
+      axis.text = element_text(size = rel(2)),
+      plot.margin = margin(1, 1, 1, 1.2, "cm")
+    ),
   labels = c("A", "B", "C", "D"),
+  font.label = list(color = "black", size = 30),
+  widths = c(0.9, 0.9, 0.9, 0.9), heights = c(0.9, 0.9, 0.9, 0.9),
   ncol = 2, nrow = 2, common.legend = TRUE, legend = "right"
 )
-all_scen_plots <- annotate_figure(
+all_scen_plots_labeled <- annotate_figure(
   all_scen_plots,
   left = text_grob("Cover Proportions",
-    rot = 90, size = 20
+    rot = 90, size = 50
   ),
-  bottom = text_grob("Time", size = 20)
+  bottom = text_grob("Time", size = 50)
 )
 ggplot2::ggsave(
   here::here("./graphs/conclusions-plots/nhrcp-tnc-all-scen.png"),
-  all_scen_plots,
-  width = 18,
-  height = 15,
+  all_scen_plots_labeled,
+  width = 26,
+  height = 17,
   bg = "white"
 )

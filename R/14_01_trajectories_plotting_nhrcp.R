@@ -61,7 +61,6 @@ ggplot2::ggsave(
   nhrcp_plot
 )
 
-
 nhrcp_plot_c <- ggplot() +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
