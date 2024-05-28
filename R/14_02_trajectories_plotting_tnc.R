@@ -3,6 +3,7 @@ library(tidyverse)
 library(here)
 library(qs)
 library(ggpubr)
+library(grid)
 
 source(here::here("./R/cc/00_functions.R"))
 source(here::here("./R/00_global_funs.R"))
@@ -248,4 +249,36 @@ ggplot2::ggsave(
 )
 
 # plot them all (the nhrcp ones too) in one plot ===============================
-ggarrange(tnc_plot, nhrcp_plot, ncol = 2, nrow = 2, common.legend = TRUE, legend = "bottom")
+all_scen_plots <- ggarrange(
+  tnc_plot + rremove("ylab") + rremove("xlab"),
+  nhrcp_plot + rremove("ylab") + rremove("xlab"),
+  tnc_plot_rec + rremove("ylab") + rremove("xlab"),
+  nhrcp_plot_rec + rremove("ylab") + rremove("xlab"),
+  labels = c("A", "B", "C", "D"),
+  ncol = 2, nrow = 2, common.legend = TRUE, legend = "right"
+)
+all_scen_plots <- annotate_figure(
+  all_scen_plots,
+  left = text_grob("Cover Proportions",
+    rot = 90
+  ),
+  bottom = text_grob("Time", gp = gpar(cex = 1.3))
+)
+ggplot2::ggsave(
+  here::here("./graphs/conclusions-plots/nhrcp-tnc-all-scen.png"),
+  all_scen_plots
+)
+
+
+figure <- ggarrange(gg_1 + rremove("ylab") + rremove("xlab"), gg_2 + rremove("ylab") + rremove("xlab"), gg_3 + rremove("ylab") + rremove("xlab"), gg_4 + rremove("ylab") + rremove("xlab"), # remove axis labels from plots
+  labels = NULL,
+  ncol = 2, nrow = 2,
+  common.legend = TRUE, legend = "bottom",
+  align = "hv",
+  font.label = list(size = 10, color = "black", face = "bold", family = NULL, position = "top")
+)
+
+annotate_figure(figure,
+  left = textGrob("Common y-axis", rot = 90, vjust = 1, gp = gpar(cex = 1.3)),
+  bottom = textGrob("Common x-axis", gp = gpar(cex = 1.3))
+)
