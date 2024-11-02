@@ -7,6 +7,7 @@ library(grid)
 
 source(here::here("./R/cc/00_functions.R"))
 source(here::here("./R/00_global_funs.R"))
+source(here::here("./R/14_01_trajectories_plotting_nhrcp.R"))
 `%notin%` <- Negate(`%in%`)
 
 # initial version ==============================================================
@@ -39,12 +40,12 @@ tnc_plot <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#bc9e82", alpha = 0.02
+    colour = "#bc9e82", alpha = 0.09
   ) +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.2
+    colour = "#fe8da5", alpha = 0.09
   ) +
   geom_line(
     data = mean_tnc, # [which(mean_tnc$Cover == "M"),],
@@ -56,7 +57,7 @@ tnc_plot <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -71,11 +72,11 @@ ggplot2::ggsave(
 tnc_plot_c <- ggplot() +
   # geom_line(data = tnc_df[which(tnc_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.05)  +
+  #           colour = "#382619", alpha = 0.05)  +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.05
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_tnc[which(mean_tnc$Cover == "C"), ], # [which(mean_tnc$Cover == "M"),],
@@ -87,7 +88,7 @@ tnc_plot_c <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("TNC Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -102,11 +103,11 @@ tnc_plot_m <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.05
+    colour = "#382619", alpha = 0.05
   ) +
   # geom_line(data = tnc_df[which(tnc_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.05) +
+  #           colour = "#382619", alpha = 0.05) +
   geom_line(
     data = mean_tnc[which(mean_tnc$Cover == "M"), ], # [which(mean_tnc$Cover == "M"),],
     aes(x = time, y = vals, colour = Cover),
@@ -117,7 +118,7 @@ tnc_plot_m <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("TNC Cover",
-    values = c("#80461b"),
+    values = c("#382619"),
     labels = c("Macroalgae")
   ) +
   theme(
@@ -160,12 +161,12 @@ tnc_plot_rec <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#bc9e82", alpha = 0.02
+    colour = "#bc9e82", alpha = 0.09
   ) +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.2
+    colour = "#fe8da5", alpha = 0.09
   ) +
   geom_line(
     data = mean_tnc, # [which(mean_tnc$Cover == "M"),],
@@ -177,7 +178,7 @@ tnc_plot_rec <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -191,11 +192,11 @@ ggplot2::ggsave(
 tnc_plot_c <- ggplot() +
   # geom_line(data = tnc_df[which(tnc_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.05)  +
+  #           colour = "#382619", alpha = 0.05)  +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.05
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_tnc[which(mean_tnc$Cover == "C"), ], # [which(mean_tnc$Cover == "M"),],
@@ -207,7 +208,7 @@ tnc_plot_c <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("TNC Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -222,11 +223,11 @@ tnc_plot_m <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.05
+    colour = "#382619", alpha = 0.05
   ) +
   # geom_line(data = tnc_df[which(tnc_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.05) +
+  #           colour = "#382619", alpha = 0.05) +
   geom_line(
     data = mean_tnc[which(mean_tnc$Cover == "M"), ], # [which(mean_tnc$Cover == "M"),],
     aes(x = time, y = vals, colour = Cover),
@@ -237,7 +238,7 @@ tnc_plot_m <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("TNC Cover",
-    values = c("#80461b"),
+    values = c("#382619"),
     labels = c("Macroalgae")
   ) +
   theme(
@@ -288,7 +289,10 @@ all_scen_plots_labeled <- annotate_figure(
   left = text_grob("Cover Proportions",
     rot = 90, size = 50
   ),
-  bottom = text_grob("Time", size = 50)
+  bottom = text_grob("Time", size = 50),
+  top = text_grob("TNC Case Study                    NHRCP Case Study",
+    size = 50, face = "bold"
+  )
 )
 ggplot2::ggsave(
   here::here("./graphs/conclusions-plots/nhrcp-tnc-all-scen.png"),

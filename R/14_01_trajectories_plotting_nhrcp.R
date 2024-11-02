@@ -33,12 +33,12 @@ nhrcp_plot <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.02
+    colour = "#382619", alpha = 0.02
   ) +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.02
   ) +
   geom_line(
     data = mean_nhrcp, # [which(mean_nhrcp$Cover == "M"),],
@@ -50,11 +50,11 @@ nhrcp_plot <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
-    legend.position = c(0.8, 0.4)
+    legend.position.inside = c(0.8, 0.4)
   )
 ggplot2::ggsave(
   here::here("./graphs/conclusions-plots/nhrcp-scenario.png"),
@@ -64,11 +64,11 @@ ggplot2::ggsave(
 nhrcp_plot_c <- ggplot() +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.02)  +
+  #           colour = "#382619", alpha = 0.02)  +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.02
   ) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "C"), ],
@@ -80,7 +80,7 @@ nhrcp_plot_c <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("NHRCP Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -95,11 +95,11 @@ nhrcp_plot_m <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.02
+    colour = "#382619", alpha = 0.02
   ) +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "pink1", alpha = 0.02) +
+  #           colour = "#fe8da5", alpha = 0.02) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "M"), ],
     aes(x = time, y = vals, colour = Cover),
@@ -110,7 +110,7 @@ nhrcp_plot_m <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("NHRCP Cover",
-    values = c("#80461b"),
+    values = c("#382619"),
     labels = c("Macroalgae")
   ) +
   theme(
@@ -149,12 +149,12 @@ nhrcp_plot_rec <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.02
+    colour = "#382619", alpha = 0.02
   ) +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.02
   ) +
   geom_line(
     data = mean_nhrcp, # [which(mean_nhrcp$Cover == "M"),],
@@ -166,7 +166,7 @@ nhrcp_plot_rec <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -181,11 +181,11 @@ ggplot2::ggsave(
 nhrcp_plot_c <- ggplot() +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "#80461b", alpha = 0.02)  +
+  #           colour = "#382619", alpha = 0.02)  +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "pink1", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.02
   ) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "C"), ],
@@ -197,7 +197,7 @@ nhrcp_plot_c <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("NHRCP Cover",
-    values = c("pink1", "#80461b"),
+    values = c("#fe8da5", "#382619"),
     labels = c("Coral", "Macroalgae")
   ) +
   theme(
@@ -212,11 +212,11 @@ nhrcp_plot_m <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#80461b", alpha = 0.02
+    colour = "#382619", alpha = 0.02
   ) +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),
-  #           colour = "pink1", alpha = 0.02) +
+  #           colour = "#fe8da5", alpha = 0.02) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "M"), ],
     aes(x = time, y = vals, colour = Cover),
@@ -227,7 +227,7 @@ nhrcp_plot_m <- ggplot() +
   ylim(0, 1) +
   labs(x = "Time", y = "Cover Proportions") +
   scale_colour_manual("NHRCP Cover",
-    values = c("#80461b"),
+    values = c("#382619"),
     labels = c("Macroalgae")
   ) +
   theme(
