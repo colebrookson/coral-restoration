@@ -60,9 +60,9 @@ generate_colors <- function(n, high, mid, low) {
 
 # Example usage
 n <- 182
-low <- "#178b8b" # Red for the highest value
-mid <- "#51516C" # White for the midpoint
-high <- "#8B174D" # Blue for the lowest value
+low <- "#16665f" # Red for the highest value
+mid <- "#e7f57d" # White for the midpoint
+high <- "#9b4804" # Blue for the lowest value
 
 cols <- generate_colors(n, high, mid, low)
 
@@ -78,7 +78,7 @@ div_by_macro_recruit <- ggplot(data = matching_df) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
     values = cols,
-    na.value = "grey40"
+    na.value = "grey80"
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +
@@ -117,7 +117,7 @@ div_by_macro_comp <- ggplot(data = matching_df) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
     values = cols,
-    na.value = "grey40"
+    na.value = "grey80"
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +
@@ -157,7 +157,7 @@ div_by_macro_grazing <- ggplot(data = matching_df) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
     values = cols,
-    na.value = "grey40"
+    na.value = "grey80"
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +

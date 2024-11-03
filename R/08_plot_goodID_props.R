@@ -65,9 +65,9 @@ generate_colors <- function(n, high, mid, low) {
 
 # Example usage
 n <- 182
-low <- "#178b8b" # Red for the highest value
-mid <- "#51516C" # White for the midpoint
-high <- "#8B174D" # Blue for the lowest value
+low <- "#16665f" # Red for the highest value
+mid <- "#e7f57d" # White for the midpoint
+high <- "#9b4804" # Blue for the lowest value
 
 cols <- generate_colors(n, high, mid, low)
 
