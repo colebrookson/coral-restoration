@@ -40,12 +40,12 @@ tnc_plot <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#bc9e82", alpha = 0.09
+    colour = "#382619", alpha = 0.05
   ) +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.09
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_tnc, # [which(mean_tnc$Cover == "M"),],
@@ -161,12 +161,12 @@ tnc_plot_rec <- ggplot() +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#bc9e82", alpha = 0.09
+    colour = "#382619", alpha = 0.05
   ) +
   geom_line(
     data = tnc_df[which(tnc_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.09
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_tnc, # [which(mean_tnc$Cover == "M"),],

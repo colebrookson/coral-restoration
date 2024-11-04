@@ -67,8 +67,10 @@ high <- "#9b4804" # Blue for the lowest value
 cols <- generate_colors(n, high, mid, low)
 
 div_by_macro_recruit <- ggplot(data = matching_df) +
-  geom_point(aes(x = a, y = g, fill = min_coral), alpha = 0.3) +
-  geom_point(aes(x = a, y = g, color = as.factor(min_coral)), alpha = 0.3) +
+  geom_point(aes(x = a, y = g, fill = min_coral), alpha = 0.3, size = 2) +
+  geom_point(aes(x = a, y = g, color = as.factor(min_coral)),
+    alpha = 0.3, size = 2
+  ) +
   facet_grid(macro ~ recruit_level) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",
@@ -106,8 +108,10 @@ ggsave(
   height = 6, width = 10
 )
 div_by_macro_comp <- ggplot(data = matching_df) +
-  geom_point(aes(x = z, y = g, fill = min_coral), alpha = 0.3) +
-  geom_point(aes(x = z, y = g, color = as.factor(min_coral)), alpha = 0.3) +
+  geom_point(aes(x = z, y = g, fill = min_coral), alpha = 0.3, size = 2) +
+  geom_point(aes(x = z, y = g, color = as.factor(min_coral)),
+    alpha = 0.3, size = 2
+  ) +
   facet_grid(macro ~ overgrow_level) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",
@@ -146,8 +150,10 @@ ggsave(
 )
 
 div_by_macro_grazing <- ggplot(data = matching_df) +
-  geom_point(aes(x = a, y = z, fill = min_coral), alpha = 0.3) +
-  geom_point(aes(x = a, y = z, color = as.factor(min_coral)), alpha = 0.3) +
+  geom_point(aes(x = a, y = z, fill = min_coral), alpha = 0.3, size = 2) +
+  geom_point(aes(x = a, y = z, color = as.factor(min_coral)),
+    alpha = 0.3, size = 2
+  ) +
   facet_grid(macro ~ grazing_level) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",

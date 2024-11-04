@@ -78,8 +78,11 @@ for (i in 1:length(proplvls)) {
 }
 
 div_by_recruit <- ggplot(data = prop_df) +
-  geom_point(aes(x = a, y = g, fill = prop), alpha = 0.3) +
-  geom_point(aes(x = a, y = g, colour = as.factor(prop)), alpha = 0.3) + # colour = prop
+  geom_point(aes(x = a, y = g, fill = prop), alpha = 0.3, size = 2) +
+  geom_point(aes(x = a, y = g, colour = as.factor(prop)),
+    alpha = 0.3,
+    size = 2
+  ) + # colour = prop
   facet_grid(~recruit_level) +
   theme_base() +
   scale_color_manual(breaks = proplvls, values = cols, na.value = "grey80") +
@@ -122,8 +125,10 @@ ggsave(
 )
 
 div_by_comp <- ggplot(data = prop_df) +
-  geom_point(aes(x = a, y = g, fill = prop), alpha = 0.3) +
-  geom_point(aes(x = z, y = g, colour = as.factor(prop)), alpha = 0.3) + # colour = prop
+  geom_point(aes(x = a, y = g, fill = prop), alpha = 0.3, size = 2) +
+  geom_point(aes(x = z, y = g, colour = as.factor(prop)),
+    alpha = 0.3, size = 2
+  ) + # colour = prop
   facet_grid(~overgrow_level) +
   theme_base() +
   scale_color_manual(breaks = proplvls, values = cols, na.value = "grey80") +
@@ -149,8 +154,11 @@ ggsave(
 )
 
 div_by_grazing <- ggplot(data = prop_df) +
-  geom_point(aes(x = a, y = z, fill = prop), alpha = 0.3) +
-  geom_point(aes(x = a, y = z, colour = as.factor(prop)), alpha = 0.3) +
+  geom_point(aes(x = a, y = z, fill = prop), size = 2, alpha = 0.3) +
+  geom_point(aes(x = a, y = z, colour = as.factor(prop)),
+    size = 2,
+    alpha = 0.3
+  ) +
   facet_grid(~grazing_level) +
   theme_base() +
   scale_color_manual(breaks = proplvls, values = cols, na.value = "grey80") +

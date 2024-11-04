@@ -33,12 +33,12 @@ nhrcp_plot <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#382619", alpha = 0.02
+    colour = "#382619", alpha = 0.05
   ) +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_nhrcp, # [which(mean_nhrcp$Cover == "M"),],
@@ -68,7 +68,7 @@ nhrcp_plot_c <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "C"), ],
@@ -95,7 +95,7 @@ nhrcp_plot_m <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#382619", alpha = 0.02
+    colour = "#382619", alpha = 0.05
   ) +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),
@@ -149,12 +149,12 @@ nhrcp_plot_rec <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#382619", alpha = 0.02
+    colour = "#382619", alpha = 0.05
   ) +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_nhrcp, # [which(mean_nhrcp$Cover == "M"),],
@@ -177,7 +177,6 @@ ggplot2::ggsave(
   nhrcp_plot
 )
 
-
 nhrcp_plot_c <- ggplot() +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "M"),],
   #           aes(x = time, y = vals, group = group_num),
@@ -185,7 +184,7 @@ nhrcp_plot_c <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "C"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#fe8da5", alpha = 0.02
+    colour = "#fe8da5", alpha = 0.05
   ) +
   geom_line(
     data = mean_nhrcp[which(mean_nhrcp$Cover == "C"), ],
@@ -212,7 +211,7 @@ nhrcp_plot_m <- ggplot() +
   geom_line(
     data = nhrcp_df[which(nhrcp_df$Cover == "M"), ],
     aes(x = time, y = vals, group = group_num),
-    colour = "#382619", alpha = 0.02
+    colour = "#382619", alpha = 0.05
   ) +
   # geom_line(data = nhrcp_df[which(nhrcp_df$Cover == "C"),],
   #           aes(x = time, y = vals, group = group_num),

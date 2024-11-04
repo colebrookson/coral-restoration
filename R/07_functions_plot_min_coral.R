@@ -86,7 +86,8 @@ div_by_recruit <- ggplot(data = matching_df) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
+    colors = cols,
+    na.value = "grey80"
   ) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
@@ -116,16 +117,21 @@ ggsave(
 )
 div_by_comp <- ggplot(data = matching_df) +
   geom_point(aes(x = z, y = g, fill = min_coral), alpha = 0.3, size = 2) +
-  geom_point(aes(x = z, y = g, colour = as.factor(min_coral)), size = 2) +
+  geom_point(aes(x = z, y = g, colour = as.factor(min_coral)),
+    size = 2,
+    alpha = 0.3
+  ) +
   facet_grid(~overgrow_level) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
+    colors = cols,
+    na.value = "grey80"
   ) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
-    values = cols
+    values = cols,
+    na.value = "grey80"
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +
@@ -159,11 +165,13 @@ div_by_grazing <- ggplot(data = matching_df) +
   theme_base() +
   scale_fill_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
+    colors = cols,
+    na.value = "grey80"
   ) +
   scale_color_manual("Minimum Coral",
     breaks = seq(0.01, 0.96, 0.01),
-    values = cols
+    values = cols,
+    na.value = "grey80"
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +

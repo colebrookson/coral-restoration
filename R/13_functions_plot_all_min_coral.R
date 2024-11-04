@@ -103,7 +103,7 @@ ggsave(
   height = 6, width = 10
 )
 div_by_comp <- ggplot(data = matching_df) +
-  geom_point(aes(x = z, y = g, fill = min_coral), size = 2) +
+  geom_point(aes(x = z, y = g, fill = min_coral), alpha = 0.3, size = 2) +
   geom_point(aes(x = z, y = g, colour = as.factor(min_coral)),
     size = 2,
     alpha = 0.3
@@ -137,7 +137,7 @@ ggsave(
 )
 
 div_by_grazing <- ggplot(data = matching_df) +
-  geom_point(aes(x = z, y = z, fill = min_coral), size = 2) +
+  geom_point(aes(x = z, y = z, fill = min_coral), alpha = 0.3, size = 2) +
   geom_point(aes(x = a, y = z, colour = as.factor(min_coral)),
     size = 2,
     alpha = 0.3
