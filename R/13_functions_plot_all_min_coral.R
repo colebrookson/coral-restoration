@@ -67,7 +67,6 @@ mid <- "#e7f57d" # White for the midpoint
 high <- "#9b4804" # Blue for the lowest value
 
 cols <- generate_colors(n, high, mid, low)
-
 # make the plots ===============================================================
 div_by_recruit <- ggplot(data = matching_df) +
   geom_point(aes(x = a, y = g, fill = min_coral), size = 2, alpha = 0.3) +
