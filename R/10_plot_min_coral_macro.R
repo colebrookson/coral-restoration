@@ -84,7 +84,7 @@ div_by_macro_recruit <- ggplot(data = matching_df) +
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +
-  labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
+  labs(x = "Macroalgal-Coral Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.99),
     labels = c(0.01, 0.25, 0.5, 0.75, 1.0),
@@ -130,7 +130,7 @@ div_by_macro_comp <- ggplot(data = matching_df) +
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~.,
-      name = "Coral/Macroalgae Comp.",
+      name = "Macroalgal-Coral Comp.",
       breaks = NULL, labels = NULL
     )
   ) +
@@ -167,7 +167,7 @@ div_by_macro_grazing <- ggplot(data = matching_df) +
   ) +
   # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
   # breaks = c(0.01, 0.5, 0.96)) +
-  labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") +
+  labs(x = "Macroalgal-Coral Comp.", y = "Recruitment") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),

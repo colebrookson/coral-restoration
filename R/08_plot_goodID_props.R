@@ -90,26 +90,12 @@ div_by_recruit <- ggplot(data = prop_df) +
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
     colors = cols
   ) +
-  # scale_color_manual("Minimum Coral",
-  #   breaks = seq(0.01, 0.96, 0.01),
-  #   values = cols,
-  #   #na.value = "grey60"
-  # ) +
-  labs(x = "Coral/Macroalgae Comp.", y = "Grazing") +
+  labs(x = "Macroalgal-Coral Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~.,
       name = "Recruitment",
-      breaks = NULL, labels = NULL
-    )
-  ) +
-  labs(x = "Recruitment", y = "Grazing") +
-  scale_x_continuous(
-    breaks = c(0, 0.25, 0.5, 0.75, 0.99),
-    labels = c(0, 0.25, 0.5, 0.75, 1.0),
-    sec.axis = sec_axis(~.,
-      name = "Coral/Macroalgae Comp.",
       breaks = NULL, labels = NULL
     )
   ) +
@@ -143,7 +129,7 @@ div_by_comp <- ggplot(data = prop_df) +
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),
     sec.axis = sec_axis(~.,
-      name = "Coral/Macroalgae Comp.",
+      name = "Macroalgal-Coral Comp.",
       breaks = NULL, labels = NULL
     )
   )
@@ -168,7 +154,7 @@ div_by_grazing <- ggplot(data = prop_df) +
     colors = cols
   ) +
   # scale_color_gradient("Good Eq. Prop", low = "seagreen", high = "skyblue") +
-  labs(x = "Coral/Macroalgae Comp.", y = "Recruitment") +
+  labs(x = "Macroalgal-Coral Comp.", y = "Recruitment") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
     labels = c(0, 0.25, 0.5, 0.75, 1.0),
