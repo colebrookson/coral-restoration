@@ -67,23 +67,16 @@ high <- "#9b4804" # Blue for the lowest value
 cols <- generate_colors(n, high, mid, low)
 
 div_by_macro_recruit <- ggplot(data = matching_df) +
-  geom_point(aes(x = a, y = g, fill = min_coral), alpha = 0.3, size = 2) +
-  geom_point(aes(x = a, y = g, color = as.factor(min_coral)),
+  geom_point(aes(x = a, y = g, colour = min_coral, fill = "NA"),
     alpha = 0.3, size = 2
   ) +
   facet_grid(macro ~ recruit_level) +
   theme_base() +
-  scale_fill_gradientn("Minimum Coral",
+  scale_color_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
-  ) +
-  scale_color_manual("Minimum Coral",
-    breaks = seq(0.01, 0.96, 0.01),
-    values = cols,
+    colors = cols,
     na.value = "grey80"
   ) +
-  # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
-  # breaks = c(0.01, 0.5, 0.96)) +
   labs(x = "Macroalgal-Coral Comp.", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.99),
@@ -101,30 +94,37 @@ div_by_macro_recruit <- ggplot(data = matching_df) +
       breaks = NULL, labels = NULL
     )
   ) +
-  guides(color = "none")
+  scale_fill_manual(values = "grey80", labels = "") +
+  guides(
+    colour = guide_colorbar(
+      title = "Minimum Coral",
+      order = 1
+    ),
+    fill = guide_legend(
+      title = "No Possible Combination",
+      override.aes = list(
+        fill = "grey80",
+        size = 4,
+        order = 2
+      )
+    )
+  )
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-recruit.png"),
   div_by_macro_recruit,
   height = 6, width = 10
 )
 div_by_macro_comp <- ggplot(data = matching_df) +
-  geom_point(aes(x = z, y = g, fill = min_coral), alpha = 0.3, size = 2) +
-  geom_point(aes(x = z, y = g, color = as.factor(min_coral)),
+  geom_point(aes(x = z, y = g, colour = min_coral, fill = "NA"),
     alpha = 0.3, size = 2
   ) +
   facet_grid(macro ~ overgrow_level) +
   theme_base() +
-  scale_fill_gradientn("Minimum Coral",
+  scale_color_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
-  ) +
-  scale_color_manual("Minimum Coral",
-    breaks = seq(0.01, 0.96, 0.01),
-    values = cols,
+    colors = cols,
     na.value = "grey80"
   ) +
-  # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
-  # breaks = c(0.01, 0.5, 0.96)) +
   labs(x = "Recruitment", y = "Grazing") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -142,7 +142,21 @@ div_by_macro_comp <- ggplot(data = matching_df) +
       breaks = NULL, labels = NULL
     )
   ) +
-  guides(color = "none")
+  scale_fill_manual(values = "grey80", labels = "") +
+  guides(
+    colour = guide_colorbar(
+      title = "Minimum Coral",
+      order = 1
+    ),
+    fill = guide_legend(
+      title = "No Possible Combination",
+      override.aes = list(
+        fill = "grey80",
+        size = 4,
+        order = 2
+      )
+    )
+  )
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-comp.png"),
   div_by_macro_comp,
@@ -150,23 +164,16 @@ ggsave(
 )
 
 div_by_macro_grazing <- ggplot(data = matching_df) +
-  geom_point(aes(x = a, y = z, fill = min_coral), alpha = 0.3, size = 2) +
-  geom_point(aes(x = a, y = z, color = as.factor(min_coral)),
+  geom_point(aes(x = a, y = z, colour = min_coral, fill = "NA"),
     alpha = 0.3, size = 2
   ) +
   facet_grid(macro ~ grazing_level) +
   theme_base() +
-  scale_fill_gradientn("Minimum Coral",
+  scale_color_gradientn("Minimum Coral",
     breaks = c(0.01, 0.25, 0.5, 0.75, 0.96),
-    colors = cols
-  ) +
-  scale_color_manual("Minimum Coral",
-    breaks = seq(0.01, 0.96, 0.01),
-    values = cols,
+    colors = cols,
     na.value = "grey80"
   ) +
-  # scale_color_viridis_c("Minimum Coral", option = "plasma", direction = 1,
-  # breaks = c(0.01, 0.5, 0.96)) +
   labs(x = "Macroalgal-Coral Comp.", y = "Recruitment") +
   scale_x_continuous(
     breaks = c(0, 0.25, 0.5, 0.75, 0.99),
@@ -184,7 +191,21 @@ div_by_macro_grazing <- ggplot(data = matching_df) +
       breaks = NULL, labels = NULL
     )
   ) +
-  guides(color = "none")
+  scale_fill_manual(values = "grey80", labels = "") +
+  guides(
+    colour = guide_colorbar(
+      title = "Minimum Coral",
+      order = 1
+    ),
+    fill = guide_legend(
+      title = "No Possible Combination",
+      override.aes = list(
+        fill = "grey80",
+        size = 4,
+        order = 2
+      )
+    )
+  )
 
 ggsave(
   here::here("./graphs/conclusions-plots/min-coral-by-macro-div-by-grazing.png"),
