@@ -111,10 +111,10 @@ ggsave(
 )
 
 div_by_comp <- ggplot(data = prop_df) +
-  geom_point(aes(x = a, y = g, fill = prop), alpha = 0.3, size = 2) +
+  geom_point(aes(x = z, y = g, fill = prop), alpha = 0.3, size = 2) +
   geom_point(aes(x = z, y = g, colour = as.factor(prop)),
     alpha = 0.3, size = 2
-  ) + # colour = prop
+  ) +
   facet_grid(~overgrow_level) +
   theme_base() +
   scale_color_manual(breaks = proplvls, values = cols, na.value = "grey80") +
